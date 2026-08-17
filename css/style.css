@@ -278,22 +278,22 @@ header.scrolled {
 
 /* Sections */
 section {
-    padding: 7rem 0;
+    padding: 10rem 0;
     position: relative;
 }
 
 .section-title {
     text-align: center;
-    margin-bottom: 4rem;
+    margin-bottom: 5rem;
 }
 
 .section-title span {
     display: block;
     font-size: 0.9rem;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 4px;
     color: var(--text-secondary);
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
 }
 
 /* Features/How It Works Grid */
