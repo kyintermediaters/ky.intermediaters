@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | KY Intermediater's</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="bg-shape bg-shape-1"></div>
+    <div class="bg-shape bg-shape-2"></div>
+
+    <header>
+        <div class="container nav-container">
+            <a href="index.html" class="logo">KY INTERMEDIATER'S</a>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container" style="padding-top: 8rem; min-height: calc(100vh - 150px); display: flex; align-items: center; justify-content: center;">
+        <div class="glass-panel" style="width: 100%; max-width: 500px;">
+            <h2 style="text-align: center; margin-bottom: 2rem;">Register Now</h2>
+            
+            <div id="alert-message" style="display: none; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center;"></div>
+
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required placeholder="John Doe">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required placeholder="john@example.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" required placeholder="+91 9876543210">
+                </div>
+                
+                <div class="form-group">
+                    <label for="interest">Area of Interest / Industry</label>
+                    <select id="interest" name="interest" required>
+                        <option value="" disabled selected>Select an industry</option>
+                        <option value="Technology">Technology & IT</option>
+                        <option value="Food & Beverage">Food & Beverage</option>
+                        <option value="Retail & E-commerce">Retail & E-commerce</option>
+                        <option value="Healthcare">Healthcare & Fitness</option>
+                        <option value="Education">Education & EdTech</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="budget">Available Capital (Approximate)</label>
+                    <input type="text" id="budget" name="budget" placeholder="e.g. ₹50,000" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;" id="submit-btn">
+                    Submit Details & Pay ₹500 Later
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script>
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submit-btn');
+            const alertBox = document.getElementById('alert-message');
+            const form = e.target;
+            
+            btn.disabled = true;
+            btn.textContent = 'Submitting...';
+            
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            
+            try {
+                const response = await submitRegistration(data);
+                
+                alertBox.style.display = 'block';
+                alertBox.style.backgroundColor = 'rgba(0, 204, 102, 0.2)';
+                alertBox.style.border = '1px solid var(--success)';
+                alertBox.style.color = 'var(--text-primary)';
+                alertBox.textContent = 'Registration successful! We will contact you shortly.';
+                
+                form.reset();
+            } catch (error) {
+                alertBox.style.display = 'block';
+                alertBox.style.backgroundColor = 'rgba(255, 77, 77, 0.2)';
+                alertBox.style.border = '1px solid var(--error)';
+                alertBox.style.color = 'var(--text-primary)';
+                alertBox.textContent = error.message || 'Something went wrong. Please try again.';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Submit Details & Pay ₹500 Later';
+            }
+        });
+    </script>
+</body>
+</html>
