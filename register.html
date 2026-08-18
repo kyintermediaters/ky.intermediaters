@@ -185,7 +185,7 @@
 
                 <div id="step-2-footer">
                     <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 2rem;" id="submit-btn">
-                        Submit Details & Pay ₹----- Later
+                        Submit Details & Pay ₹<span class="blurred-price">500</span> Later
                     </button>
                 </div>
             </form>
@@ -300,7 +300,7 @@
                 showAlert(error.message || 'Something went wrong. Please try again.', true);
             } finally {
                 btn.disabled = false;
-                btn.textContent = 'Submit Details & Pay ₹----- Later';
+                btn.innerHTML = 'Submit Details & Pay ₹<span class="blurred-price">500</span> Later';
             }
         });
     </script>
