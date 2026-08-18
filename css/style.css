@@ -216,6 +216,27 @@ footer { padding: 4rem 0; border-top: 1px solid rgba(0,0,0,0.05); margin-top: 5r
 .dark-glass .testimonial-text { color: rgba(255, 255, 255, 0.9); }
 .dark-glass .testimonial-meta { color: var(--accent); }
 
+/* Form Styling */
+.form-group { margin-bottom: 1.5rem; text-align: left; }
+.form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary); font-size: 0.9rem; }
+.form-group input, .form-group select, .form-group textarea { 
+    width: 100%; 
+    padding: 1rem; 
+    border: 1px solid rgba(0,0,0,0.1); 
+    border-radius: 8px; 
+    font-family: inherit;
+    font-size: 1rem;
+    background: rgba(255,255,255,0.8);
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(156, 123, 56, 0.1);
+}
+
 /* Custom Cursor */
 @media (min-width: 900px) {
     body, a, button, input, textarea, select { cursor: none !important; }
