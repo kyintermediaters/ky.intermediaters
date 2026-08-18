@@ -167,7 +167,7 @@ footer .logo img { height: 130px; }
 .pricing-list li { margin-bottom: 1rem; font-weight: 500; display: flex; gap: 10px; }
 .pricing-features li::before { content: "✓"; color: var(--accent); margin-right: 0.5rem; }
 
-.blurred-price { filter: blur(5px); user-select: none; pointer-events: none; opacity: 0.8; }
+.blurred-price { filter: blur(8px); user-select: none; pointer-events: none; opacity: 0.8; }
 
 /* FAQ */
 .faq-grid { display: grid; gap: 1.5rem; max-width: 800px; margin: 0 auto; }
