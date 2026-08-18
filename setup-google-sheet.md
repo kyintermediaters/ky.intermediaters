@@ -124,6 +124,7 @@ function doPost(e) {
 
       // Send Confirmation Email automatically
       try {
+        // Email to Client
         MailApp.sendEmail({
             to: data.email,
             subject: "Application Received | KY Intermediater's",
@@ -136,6 +137,34 @@ function doPost(e) {
                 <p><strong>The KY Intelligence Team</strong></p>
             </div>`
         });
+
+        // Email to Admin
+        const adminEmail = "ky.intermediaters@gmail.com";
+        const adminHtmlBody = `<div style="font-family: sans-serif; color: #333;">
+            <h2>New Registration: ${data.name}</h2>
+            <p><strong>Email:</strong> ${data.email}</p>
+            <p><strong>Phone:</strong> ${data.phone}</p>
+            <p><strong>Interest:</strong> ${data.interest}</p>
+            <p><strong>Capital:</strong> ${data.budget}</p>
+            <p><strong>Location:</strong> ${data.location}</p>
+            <p><strong>Occupation:</strong> ${data.occupation}</p>
+            <p><strong>Experience:</strong> ${data.experience}</p>
+            <p><strong>Motivation:</strong> ${data.motivation}</p>
+            <p><strong>Goal:</strong> ${data.goal}</p>
+            <p><strong>Timeline:</strong> ${data.timeline}</p>
+            <p><strong>Time Comm.:</strong> ${data.time}</p>
+            <p><strong>Venture Type:</strong> ${data.venture_type}</p>
+            <p><strong>Risk Tolerance:</strong> ${data.risk}</p>
+            <hr>
+            <p><a href="https://ky-intermediaters.vercel.app/admin.html">Login to Admin Dashboard</a></p>
+        </div>`;
+        
+        MailApp.sendEmail({
+            to: adminEmail,
+            subject: `New Lead: ${data.name} - ${data.budget}`,
+            htmlBody: adminHtmlBody
+        });
+
       } catch (e) {
           // Ignore email failure so the registration still succeeds
       }
