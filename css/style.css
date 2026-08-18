@@ -2,14 +2,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-    --bg-color: #f3f4f6;
-    --text-primary: #000000;
-    --text-secondary: #333333;
-    --glass-bg: rgba(255, 255, 255, 0.55);
-    --glass-border: rgba(255, 255, 255, 0.8);
-    --glass-shadow: 0 10px 40px -10px rgba(31, 38, 135, 0.15);
-    --accent: #2563eb;
-    --accent-hover: #1d4ed8;
+    --bg-color: #fcfcfc;
+    --text-primary: #111827;
+    --text-secondary: #4b5563;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.9);
+    --glass-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
+    --accent: #9c7b38;
+    --accent-hover: #7a5e26;
 }
 
 * {
@@ -58,16 +58,16 @@ html.lenis {
     opacity: 0.8;
 }
 
-.bg-shape-1 { width: 600px; height: 600px; background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); top: -100px; left: -100px; }
-.bg-shape-2 { width: 700px; height: 700px; background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); bottom: -150px; right: -100px; }
-.bg-shape-3 { width: 500px; height: 500px; background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); top: 30%; left: 30%; }
+.bg-shape-1 { width: 600px; height: 600px; background: linear-gradient(135deg, #f5ede1 0%, #e6d5b8 100%); top: -100px; left: -100px; }
+.bg-shape-2 { width: 700px; height: 700px; background: linear-gradient(135deg, #e2e8f0 0%, #ffffff 100%); bottom: -150px; right: -100px; }
+.bg-shape-3 { width: 500px; height: 500px; background: linear-gradient(135deg, #fdfbf7 0%, #e8e0d5 100%); top: 30%; left: 30%; }
 
 /* Typography */
 h1, h2, h3, h4, h5, h6 { font-weight: 800; line-height: 1.1; color: var(--text-primary); }
 p { color: var(--text-secondary); margin-bottom: 1rem; }
 
 .text-gradient {
-    background: linear-gradient(270deg, #2563eb, #7c3aed, #db2777);
+    background: linear-gradient(270deg, #1e293b, #9c7b38, #1e293b);
     background-size: 200% 200%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -174,7 +174,7 @@ footer .logo img { height: 100px; }
 
 /* CTA Banner */
 .cta-banner {
-    background: linear-gradient(135deg, var(--accent) 0%, #7c3aed 100%);
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
     color: white; padding: 6rem 2rem; border-radius: 30px; text-align: center;
     margin: 8rem auto 0 auto; max-width: 1000px; position: relative; overflow: hidden;
 }
