@@ -3,8 +3,8 @@
 
 :root {
     --bg-color: #f3f4f6;
-    --text-primary: #111827;
-    --text-secondary: #4b5563;
+    --text-primary: #000000;
+    --text-secondary: #333333;
     --glass-bg: rgba(255, 255, 255, 0.55);
     --glass-border: rgba(255, 255, 255, 0.8);
     --glass-shadow: 0 10px 40px -10px rgba(31, 38, 135, 0.15);
@@ -19,7 +19,7 @@
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Palatino', 'Palatino Linotype', 'Book Antiqua', serif;
     background-color: var(--bg-color);
     color: var(--text-primary);
     line-height: 1.6;
