@@ -160,7 +160,7 @@
 
                         <div style="margin-top: auto; display: flex; gap: 0.5rem; padding-top: 1rem; border-top: 1px solid rgba(0,0,0,0.05);">
                             <a href="mailto:${row[2]}" class="btn btn-primary" style="flex: 1; padding: 0.6rem; font-size: 0.8rem; text-align: center; text-decoration: none;">Email</a>
-                            <a href="tel:${row[3]}" class="btn btn-outline" style="flex: 1; padding: 0.6rem; font-size: 0.8rem; text-align: center; text-decoration: none;">Call</a>
+                            <a href="https://wa.me/${(row[3] || '').toString().replace(/\\D/g, '')}" target="_blank" class="btn btn-outline" style="flex: 1; padding: 0.6rem; font-size: 0.8rem; text-align: center; text-decoration: none; color: #25D366; border-color: #25D366;">WhatsApp</a>
                         </div>
                     `;
                     leadsGrid.appendChild(card);
