@@ -528,6 +528,145 @@ input::placeholder, textarea::placeholder {
 .stagger-2 { transition-delay: 0.3s; }
 .stagger-3 { transition-delay: 0.45s; }
 
+/* Success Stories */
+.testimonial-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.testimonial-card {
+    padding: 2.5rem;
+    background: rgba(255,255,255,0.6);
+    border: 1px solid rgba(255,255,255,0.9);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+    position: relative;
+    text-align: left;
+}
+
+.testimonial-card::before {
+    content: '"';
+    font-size: 5rem;
+    color: rgba(37, 99, 235, 0.1);
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    font-family: serif;
+    line-height: 1;
+}
+
+.testimonial-text {
+    font-size: 1.05rem;
+    font-style: italic;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+    position: relative;
+    z-index: 2;
+}
+
+.testimonial-author {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--accent);
+}
+
+.testimonial-meta {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* FAQ */
+.faq-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.faq-card {
+    background: rgba(255,255,255,0.6);
+    border: 1px solid rgba(255,255,255,0.9);
+    padding: 1.5rem 2rem;
+    border-radius: 16px;
+    text-align: left;
+    transition: transform 0.3s ease;
+}
+
+.faq-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255,255,255,0.8);
+}
+
+.faq-card h4 {
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+}
+
+.faq-card p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 0;
+}
+
+/* CTA Banner */
+.cta-banner {
+    background: linear-gradient(135deg, var(--accent) 0%, #7c3aed 100%);
+    color: white;
+    padding: 4rem 2rem;
+    border-radius: 24px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(37, 99, 235, 0.2);
+    margin: 4rem auto 0 auto;
+    position: relative;
+    overflow: hidden;
+    max-width: 1000px;
+}
+
+.cta-banner::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+    animation: float 15s infinite linear;
+}
+
+.cta-banner h2 {
+    color: white;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 2;
+}
+
+.cta-banner p {
+    color: rgba(255,255,255,0.9);
+    font-size: 1.2rem;
+    margin-bottom: 2.5rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    z-index: 2;
+}
+
+.btn-white {
+    background: white;
+    color: var(--accent);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 2;
+}
+
+.btn-white:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
 /* Footer */
 footer {
     padding: 4rem 0;
