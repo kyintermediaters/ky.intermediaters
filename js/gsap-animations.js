@@ -158,4 +158,32 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
+    // 8. Image Parallax Effects
+    const parallaxImages = document.querySelectorAll('.parallax-img');
+    parallaxImages.forEach(img => {
+        gsap.to(img, {
+            yPercent: 15,
+            ease: "none",
+            scrollTrigger: {
+                trigger: img.parentElement,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true
+            }
+        });
+    });
+
+    const bgFast = document.querySelectorAll('.parallax-bg-fast');
+    bgFast.forEach(img => {
+        gsap.to(img, {
+            yPercent: 30,
+            ease: "none",
+            scrollTrigger: {
+                trigger: img.parentElement,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true
+            }
+        });
+    });
 });

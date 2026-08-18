@@ -193,4 +193,23 @@ footer { padding: 4rem 0; border-top: 1px solid rgba(0,0,0,0.05); margin-top: 5r
     .hero-title { font-size: 3rem; }
     .section-title { font-size: 2.5rem; }
     .cinematic-stats { flex-direction: column; gap: 1.5rem; }
+    .hero-grid { grid-template-columns: 1fr; text-align: center; }
+    .hero-desc { text-align: center !important; }
+    .hero-img-wrapper { height: 40vh; }
 }
+
+/* Imagery & Cinematic Layout Classes */
+.hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; text-align: left; }
+.hero-img-wrapper { border-radius: 24px; overflow: hidden; box-shadow: var(--glass-shadow); height: 60vh; position: relative; }
+.cinematic-img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.15); transition: transform 0.8s ease; }
+.hero-img-wrapper:hover .cinematic-img { transform: scale(1.05); }
+
+.image-bg-section { position: relative; overflow: hidden; margin-top: 10rem; }
+.bg-img { position: absolute; top: 0; left: 0; width: 100%; height: 120%; object-fit: cover; z-index: 1; transform: scale(1.1); }
+.overlay-dark { position: absolute; inset: 0; background: rgba(15, 23, 42, 0.85); z-index: 2; }
+.relative { position: relative; }
+.z-10 { z-index: 10; }
+
+.dark-glass { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; }
+.dark-glass .testimonial-text { color: rgba(255, 255, 255, 0.9); }
+.dark-glass .testimonial-meta { color: var(--accent); }
