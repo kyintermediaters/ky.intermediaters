@@ -84,18 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 5. Editorial Split-Screen Pinning (Desktop Only)
-    ScrollTrigger.matchMedia({
-        "(min-width: 901px)": function() {
-            ScrollTrigger.create({
-                trigger: ".split-section",
-                start: "top 150px",
-                end: "bottom bottom",
-                pin: ".split-left",
-                pinSpacing: false
-            });
-        }
-    });
+    // 5. Native CSS Sticky is handling the split-screen pinning to avoid Flexbox conflicts.
 
     // 6. Generic Text/Element Reveals on Scroll
     const revealElements = document.querySelectorAll('.reveal-text');

@@ -134,7 +134,7 @@ footer .logo img { height: 100px; }
 
 /* Split Section Styling */
 .split-section { display: flex; align-items: flex-start; max-width: 1400px; margin: 0 auto; padding: 10rem 2rem; gap: 4rem; }
-.split-left { flex: 1; padding-right: 2rem; }
+.split-left { flex: 1; padding-right: 2rem; align-self: flex-start; position: sticky; top: 150px; }
 .split-right { flex: 1; padding-top: 50vh; padding-bottom: 20vh; }
 .section-title { font-size: 3.5rem; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 2rem; }
 .section-title span { display: block; font-size: 1rem; text-transform: uppercase; letter-spacing: 5px; color: var(--accent); margin-bottom: 1rem; }
