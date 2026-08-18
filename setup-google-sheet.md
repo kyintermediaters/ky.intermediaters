@@ -21,10 +21,10 @@ const SHEET_NAME = 'Registrations';
 function setup() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   let sheet = ss.getSheetByName(SHEET_NAME);
-  if (!sheet) {
-    sheet = ss.insertSheet(SHEET_NAME);
-    sheet.appendRow(['Timestamp', 'Name', 'Email', 'Phone', 'Interest', 'Budget']);
-    sheet.getRange("A1:F1").setFontWeight("bold");
+  // If sheet is empty, add headers
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(['Timestamp', 'Name', 'Email', 'Phone', 'Interest', 'Capital', 'Location', 'Occupation', 'Experience', 'Motivation', 'Goal', 'Timeline', 'Time Comm.', 'Venture Type', 'Risk']);
+    sheet.getRange("A1:O1").setFontWeight("bold");
   }
 }
 
@@ -42,13 +42,23 @@ function doPost(e) {
         sheet = ss.getSheetByName(SHEET_NAME);
       }
       
+      // Append row to sheet
       sheet.appendRow([
         new Date(),
         data.name,
         data.email,
         data.phone,
         data.interest,
-        data.budget
+        data.budget,
+        data.location,
+        data.occupation,
+        data.experience,
+        data.motivation,
+        data.goal,
+        data.timeline,
+        data.time,
+        data.venture_type,
+        data.risk
       ]);
       
       return ContentService.createTextOutput(JSON.stringify({ status: 'success' }))

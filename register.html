@@ -59,7 +59,93 @@
                     <input type="text" id="budget" name="budget" placeholder="e.g. ₹50,000" required>
                 </div>
 
-                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;" id="submit-btn">
+                <hr style="border: 0; border-top: 1px solid rgba(0,0,0,0.1); margin: 2.5rem 0;">
+                <h3 style="margin-bottom: 1.5rem; font-size: 1.2rem;">Demographics & Background</h3>
+
+                <div class="form-group">
+                    <label for="location">Location / City</label>
+                    <input type="text" id="location" name="location" placeholder="e.g. Mumbai, Maharashtra" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="occupation">Current Occupation</label>
+                    <input type="text" id="occupation" name="occupation" placeholder="e.g. Software Engineer, Student" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="experience">Prior Business Experience</label>
+                    <select id="experience" name="experience" required>
+                        <option value="" disabled selected>Select experience level</option>
+                        <option value="None">None - First time entrepreneur</option>
+                        <option value="Some">Some - Tried a few side hustles</option>
+                        <option value="Experienced">Experienced - Have run a business before</option>
+                    </select>
+                </div>
+
+                <hr style="border: 0; border-top: 1px solid rgba(0,0,0,0.1); margin: 2.5rem 0;">
+                <h3 style="margin-bottom: 1.5rem; font-size: 1.2rem;">Motivations & Goals</h3>
+
+                <div class="form-group">
+                    <label for="motivation">Why do you want to start a business?</label>
+                    <textarea id="motivation" name="motivation" rows="3" placeholder="Briefly describe what's driving you..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="goal">Primary Goal</label>
+                    <select id="goal" name="goal" required>
+                        <option value="" disabled selected>Select primary goal</option>
+                        <option value="Passive">Passive income stream</option>
+                        <option value="Replace Job">Replace full-time job</option>
+                        <option value="Scalable Startup">Build a highly scalable startup</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="timeline">Preferred Timeline to Launch</label>
+                    <select id="timeline" name="timeline" required>
+                        <option value="" disabled selected>Select timeline</option>
+                        <option value="Immediate">Immediately (0-1 month)</option>
+                        <option value="Short-term">1-3 months</option>
+                        <option value="Medium-term">3-6 months</option>
+                        <option value="Long-term">6+ months</option>
+                    </select>
+                </div>
+
+                <hr style="border: 0; border-top: 1px solid rgba(0,0,0,0.1); margin: 2.5rem 0;">
+                <h3 style="margin-bottom: 1.5rem; font-size: 1.2rem;">Operational Capacity</h3>
+
+                <div class="form-group">
+                    <label for="time">Time Commitment</label>
+                    <select id="time" name="time" required>
+                        <option value="" disabled selected>Select hours per week</option>
+                        <option value="0-10">0-10 hours/week</option>
+                        <option value="10-20">10-20 hours/week</option>
+                        <option value="20-40">20-40 hours/week</option>
+                        <option value="Full-time">Full-time (40+ hours)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="venture_type">Venture Type</label>
+                    <select id="venture_type" name="venture_type" required>
+                        <option value="" disabled selected>Select preference</option>
+                        <option value="Solo">Solo venture</option>
+                        <option value="Co-founders">Looking for co-founders</option>
+                        <option value="Open">Open to both</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="risk">Risk Tolerance</label>
+                    <select id="risk" name="risk" required>
+                        <option value="" disabled selected>Select risk tolerance</option>
+                        <option value="Low">Low - Steady & Safe</option>
+                        <option value="Medium">Medium - Balanced</option>
+                        <option value="High">High - Big Risk / Big Reward</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 2rem;" id="submit-btn">
                     Submit Details & Pay ₹----- Later
                 </button>
             </form>

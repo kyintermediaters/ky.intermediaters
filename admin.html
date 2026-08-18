@@ -41,23 +41,32 @@
             </div>
             
             <div class="glass-panel data-table-container">
-                <table id="customers-table">
-                    <thead>
-                        <tr>
-                            <th>Timestamp</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Interest</th>
-                            <th>Capital</th>
-                        </tr>
-                    </thead>
-                    <tbody id="table-body">
-                        <tr>
-                            <td colspan="6" style="text-align: center; padding: 2rem;">Loading data...</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 1200px;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid rgba(0,0,0,0.1);">
+                                <th style="padding: 1rem; font-weight: 600; color: var(--text-secondary);">Timestamp</th>
+                                <th style="padding: 1rem; font-weight: 600; color: var(--text-secondary);">Name</th>
+                                <th style="padding: 1rem; font-weight: 600; color: var(--text-secondary);">Email</th>
+                                <th style="padding: 1rem; font-weight: 600; color: var(--text-secondary);">Phone</th>
+                                <th style="padding: 1rem; font-weight: 600; color: var(--text-secondary);">Interest</th>
+                                <th style="padding: 1rem; font-weight: 600; color: var(--text-secondary);">Capital</th>
+                                <th style="padding: 1rem; font-weight: 600; color: var(--text-secondary);">Location</th>
+                                <th style="padding: 1rem; font-weight: 600; color: var(--text-secondary);">Occupation</th>
+                                <th style="padding: 1rem; font-weight: 600; color: var(--text-secondary);">Experience</th>
+                                <th style="padding: 1rem; font-weight: 600; color: var(--text-secondary);">Motivation</th>
+                                <th style="padding: 1rem; font-weight: 600; color: var(--text-secondary);">Goal</th>
+                                <th style="padding: 1rem; font-weight: 600; color: var(--text-secondary);">Timeline</th>
+                                <th style="padding: 1rem; font-weight: 600; color: var(--text-secondary);">Time Comm.</th>
+                                <th style="padding: 1rem; font-weight: 600; color: var(--text-secondary);">Type</th>
+                                <th style="padding: 1rem; font-weight: 600; color: var(--text-secondary);">Risk</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                            <tr><td colspan="15" style="text-align: center; padding: 2rem;">Loading data...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </main>
@@ -81,32 +90,40 @@
             
             refreshBtn.textContent = 'Refreshing...';
             refreshBtn.disabled = true;
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Fetching data from Google Sheets...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="15" style="text-align: center; padding: 2rem;">Fetching data from Google Sheets...</td></tr>';
             
             try {
                 const data = await fetchRegistrations();
                 
                 if (data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">No registrations found.</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="15" style="text-align: center; padding: 2rem;">No registrations found.</td></tr>';
                     return;
                 }
                 
                 tbody.innerHTML = '';
                 data.forEach(row => {
                     const tr = document.createElement('tr');
-                    // Assuming columns: Timestamp, Name, Email, Phone, Interest, Budget
                     tr.innerHTML = `
-                        <td>${new Date(row[0]).toLocaleString() || 'N/A'}</td>
-                        <td style="font-weight: 500; color: var(--text-primary);">${row[1] || ''}</td>
-                        <td>${row[2] || ''}</td>
-                        <td>${row[3] || ''}</td>
-                        <td><span style="background: rgba(255,255,255,0.1); padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">${row[4] || ''}</span></td>
-                        <td>${row[5] || ''}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05); white-space: nowrap;">${new Date(row[0]).toLocaleString() || 'N/A'}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05); font-weight: 500; color: var(--text-primary); white-space: nowrap;">${row[1] || ''}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05);">${row[2] || ''}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05); white-space: nowrap;">${row[3] || ''}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05);"><span style="background: rgba(0,0,0,0.05); padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; white-space: nowrap;">${row[4] || ''}</span></td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05);">${row[5] || ''}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05);">${row[6] || ''}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05);">${row[7] || ''}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05);">${row[8] || ''}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05); min-width: 200px;">${row[9] || ''}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05);">${row[10] || ''}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05);">${row[11] || ''}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05);">${row[12] || ''}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05);">${row[13] || ''}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05);">${row[14] || ''}</td>
                     `;
                     tbody.appendChild(tr);
                 });
             } catch (error) {
-                tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--error);">Error: ${error.message} <br><br> (Did you set up the Google Apps Script Web App URL in js/api.js?)</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="15" style="text-align: center; padding: 2rem; color: var(--error);">Error: ${error.message} <br><br> (Did you set up the Google Apps Script Web App URL in js/api.js?)</td></tr>`;
             } finally {
                 refreshBtn.textContent = 'Refresh Data';
                 refreshBtn.disabled = false;
