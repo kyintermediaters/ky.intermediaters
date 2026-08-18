@@ -32,25 +32,36 @@ document.addEventListener("DOMContentLoaded", () => {
     // 2. Cinematic Hero Entrance
     const heroTl = gsap.timeline({ defaults: { ease: "power4.out" } });
     
-    heroTl.from(".hero-badge", {
+    heroTl.fromTo(".hero-badge", {
         y: 30,
-        opacity: 0,
+        autoAlpha: 0
+    }, {
+        y: 0,
+        autoAlpha: 1,
         duration: 1,
         delay: 0.2
     })
-    .from(".line-inner", {
-        y: "110%",
+    .fromTo(".line-inner", {
+        y: "110%"
+    }, {
+        y: "0%",
         duration: 1.2,
         stagger: 0.15
     }, "-=0.8")
-    .from(".hero-desc", {
+    .fromTo(".hero-desc", {
         y: 20,
-        opacity: 0,
+        autoAlpha: 0
+    }, {
+        y: 0,
+        autoAlpha: 1,
         duration: 1
     }, "-=0.8")
-    .from(".hero-cta", {
+    .fromTo(".hero-cta", {
         y: 20,
-        opacity: 0,
+        autoAlpha: 0
+    }, {
+        y: 0,
+        autoAlpha: 1,
         duration: 1
     }, "-=0.8");
 
@@ -89,13 +100,16 @@ document.addEventListener("DOMContentLoaded", () => {
     // 6. Generic Text/Element Reveals on Scroll
     const revealElements = document.querySelectorAll('.reveal-text');
     revealElements.forEach(el => {
-        gsap.from(el, {
+        gsap.fromTo(el, {
+            y: 40,
+            autoAlpha: 0
+        }, {
             scrollTrigger: {
                 trigger: el,
                 start: "top 85%",
             },
-            y: 40,
-            opacity: 0,
+            y: 0,
+            autoAlpha: 1,
             duration: 1,
             ease: "power3.out"
         });
@@ -103,13 +117,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const revealCards = document.querySelectorAll('.reveal-card, .step-card');
     revealCards.forEach((card, i) => {
-        gsap.from(card, {
+        gsap.fromTo(card, {
+            y: 50,
+            autoAlpha: 0
+        }, {
             scrollTrigger: {
                 trigger: card,
                 start: "top 85%",
             },
-            y: 50,
-            opacity: 0,
+            y: 0,
+            autoAlpha: 1,
             duration: 0.8,
             ease: "back.out(1.2)"
         });
@@ -117,14 +134,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const revealScales = document.querySelectorAll('.reveal-scale');
     revealScales.forEach(el => {
-        gsap.from(el, {
+        gsap.fromTo(el, {
+            scale: 0.95,
+            y: 30,
+            autoAlpha: 0
+        }, {
             scrollTrigger: {
                 trigger: el,
                 start: "top 85%",
             },
-            scale: 0.95,
-            y: 30,
-            opacity: 0,
+            scale: 1,
+            y: 0,
+            autoAlpha: 1,
             duration: 1,
             ease: "power3.out"
         });

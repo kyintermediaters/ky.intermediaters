@@ -117,8 +117,8 @@ footer .logo img { height: 100px; }
 .full-screen-hero { height: 100vh; display: flex; align-items: center; text-align: center; }
 .hero-title { font-size: 5rem; letter-spacing: -2px; margin-bottom: 2rem; }
 .hero-desc { font-size: 1.3rem; max-width: 650px; margin: 0 auto 3rem auto; }
-.line { display: block; overflow: hidden; padding-bottom: 0.2rem; }
-.line-inner { display: inline-block; transform: translateY(110%); }
+.line { display: block; overflow: hidden; padding-bottom: 0.5rem; }
+.line-inner { display: inline-block; }
 .hero-badge {
     display: inline-block; padding: 0.6rem 1.5rem; border-radius: 30px;
     background: rgba(255, 255, 255, 0.8); font-size: 0.85rem; font-weight: 700;
@@ -126,9 +126,15 @@ footer .logo img { height: 100px; }
     color: var(--accent);
 }
 
+/* Visibility for Scroll Elements */
+.reveal-text, .reveal-card, .reveal-scale, .step-card, .hero-badge, .hero-desc, .hero-cta {
+    opacity: 0;
+    visibility: hidden;
+}
+
 /* Split Section Styling */
 .split-section { display: flex; align-items: flex-start; max-width: 1400px; margin: 0 auto; padding: 10rem 2rem; gap: 4rem; }
-.split-left { flex: 1; position: sticky; top: 150px; padding-right: 2rem; }
+.split-left { flex: 1; padding-right: 2rem; }
 .split-right { flex: 1; padding-top: 50vh; padding-bottom: 20vh; }
 .section-title { font-size: 3.5rem; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 2rem; }
 .section-title span { display: block; font-size: 1rem; text-transform: uppercase; letter-spacing: 5px; color: var(--accent); margin-bottom: 1rem; }
