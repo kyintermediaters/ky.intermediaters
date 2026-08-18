@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="css/style.css?v=4">
 </head>
 <body>
+    <!-- Preloader & Cursor -->
+    <div id="preloader">
+        <img src="images/logo.png" alt="Loading..." class="loader-logo">
+    </div>
+    <div class="custom-cursor"></div>
+
     <div class="bg-shape bg-shape-1"></div>
     <div class="bg-shape bg-shape-2"></div>
 
@@ -26,20 +32,52 @@
             <div id="alert-message" style="display: none; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center;"></div>
 
             <form id="register-form">
-                <div class="form-group">
-                    <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" required placeholder="John Doe">
-                </div>
                 
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" required placeholder="john@example.com">
+                <!-- STEP 1: Basic Info & OTP Trigger -->
+                <div id="step-1">
+                    <h3 style="margin-bottom: 1rem; color: var(--accent);">Step 1: Verification</h3>
+                    <p style="margin-bottom: 2rem; font-size: 0.9rem; color: var(--text-secondary);">To maintain the quality of our network, we require email verification before accepting business profiles.</p>
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" required placeholder="John Doe">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required placeholder="john@example.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required placeholder="+91 9876543210">
+                    </div>
+
+                    <button type="button" class="btn btn-primary" style="width: 100%; margin-top: 1rem;" id="send-otp-btn">
+                        Send Verification Code
+                    </button>
                 </div>
-                
-                <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" required placeholder="+91 9876543210">
+
+                <!-- STEP 2: OTP Entry -->
+                <div id="step-otp" style="display: none;">
+                    <h3 style="margin-bottom: 1rem; color: var(--accent);">Enter Verification Code</h3>
+                    <p style="margin-bottom: 2rem; font-size: 0.9rem; color: var(--text-secondary);">We sent a 6-digit code to <strong id="otp-email-display" style="color: var(--text-primary);"></strong>. It will expire in 10 minutes.</p>
+                    
+                    <div class="form-group">
+                        <label for="otp">One-Time Password (OTP)</label>
+                        <input type="text" id="otp" name="otp" placeholder="123456" maxlength="6" style="letter-spacing: 5px; text-align: center; font-size: 1.5rem;">
+                    </div>
+
+                    <button type="button" class="btn btn-primary" style="width: 100%; margin-top: 1rem;" id="verify-otp-btn">
+                        Verify Email
+                    </button>
+                    <button type="button" class="btn btn-outline" style="width: 100%; margin-top: 1rem;" id="back-to-step-1">
+                        Back
+                    </button>
                 </div>
+
+                <!-- STEP 3: Full Profile -->
+                <div id="step-2" style="display: none;">
+                    <h3 style="margin-bottom: 2rem; color: var(--accent);">Step 2: Business Profile</h3>
                 
                 <div class="form-group">
                     <label for="interest">Area of Interest / Industry</label>
@@ -145,19 +183,103 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 2rem;" id="submit-btn">
-                    Submit Details & Pay ₹----- Later
-                </button>
+                <div id="step-2-footer">
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 2rem;" id="submit-btn">
+                        Submit Details & Pay ₹----- Later
+                    </button>
+                </div>
             </form>
         </div>
     </main>
 
+    <script src="js/main.js"></script>
     <script src="js/api.js"></script>
     <script>
+        const step1 = document.getElementById('step-1');
+        const stepOtp = document.getElementById('step-otp');
+        const step2 = document.getElementById('step-2');
+        const alertBox = document.getElementById('alert-message');
+        
+        function showAlert(msg, isError = false) {
+            alertBox.style.display = 'block';
+            alertBox.textContent = msg;
+            if (isError) {
+                alertBox.style.backgroundColor = 'rgba(255, 77, 77, 0.2)';
+                alertBox.style.border = '1px solid var(--error)';
+                alertBox.style.color = 'var(--error)';
+            } else {
+                alertBox.style.backgroundColor = 'rgba(0, 204, 102, 0.2)';
+                alertBox.style.border = '1px solid var(--success)';
+                alertBox.style.color = 'var(--text-primary)';
+            }
+        }
+
+        // Send OTP
+        document.getElementById('send-otp-btn').addEventListener('click', async () => {
+            const email = document.getElementById('email').value;
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const btn = document.getElementById('send-otp-btn');
+
+            if (!email || !name || !phone) {
+                showAlert('Please fill out Name, Email, and Phone.', true);
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+
+            try {
+                await KYApi.sendOTP(email);
+                step1.style.display = 'none';
+                stepOtp.style.display = 'block';
+                document.getElementById('otp-email-display').textContent = email;
+                alertBox.style.display = 'none';
+            } catch (error) {
+                showAlert(error.message, true);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Send Verification Code';
+            }
+        });
+
+        // Back to Step 1
+        document.getElementById('back-to-step-1').addEventListener('click', () => {
+            stepOtp.style.display = 'none';
+            step1.style.display = 'block';
+        });
+
+        // Verify OTP
+        document.getElementById('verify-otp-btn').addEventListener('click', async () => {
+            const email = document.getElementById('email').value;
+            const otp = document.getElementById('otp').value;
+            const btn = document.getElementById('verify-otp-btn');
+
+            if (!otp || otp.length !== 6) {
+                showAlert('Please enter a valid 6-digit OTP.', true);
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Verifying...';
+
+            try {
+                await KYApi.verifyOTP(email, otp);
+                stepOtp.style.display = 'none';
+                step2.style.display = 'block';
+                showAlert('Email verified successfully. Please complete your profile.');
+            } catch (error) {
+                showAlert(error.message, true);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Verify Email';
+            }
+        });
+
+        // Final Form Submission
         document.getElementById('register-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
-            const alertBox = document.getElementById('alert-message');
             const form = e.target;
             
             btn.disabled = true;
@@ -167,21 +289,15 @@
             const data = Object.fromEntries(formData.entries());
             
             try {
-                const response = await submitRegistration(data);
+                await KYApi.submitRegistration(data);
                 
-                alertBox.style.display = 'block';
-                alertBox.style.backgroundColor = 'rgba(0, 204, 102, 0.2)';
-                alertBox.style.border = '1px solid var(--success)';
-                alertBox.style.color = 'var(--text-primary)';
-                alertBox.textContent = 'Registration successful! We will contact you shortly.';
+                showAlert('Registration successful! We have emailed you a confirmation. We will contact you shortly to schedule your consultation.');
                 
                 form.reset();
+                step2.style.display = 'none';
+                // keep the success message visible
             } catch (error) {
-                alertBox.style.display = 'block';
-                alertBox.style.backgroundColor = 'rgba(255, 77, 77, 0.2)';
-                alertBox.style.border = '1px solid var(--error)';
-                alertBox.style.color = 'var(--text-primary)';
-                alertBox.textContent = error.message || 'Something went wrong. Please try again.';
+                showAlert(error.message || 'Something went wrong. Please try again.', true);
             } finally {
                 btn.disabled = false;
                 btn.textContent = 'Submit Details & Pay ₹----- Later';

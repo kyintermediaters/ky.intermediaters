@@ -64,3 +64,45 @@ async function fetchRegistrations() {
         throw error;
     }
 }
+
+/**
+ * Sends OTP to email
+ * @param {string} email
+ */
+async function sendOTP(email) {
+    if (GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE') throw new Error('Setup Google Script URL first.');
+    const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'sendOTP', email: email }),
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+    });
+    const result = await response.json();
+    if (result.status !== 'success') throw new Error(result.message);
+    return true;
+}
+
+/**
+ * Verifies OTP
+ * @param {string} email
+ * @param {string} otp
+ */
+async function verifyOTP(email, otp) {
+    if (GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE') throw new Error('Setup Google Script URL first.');
+    const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'verifyOTP', email: email, otp: otp }),
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+    });
+    const result = await response.json();
+    if (result.status !== 'success') throw new Error(result.message);
+    return true;
+}
+
+// Export a namespace for easier access
+window.KYApi = {
+    submitRegistration,
+    fetchRegistrations,
+    getRegistrations: fetchRegistrations, // alias for backwards compatibility with admin.html
+    sendOTP,
+    verifyOTP
+};

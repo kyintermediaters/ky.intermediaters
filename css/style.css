@@ -213,3 +213,16 @@ footer { padding: 4rem 0; border-top: 1px solid rgba(0,0,0,0.05); margin-top: 5r
 .dark-glass { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; }
 .dark-glass .testimonial-text { color: rgba(255, 255, 255, 0.9); }
 .dark-glass .testimonial-meta { color: var(--accent); }
+
+/* Custom Cursor */
+@media (min-width: 900px) {
+    body, a, button, input, textarea, select { cursor: none !important; }
+    .custom-cursor { position: fixed; top: 0; left: 0; width: 24px; height: 24px; border: 2px solid var(--accent); border-radius: 50%; pointer-events: none; z-index: 99999; transform: translate(-50%, -50%); transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease; }
+    .custom-cursor.hover { width: 60px; height: 60px; background-color: rgba(156, 123, 56, 0.1); border-color: rgba(156, 123, 56, 0.5); backdrop-filter: blur(2px); }
+}
+@media (max-width: 899px) { .custom-cursor { display: none; } }
+
+/* Preloader */
+#preloader { position: fixed; inset: 0; background: var(--bg-color); z-index: 100000; display: flex; align-items: center; justify-content: center; transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+.loader-logo { height: 120px; animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .5; transform: scale(0.95); } }

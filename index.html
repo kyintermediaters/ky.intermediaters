@@ -8,6 +8,12 @@
     <link rel="stylesheet" href="css/style.css?v=5">
 </head>
 <body>
+    <!-- Preloader & Cursor -->
+    <div id="preloader">
+        <img src="images/logo.png" alt="Loading..." class="loader-logo">
+    </div>
+    <div class="custom-cursor"></div>
+
     <!-- Lenis Smooth Scroll Wrapper -->
     <div id="smooth-wrapper">
         <div id="smooth-content">
@@ -123,6 +129,58 @@
                     </div>
                 </section>
 
+                <!-- Meet the Intelligence Section -->
+                <section class="container" style="padding-top: 10rem;">
+                    <h2 class="section-title reveal-text" style="margin-bottom: 4rem;"><span>Our Network</span>Meet the Intelligence</h2>
+                    <div class="split-section" style="padding: 0; align-items: center;">
+                        <div class="split-left reveal-text" style="position: relative; top: 0;">
+                            <p style="font-size: 1.2rem; margin-bottom: 1.5rem;">We don't rely on AI generators or generic templates. Your business blueprint is crafted by humans who have actually built, scaled, or analyzed profitable companies.</p>
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="margin-bottom: 1rem; padding-left: 2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Ex-Tier 1 Consultants</strong> (McKinsey, BCG)</li>
+                                <li style="margin-bottom: 1rem; padding-left: 2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Supply Chain Veterans</strong></li>
+                                <li style="margin-bottom: 1rem; padding-left: 2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Niche B2B SaaS Operators</strong></li>
+                                <li style="padding-left: 2rem; position: relative;"><span style="position: absolute; left: 0; color: var(--accent);">◆</span> <strong>Data Scientists & Quant Analysts</strong></li>
+                            </ul>
+                        </div>
+                        <div class="split-right reveal-scale" style="padding: 0;">
+                            <div class="hero-img-wrapper" style="height: 400px;">
+                                <img src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?auto=format&fit=crop&w=1200&q=80" alt="Intelligence Network" class="cinematic-img parallax-img">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- The Deliverable Preview -->
+                <section class="container" style="padding-top: 10rem;">
+                    <h2 class="section-title text-center reveal-text" style="margin-bottom: 4rem;"><span>The Blueprint</span>What You Receive</h2>
+                    <div class="glass-panel reveal-scale" style="position: relative; overflow: hidden; padding: 4rem; text-align: left; max-width: 900px; margin: 0 auto;">
+                        <div style="position: absolute; top: -50px; right: -50px; opacity: 0.05; font-size: 15rem; font-family: serif; color: var(--accent); line-height: 1;">§</div>
+                        <h3 style="font-size: 2rem; border-bottom: 2px solid rgba(0,0,0,0.1); padding-bottom: 1rem; margin-bottom: 2rem;">Confidential Business Blueprint</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;" class="deliverable-grid">
+                            <div>
+                                <h4 style="color: var(--accent); margin-bottom: 0.5rem;">1. Market Validation</h4>
+                                <p style="font-size: 0.9rem; color: var(--text-secondary);">Proprietary data showing exactly why this niche is underserved in your specific geographic region.</p>
+                            </div>
+                            <div>
+                                <h4 style="color: var(--accent); margin-bottom: 0.5rem;">2. Unit Economics</h4>
+                                <p style="font-size: 0.9rem; color: var(--text-secondary);">A line-by-line breakdown of Customer Acquisition Cost (CAC) vs Lifetime Value (LTV).</p>
+                            </div>
+                            <div>
+                                <h4 style="color: var(--accent); margin-bottom: 0.5rem;">3. Risk Mitigation</h4>
+                                <p style="font-size: 0.9rem; color: var(--text-secondary);">The top 3 reasons businesses in this niche fail, and exactly how to avoid them.</p>
+                            </div>
+                            <div>
+                                <h4 style="color: var(--accent); margin-bottom: 0.5rem;">4. 30-Day Execution Plan</h4>
+                                <p style="font-size: 0.9rem; color: var(--text-secondary);">A step-by-step roadmap detailing what to do on Day 1, Day 15, and Day 30 to reach revenue.</p>
+                            </div>
+                        </div>
+                        <div style="margin-top: 3rem; text-align: center;">
+                            <div class="btn btn-outline" style="pointer-events: none; opacity: 0.5; filter: blur(1px);">Download Sample PDF</div>
+                            <p style="font-size: 0.8rem; margin-top: 1rem; color: var(--text-secondary);">*Sample documents are fully redacted to protect client intellectual property.</p>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Success Stories Section -->
                 <section class="image-bg-section">
                     <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32b7?auto=format&fit=crop&w=1600&q=80" alt="Consulting" class="bg-img parallax-bg-fast">
@@ -151,13 +209,35 @@
                         <h3 style="color: var(--text-secondary); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem;">One-Time Consultation</h3>
                         <div class="pricing-amount"><span>₹</span>-----</div>
                         <p>A flat, transparent fee to unlock your next venture.</p>
-                        <ul class="pricing-list">
-                            <li>1-on-1 Analyst Matching</li>
-                            <li>Tailored Business Idea</li>
-                            <li>Market Overview & Risk Analysis</li>
-                            <li>Basic Execution Roadmap</li>
+                        <ul class="pricing-features">
+                            <li>Dedicated Analyst Match</li>
+                            <li>Full Business Blueprint PDF</li>
+                            <li>1-Hour Strategy Call</li>
                         </ul>
-                        <a href="register.html" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Book Consultation Now</a>
+                        <a href="register.html" class="btn btn-primary" style="width: 100%;">Get Started</a>
+                    </div>
+                </section>
+
+                <!-- Interactive Capital Slider -->
+                <section class="container" style="padding-top: 10rem;">
+                    <h2 class="section-title text-center reveal-text" style="margin-bottom: 2rem;"><span>Potential</span>What Could You Build?</h2>
+                    <div class="glass-panel reveal-scale" style="max-width: 800px; margin: 0 auto; text-align: center;">
+                        <p style="margin-bottom: 2rem;">Adjust the slider to your available capital to see the types of ventures our analysts typically recommend.</p>
+                        
+                        <div style="margin: 3rem 0; position: relative;">
+                            <input type="range" min="1" max="4" value="2" class="capital-slider" id="capitalSlider" style="width: 100%; cursor: pointer;">
+                            <div style="display: flex; justify-content: space-between; margin-top: 1rem; font-weight: bold; color: var(--text-secondary); font-size: 0.9rem;" class="slider-labels">
+                                <span>₹2L - ₹5L</span>
+                                <span>₹5L - ₹15L</span>
+                                <span>₹15L - ₹50L</span>
+                                <span>₹50L+</span>
+                            </div>
+                        </div>
+
+                        <div id="sliderResult" style="padding: 2rem; background: rgba(255,255,255,0.5); border-radius: 16px; border: 1px solid rgba(0,0,0,0.05); min-height: 150px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                            <h3 id="sliderTitle" style="color: var(--accent); margin-bottom: 0.5rem;">Local Service Arbitrage</h3>
+                            <p id="sliderDesc">High-margin, low-overhead service businesses leveraging digital marketing in underserved local markets.</p>
+                        </div>
                     </div>
                 </section>
 

@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="css/style.css?v=4">
 </head>
 <body>
+    <div id="preloader">
+        <img src="images/logo.png" alt="Loading..." class="loader-logo">
+    </div>
+    <div class="custom-cursor"></div>
     <div class="bg-shape bg-shape-1"></div>
     <div class="bg-shape bg-shape-2"></div>
 
@@ -28,16 +32,25 @@
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" placeholder="Enter admin password">
+    <main style="padding-top: 150px; min-height: 80vh;">
+        <!-- Login Screen -->
+        <div id="adminLogin" class="container" style="max-width: 500px; text-align: center;">
+            <div class="glass-panel">
+                <h2 style="margin-bottom: 2rem;">Admin Access</h2>
+                <input type="password" id="adminPassword" placeholder="Enter Password" class="form-input" style="margin-bottom: 1rem;">
+                <button id="loginBtn" class="btn btn-primary" style="width: 100%;">Unlock Dashboard</button>
+                <p id="loginError" style="color: red; margin-top: 1rem; display: none;">Incorrect password.</p>
             </div>
-            <button class="btn btn-primary" style="width: 100%;" onclick="checkPassword()">Login</button>
-            <p style="text-align: center; margin-top: 1rem; font-size: 0.8rem;">(Hint: password is "admin123")</p>
         </div>
 
-        <!-- Dashboard Section -->
-        <div id="dashboard-section" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                <h2>Customer Registrations</h2>
-                <button class="btn btn-outline" onclick="loadData()" id="refresh-btn">Refresh Data</button>
+        <!-- Dashboard Content (Hidden by default) -->
+        <div id="adminDashboard" class="container" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem;">
+                <div>
+                    <h1 class="section-title" style="margin-bottom: 0.5rem; font-size: 2.5rem;">Client Submissions</h1>
+                    <p style="color: var(--text-secondary);">Real-time feed from Google Sheets</p>
+                </div>
+                <button id="refreshBtn" class="btn btn-outline">Refresh Data</button>
             </div>
             
             <div class="glass-panel data-table-container">
@@ -62,8 +75,8 @@
                                 <th style="padding: 1rem; font-weight: 600; color: var(--text-secondary);">Risk</th>
                             </tr>
                         </thead>
-                        <tbody id="table-body">
-                            <tr><td colspan="15" style="text-align: center; padding: 2rem;">Loading data...</td></tr>
+                        <tbody id="submissionsBody">
+                            <tr><td colspan="15" style="text-align: center; padding: 2rem;" id="loadingState">Loading data...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -71,64 +84,72 @@
         </div>
     </main>
 
+    <script src="js/main.js"></script>
     <script src="js/api.js"></script>
     <script>
-        function checkPassword() {
-            const pwd = document.getElementById('password').value;
-            if (pwd === 'admin123') {
-                document.getElementById('login-section').style.display = 'none';
-                document.getElementById('dashboard-section').style.display = 'block';
-                loadData();
-            } else {
-                document.getElementById('login-error').style.display = 'block';
-            }
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginScreen = document.getElementById('adminLogin');
+            const dashboard = document.getElementById('adminDashboard');
+            const loginBtn = document.getElementById('loginBtn');
+            const passInput = document.getElementById('adminPassword');
+            const loginError = document.getElementById('loginError');
 
-        async function loadData() {
-            const tbody = document.getElementById('table-body');
-            const refreshBtn = document.getElementById('refresh-btn');
-            
-            refreshBtn.textContent = 'Refreshing...';
-            refreshBtn.disabled = true;
-            tbody.innerHTML = '<tr><td colspan="15" style="text-align: center; padding: 2rem;">Fetching data from Google Sheets...</td></tr>';
-            
-            try {
-                const data = await fetchRegistrations();
-                
-                if (data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="15" style="text-align: center; padding: 2rem;">No registrations found.</td></tr>';
-                    return;
-                }
-                
-                tbody.innerHTML = '';
-                data.forEach(row => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05); white-space: nowrap;">${new Date(row[0]).toLocaleString() || 'N/A'}</td>
-                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05); font-weight: 500; color: var(--text-primary); white-space: nowrap;">${row[1] || ''}</td>
-                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05);">${row[2] || ''}</td>
-                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05); white-space: nowrap;">${row[3] || ''}</td>
-                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05);"><span style="background: rgba(0,0,0,0.05); padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; white-space: nowrap;">${row[4] || ''}</span></td>
-                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05);">${row[5] || ''}</td>
-                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05);">${row[6] || ''}</td>
-                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05);">${row[7] || ''}</td>
-                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05);">${row[8] || ''}</td>
-                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05); min-width: 200px;">${row[9] || ''}</td>
-                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05);">${row[10] || ''}</td>
-                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05);">${row[11] || ''}</td>
-                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05);">${row[12] || ''}</td>
-                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05);">${row[13] || ''}</td>
-                        <td style="padding: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05);">${row[14] || ''}</td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            } catch (error) {
-                tbody.innerHTML = `<tr><td colspan="15" style="text-align: center; padding: 2rem; color: var(--error);">Error: ${error.message} <br><br> (Did you set up the Google Apps Script Web App URL in js/api.js?)</td></tr>`;
-            } finally {
-                refreshBtn.textContent = 'Refresh Data';
-                refreshBtn.disabled = false;
+            if (sessionStorage.getItem('ky_admin_auth') === 'true') {
+                loginScreen.style.display = 'none';
+                dashboard.style.display = 'block';
+                loadData();
             }
-        }
+
+            loginBtn.addEventListener('click', () => {
+                if (passInput.value === 'KYAdmin2026') {
+                    sessionStorage.setItem('ky_admin_auth', 'true');
+                    loginScreen.style.display = 'none';
+                    dashboard.style.display = 'block';
+                    loadData();
+                } else {
+                    loginError.style.display = 'block';
+                }
+            });
+
+            document.getElementById('refreshBtn').addEventListener('click', loadData);
+
+            async function loadData() {
+                const tbody = document.getElementById('submissionsBody');
+                const refreshBtn = document.getElementById('refreshBtn');
+                refreshBtn.textContent = 'Refreshing...';
+                tbody.innerHTML = '<tr><td colspan="15" style="text-align: center; padding: 2rem;">Loading data...</td></tr>';
+                
+                try {
+                    const submissions = await KYApi.getRegistrations();
+                    tbody.innerHTML = '';
+                    
+                    if (submissions.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="15" style="text-align: center; padding: 2rem;">No submissions yet</td></tr>';
+                        return;
+                    }
+                    
+                    submissions.reverse().forEach(row => {
+                        const tr = document.createElement('tr');
+                        const cells = [
+                            new Date(row[0]).toLocaleDateString(), row[1], row[2], row[3], row[4], 
+                            row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13], row[14]
+                        ];
+                        cells.forEach(cell => {
+                            const td = document.createElement('td');
+                            td.style.padding = '1rem';
+                            td.style.borderBottom = '1px solid rgba(0,0,0,0.05)';
+                            td.textContent = cell || '-';
+                            tr.appendChild(td);
+                        });
+                        tbody.appendChild(tr);
+                    });
+                } catch (error) {
+                    tbody.innerHTML = `<tr><td colspan="15" style="text-align: center; color: red; padding: 2rem;">Error loading data.</td></tr>`;
+                } finally {
+                    refreshBtn.textContent = 'Refresh Data';
+                }
+            }
+        });
     </script>
 </body>
 </html>

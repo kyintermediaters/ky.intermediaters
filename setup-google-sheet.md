@@ -16,54 +16,137 @@ Copy and paste the following code into the script editor:
 
 ```javascript
 const SHEET_NAME = 'Registrations';
+const OTP_SHEET = 'OTP_Cache';
 
 // Run this function once manually to setup the headers
 function setup() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
+  
   let sheet = ss.getSheetByName(SHEET_NAME);
-  // If sheet is empty, add headers
-  if (sheet.getLastRow() === 0) {
+  if (!sheet) {
+    sheet = ss.insertSheet(SHEET_NAME);
     sheet.appendRow(['Timestamp', 'Name', 'Email', 'Phone', 'Interest', 'Capital', 'Location', 'Occupation', 'Experience', 'Motivation', 'Goal', 'Timeline', 'Time Comm.', 'Venture Type', 'Risk']);
     sheet.getRange("A1:O1").setFontWeight("bold");
+  }
+
+  let otpSheet = ss.getSheetByName(OTP_SHEET);
+  if (!otpSheet) {
+    otpSheet = ss.insertSheet(OTP_SHEET);
+    otpSheet.appendRow(['Timestamp', 'Email', 'OTP']);
+    otpSheet.hideSheet(); // Hide it so it doesn't clutter the UI
   }
 }
 
 function doPost(e) {
   try {
     const params = JSON.parse(e.postData.contents);
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
     
+    // 1. Send OTP
+    if (params.action === 'sendOTP') {
+      const email = params.email;
+      if (!email) throw new Error("Email is required");
+
+      const otp = Math.floor(100000 + Math.random() * 900000).toString(); // 6 digit OTP
+      
+      let otpSheet = ss.getSheetByName(OTP_SHEET);
+      if (!otpSheet) { setup(); otpSheet = ss.getSheetByName(OTP_SHEET); }
+
+      // Save OTP to cache
+      otpSheet.appendRow([new Date(), email, otp]);
+
+      // Send Email
+      MailApp.sendEmail({
+        to: email,
+        subject: "Your KY Intermediater's Verification Code",
+        htmlBody: `<div style="font-family: serif; color: #0f172a;">
+            <h2>Verification Required</h2>
+            <p>Your one-time password to access the KY Intermediater's application is:</p>
+            <h1 style="color: #9c7b38; letter-spacing: 5px;">${otp}</h1>
+            <p>This code will expire in 10 minutes.</p>
+        </div>`
+      });
+
+      return ContentService.createTextOutput(JSON.stringify({ status: 'success' }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    // 2. Verify OTP
+    if (params.action === 'verifyOTP') {
+      const { email, otp } = params;
+      const otpSheet = ss.getSheetByName(OTP_SHEET);
+      if (!otpSheet) throw new Error("Server error: OTP Sheet not found");
+
+      const data = otpSheet.getDataRange().getValues();
+      let isValid = false;
+
+      // Check from bottom to top for latest OTP
+      for (let i = data.length - 1; i > 0; i--) {
+        const row = data[i];
+        const rowTime = new Date(row[0]).getTime();
+        const rowEmail = row[1];
+        const rowOtp = row[2].toString();
+
+        // Expire after 10 mins (600,000 ms)
+        const isExpired = (new Date().getTime() - rowTime) > 600000;
+
+        if (rowEmail === email) {
+            if (rowOtp === otp && !isExpired) {
+                isValid = true;
+            }
+            break; // Found the latest one, no need to check older ones
+        }
+      }
+
+      if (isValid) {
+        return ContentService.createTextOutput(JSON.stringify({ status: 'success' }))
+          .setMimeType(ContentService.MimeType.JSON);
+      } else {
+        return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: 'Invalid or expired OTP' }))
+          .setMimeType(ContentService.MimeType.JSON);
+      }
+    }
+
+    // 3. Register Full Form
     if (params.action === 'register') {
       const data = params.data;
-      const ss = SpreadsheetApp.getActiveSpreadsheet();
       let sheet = ss.getSheetByName(SHEET_NAME);
       
-      if (!sheet) {
-        setup();
-        sheet = ss.getSheetByName(SHEET_NAME);
-      }
+      if (!sheet) { setup(); sheet = ss.getSheetByName(SHEET_NAME); }
       
       // Append row to sheet
       sheet.appendRow([
-        new Date(),
-        data.name,
-        data.email,
-        data.phone,
-        data.interest,
-        data.budget,
-        data.location,
-        data.occupation,
-        data.experience,
-        data.motivation,
-        data.goal,
-        data.timeline,
-        data.time,
-        data.venture_type,
-        data.risk
+        new Date(), data.name, data.email, data.phone, data.interest,
+        data.budget, data.location, data.occupation, data.experience,
+        data.motivation, data.goal, data.timeline, data.time,
+        data.venture_type, data.risk
       ]);
+
+      // Send Confirmation Email automatically
+      try {
+        MailApp.sendEmail({
+            to: data.email,
+            subject: "Application Received | KY Intermediater's",
+            htmlBody: `<div style="font-family: serif; color: #0f172a;">
+                <h2>Welcome to KY, ${data.name}.</h2>
+                <p>We have successfully received your business profile and capital details.</p>
+                <p>Our algorithm is currently pairing your profile with a dedicated business analyst. We will reach out within 48 hours to schedule your 1-on-1 strategy call.</p>
+                <br>
+                <p>Best Regards,</p>
+                <p><strong>The KY Intelligence Team</strong></p>
+            </div>`
+        });
+      } catch (e) {
+          // Ignore email failure so the registration still succeeds
+      }
       
       return ContentService.createTextOutput(JSON.stringify({ status: 'success' }))
         .setMimeType(ContentService.MimeType.JSON);
     }
+
+    return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: 'Invalid POST action' }))
+      .setMimeType(ContentService.MimeType.JSON);
+
   } catch (error) {
     return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: error.toString() }))
       .setMimeType(ContentService.MimeType.JSON);
@@ -82,17 +165,13 @@ function doGet(e) {
       }
       
       const data = sheet.getDataRange().getValues();
-      
-      if (data.length > 0) {
-        // Remove header row
-        data.shift();
-      }
+      if (data.length > 0) data.shift(); // Remove header row
       
       return ContentService.createTextOutput(JSON.stringify({ status: 'success', data: data }))
         .setMimeType(ContentService.MimeType.JSON);
     }
     
-    return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: 'Invalid action' }))
+    return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: 'Invalid GET action' }))
       .setMimeType(ContentService.MimeType.JSON);
   } catch (error) {
     return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: error.toString() }))
