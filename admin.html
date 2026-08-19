@@ -141,6 +141,8 @@
                     document.getElementById('adminLogin').style.display = 'none';
                     document.getElementById('adminDashboard').style.display = 'block';
                 } catch (error) {
+                    console.error("Login/Load Error:", error);
+                    document.getElementById('loginError').textContent = "Error: " + error.message;
                     document.getElementById('loginError').style.display = 'block';
                 } finally {
                     loginBtn.textContent = 'Unlock Dashboard';
@@ -182,7 +184,7 @@
             let indCount = {};
             
             allLeads.forEach(row => {
-                const capStr = row[5] || ""; // Capital
+                const capStr = (row[5] || "").toString(); // Capital
                 if (capStr.includes("50000+")) totalCap += 50000;
                 else if (capStr.includes("20000-")) totalCap += 20000;
                 else if (capStr.includes("10000-")) totalCap += 10000;
