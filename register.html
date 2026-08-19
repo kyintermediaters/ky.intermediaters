@@ -212,66 +212,21 @@
             }
         }
 
-        // Send OTP
-        document.getElementById('send-otp-btn').addEventListener('click', async () => {
-            const email = document.getElementById('email').value;
-            const name = document.getElementById('name').value;
-            const phone = document.getElementById('phone').value;
-            const btn = document.getElementById('send-otp-btn');
+        // Proceed to Step 2 (Skip OTP for speed)
+        document.getElementById("send-otp-btn").addEventListener("click", () => {
+            const email = document.getElementById("email").value;
+            const name = document.getElementById("name").value;
+            const phone = document.getElementById("phone").value;
 
             if (!email || !name || !phone) {
-                showAlert('Please fill out Name, Email, and Phone.', true);
+                showAlert("Please fill out Name, Email, and Phone.", true);
                 return;
             }
 
-            btn.disabled = true;
-            btn.textContent = 'Sending...';
-
-            try {
-                await KYApi.sendOTP(email);
-                step1.style.display = 'none';
-                stepOtp.style.display = 'block';
-                document.getElementById('otp-email-display').textContent = email;
-                alertBox.style.display = 'none';
-            } catch (error) {
-                showAlert(error.message, true);
-            } finally {
-                btn.disabled = false;
-                btn.textContent = 'Send Verification Code';
-            }
-        });
-
-        // Back to Step 1
-        document.getElementById('back-to-step-1').addEventListener('click', () => {
-            stepOtp.style.display = 'none';
-            step1.style.display = 'block';
-        });
-
-        // Verify OTP
-        document.getElementById('verify-otp-btn').addEventListener('click', async () => {
-            const email = document.getElementById('email').value;
-            const otp = document.getElementById('otp').value;
-            const btn = document.getElementById('verify-otp-btn');
-
-            if (!otp || otp.length !== 6) {
-                showAlert('Please enter a valid 6-digit OTP.', true);
-                return;
-            }
-
-            btn.disabled = true;
-            btn.textContent = 'Verifying...';
-
-            try {
-                await KYApi.verifyOTP(email, otp);
-                stepOtp.style.display = 'none';
-                step2.style.display = 'block';
-                showAlert('Email verified successfully. Please complete your profile.');
-            } catch (error) {
-                showAlert(error.message, true);
-            } finally {
-                btn.disabled = false;
-                btn.textContent = 'Verify Email';
-            }
+            // Instantly transition to step 2 without waiting for any API
+            step1.style.display = "none";
+            step2.style.display = "block";
+            alertBox.style.display = "none";
         });
 
         // Final Form Submission
