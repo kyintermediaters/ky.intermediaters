@@ -98,11 +98,31 @@ async function verifyOTP(email, otp) {
     return true;
 }
 
+/**
+ * Schedules a Google Calendar Meeting
+ * @param {string} email
+ * @param {string} name
+ * @param {string} date
+ * @param {string} time
+ */
+async function scheduleMeeting(email, name, date, time) {
+    if (GOOGLE_SCRIPT_URL === "YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE") throw new Error("Setup Google Script URL first.");
+    const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({ action: "scheduleMeeting", email: email, name: name, date: date, time: time }),
+        headers: { "Content-Type": "text/plain;charset=utf-8" }
+    });
+    const result = await response.json();
+    if (result.status !== "success") throw new Error(result.message);
+    return true;
+}
+
 // Export a namespace for easier access
 window.KYApi = {
     submitRegistration,
     fetchRegistrations,
     getRegistrations: fetchRegistrations, // alias for backwards compatibility with admin.html
     sendOTP,
-    verifyOTP
+    verifyOTP,
+    scheduleMeeting
 };
