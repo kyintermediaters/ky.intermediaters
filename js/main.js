@@ -34,19 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(el);
     });
 
-    // Custom Cursor Logic
-    const cursor = document.querySelector('.custom-cursor');
-    if (cursor && window.innerWidth >= 900) {
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-        });
-        
-        document.querySelectorAll('a, button, input, textarea, select, .glass-panel, .feature-card, .testimonial-card').forEach(el => {
-            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-        });
-    }
+
 
 });
 
