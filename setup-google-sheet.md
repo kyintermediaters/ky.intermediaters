@@ -173,6 +173,30 @@ function doPost(e) {
         .setMimeType(ContentService.MimeType.JSON);
     }
 
+    // 4. Schedule Calendar Meeting
+    if (params.action === "scheduleMeeting") {
+      const { email, name, date, time } = params;
+      if (!email || !date || !time) throw new Error("Email, Date, and Time are required.");
+
+      // Combine date and time
+      const startTime = new Date(`${date}T${time}:00`);
+      const endTime = new Date(startTime.getTime() + (60 * 60 * 1000)); // 1 hour meeting
+
+      CalendarApp.getDefaultCalendar().createEvent(
+        `Strategy Call: ${name} & KY Intelligence Team`,
+        startTime,
+        endTime,
+        {
+          guests: email,
+          sendInvites: true,
+          description: "Your 1-on-1 strategy call with the KY Intelligence Team to discuss your business profile and next steps."
+        }
+      );
+
+      return ContentService.createTextOutput(JSON.stringify({ status: "success" }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
     return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: 'Invalid POST action' }))
       .setMimeType(ContentService.MimeType.JSON);
 

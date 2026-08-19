@@ -70,6 +70,48 @@
             }, 2000);
         };
 
+        // Toggle Meeting Form
+        window.toggleMeetingForm = function(btn) {
+            const form = btn.nextElementSibling;
+            if (form.style.display === "none") {
+                form.style.display = "block";
+                btn.innerText = "Cancel";
+            } else {
+                form.style.display = "none";
+                btn.innerText = "Schedule Google Meet";
+            }
+        };
+
+        // Schedule Meeting
+        window.scheduleMeeting = async function(email, name, btn) {
+            const form = btn.parentElement;
+            const dateInput = form.querySelector(".meeting-date").value;
+            const timeInput = form.querySelector(".meeting-time").value;
+
+            if (!dateInput || !timeInput) {
+                alert("Please select both a date and a time.");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "Scheduling...";
+
+            try {
+                await KYApi.scheduleMeeting(email, name, dateInput, timeInput);
+                alert(`Meeting successfully scheduled! A Google Calendar invite has been sent to ${email}.`);
+                form.style.display = "none";
+                form.previousElementSibling.innerText = "Meeting Scheduled ✓";
+                form.previousElementSibling.disabled = true;
+                form.previousElementSibling.style.background = "#e2e8f0";
+                form.previousElementSibling.style.color = "#475569";
+                form.previousElementSibling.style.border = "none";
+            } catch (error) {
+                alert("Failed to schedule: " + error.message);
+                btn.disabled = false;
+                btn.innerText = "Send Invite";
+            }
+        };
+
         document.addEventListener('DOMContentLoaded', () => {
             const loginScreen = document.getElementById('adminLogin');
             const dashboard = document.getElementById('adminDashboard');
@@ -179,6 +221,20 @@
                             <div><strong>Type:</strong><br>${row[13] || '-'}</div>
                             <div><strong>Risk:</strong><br>${row[14] || '-'}</div>
                             <div style="grid-column: 1/-1;"><strong>Goal:</strong><br><span style="color:var(--text-secondary)">${row[10] || '-'}</span></div>
+                        </div>
+
+                        <div style="margin-top: 1.5rem; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 1rem;">
+                            <button onclick="toggleMeetingForm(this)" class="btn btn-outline" style="width: 100%; font-size: 0.8rem;">Schedule Google Meet</button>
+                            
+                            <div class="meeting-form" style="display: none; margin-top: 1rem; background: #f1f5f9; padding: 1rem; border-radius: 4px; border: 1px solid rgba(0,0,0,0.05);">
+                                <label style="font-size: 0.75rem; font-weight: bold; color: var(--text-secondary);">Date</label>
+                                <input type="date" class="meeting-date" style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; border: 1px solid #ccc; border-radius: 4px; font-family: inherit;">
+                                
+                                <label style="font-size: 0.75rem; font-weight: bold; color: var(--text-secondary);">Time</label>
+                                <input type="time" class="meeting-time" style="width: 100%; padding: 0.5rem; margin-bottom: 1rem; border: 1px solid #ccc; border-radius: 4px; font-family: inherit;">
+                                
+                                <button onclick="scheduleMeeting('${row[2]}', '${row[1]}', this)" class="btn btn-primary" style="width: 100%; font-size: 0.8rem;">Send Invite</button>
+                            </div>
                         </div>
                     `;
                     leadsGrid.appendChild(card);
