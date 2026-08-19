@@ -96,7 +96,7 @@ footer .logo img { height: 100px; }
 }
 
 /* GSAP Hero Classes */
-.full-screen-hero { height: 100vh; display: flex; align-items: center; text-align: center; }
+.full-screen-hero { min-height: 100vh; height: auto; display: flex; align-items: center; text-align: left; padding-top: 140px; padding-bottom: 4rem; }
 .hero-title { font-size: 4rem; letter-spacing: -2px; margin-bottom: 2rem; }
 .hero-desc { font-size: 1.3rem; max-width: 650px; margin: 0 auto 3rem auto; }
 .line { display: block; overflow: hidden; padding-bottom: 0.5rem; }
