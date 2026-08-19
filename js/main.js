@@ -50,12 +50,12 @@ window.addEventListener('load', () => {
 });
 
 // Capital Slider Logic
-document.addEventListener('DOMContentLoaded', () => {
-    const slider = document.getElementById('capitalSlider');
-    const sliderTitle = document.getElementById('sliderTitle');
-    const sliderDesc = document.getElementById('sliderDesc');
+document.addEventListener("DOMContentLoaded", () => {
+    const btns = document.querySelectorAll(".segment-btn");
+    const sliderTitle = document.getElementById("sliderTitle");
+    const sliderDesc = document.getElementById("sliderDesc");
     
-    if (slider) {
+    if (btns.length > 0) {
         const ventureData = {
             1: { title: "Local Service Arbitrage", desc: "High-margin, low-overhead service businesses leveraging digital marketing in underserved local markets." },
             2: { title: "Niche E-Commerce / D2C", desc: "Sourcing premium products with high unit margins and strong brand narratives. Focus on high LTV." },
@@ -63,25 +63,21 @@ document.addEventListener('DOMContentLoaded', () => {
             4: { title: "Marketplace / Platform", desc: "Capital-intensive structural plays connecting fragmented supply with high-demand consumers." }
         };
 
-        slider.addEventListener('input', (e) => {
-            const val = e.target.value;
-            sliderTitle.innerText = ventureData[val].title;
-            sliderDesc.innerText = ventureData[val].desc;
-            
-            // Highlight the correct label
-            const labels = document.querySelectorAll('.slider-labels span');
-            labels.forEach((label, index) => {
-                if (index + 1 == val) {
-                    label.style.color = 'var(--accent)';
-                    label.style.transform = 'scale(1.1)';
-                } else {
-                    label.style.color = 'var(--text-secondary)';
-                    label.style.transform = 'scale(1)';
-                }
+        btns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                // Remove active class from all
+                btns.forEach(b => b.classList.remove("active"));
+                // Add active class to clicked
+                btn.classList.add("active");
+                
+                // Update content
+                const val = btn.getAttribute("data-val");
+                sliderTitle.innerText = ventureData[val].title;
+                sliderDesc.innerText = ventureData[val].desc;
             });
         });
         
         // Trigger initial state
-        slider.dispatchEvent(new Event('input'));
+        btns[1].click();
     }
 });

@@ -213,17 +213,16 @@
                     <div class="glass-panel reveal-scale" style="max-width: 800px; margin: 0 auto; text-align: center;">
                         <p style="margin-bottom: 2rem;">Adjust the slider to your available capital to see the types of ventures our analysts typically recommend.</p>
                         
-                        <div style="margin: 3rem 0; position: relative;">
-                            <input type="range" min="1" max="4" value="2" class="capital-slider" id="capitalSlider" style="width: 100%; cursor: pointer;">
-                            <div style="display: flex; justify-content: space-between; margin-top: 1rem; font-weight: bold; color: var(--text-secondary); font-size: 0.9rem;" class="slider-labels">
-                                <span>₹2L - ₹5L</span>
-                                <span>₹5L - ₹15L</span>
-                                <span>₹15L - ₹50L</span>
-                                <span>₹50L+</span>
-                            </div>
+                        
+                        <div class="segmented-control">
+                            <button class="segment-btn active" data-val="1">₹2L - ₹5L</button>
+                            <button class="segment-btn" data-val="2">₹5L - ₹15L</button>
+                            <button class="segment-btn" data-val="3">₹15L - ₹50L</button>
+                            <button class="segment-btn" data-val="4">₹50L+</button>
+                        </div>
                         </div>
 
-                        <div id="sliderResult" style="padding: 2rem; background: rgba(255,255,255,0.5); border-radius: 16px; border: 1px solid rgba(0,0,0,0.05); min-height: 150px; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                        <div id="sliderResult" style="padding: 3rem; background: #ffffff; border-radius: 4px; border: 1px solid var(--glass-border); min-height: 150px; display: flex; align-items: center; justify-content: center; flex-direction: column; box-shadow: var(--glass-shadow);">
                             <h3 id="sliderTitle" style="color: var(--accent); margin-bottom: 0.5rem;">Local Service Arbitrage</h3>
                             <p id="sliderDesc">High-margin, low-overhead service businesses leveraging digital marketing in underserved local markets.</p>
                         </div>
