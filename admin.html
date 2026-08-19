@@ -4,27 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | KY Intermediater's</title>
+    <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/png" href="images/favicon.png">
-    <link rel="stylesheet" href="css/style.css?v=4">
+    <style>
+        .admin-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 1rem; }
+        .leads-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 1.5rem; }
+        .score-badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 12px; font-weight: bold; font-size: 0.8rem; }
+        .score-high { background: #dcfce7; color: #166534; }
+        .score-med { background: #fef08a; color: #854d0e; }
+        .score-low { background: #fee2e2; color: #991b1b; }
+        
+        .status-dropdown, .agent-dropdown { padding: 0.3rem; border-radius: 4px; border: 1px solid #ccc; background: white; font-size: 0.8rem; }
+        
+        .toolbar { display: flex; gap: 1rem; margin-bottom: 2rem; background: rgba(0,0,0,0.02); padding: 1rem; border-radius: 4px; align-items: center; flex-wrap: wrap; }
+        .bulk-actions { margin-left: auto; display: flex; gap: 0.5rem; }
+        
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 2rem; border-radius: 8px; width: 90%; max-width: 500px; }
+        
+        .stats-header { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { background: var(--secondary); color: white; padding: 1.5rem; border-radius: 8px; text-align: center; }
+        .stat-card h3 { font-size: 2rem; margin-bottom: 0.5rem; color: var(--accent); }
+    </style>
 </head>
-<body>
-    <div id="preloader">
-        <img src="images/logo.png" alt="Loading..." class="loader-logo">
-    </div>
+<body style="background: #f8fafc; padding-top: 2rem;">
 
-    <header>
-        <div class="container nav-container">
-            <a href="index.html" class="logo"><img src="images/logo.png" alt="KY Intermediater's Logo"></a>
-            <nav class="nav-links">
-                <a href="index.html">Back to Site</a>
-            </nav>
-        </div>
-    </header>
-
-
-    <main style="padding-top: 150px; min-height: 80vh;">
-        <!-- Login Screen -->
-        <div id="adminLogin" class="container" style="max-width: 500px; text-align: center;">
+    <main class="container">
+        <div id="adminLogin" style="max-width: 500px; margin: 4rem auto; text-align: center;">
             <div class="glass-panel">
                 <h2 style="margin-bottom: 2rem;">Admin Access</h2>
                 <input type="password" id="adminPassword" placeholder="Enter Password" class="form-input" style="margin-bottom: 1rem;">
@@ -33,242 +39,374 @@
             </div>
         </div>
 
-        <!-- Dashboard Content (Hidden by default) -->
-        <div id="adminDashboard" class="container" style="display: none; padding-bottom: 5rem;">
-            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; gap: 1rem;">
-                <div>
-                    <h1 class="section-title" style="margin-bottom: 0.5rem; font-size: 2.5rem;">Lead Manager</h1>
-                    <p style="color: var(--text-secondary);">Secure real-time feed</p>
-                </div>
-                <div style="display: flex; gap: 1rem; align-items: center;">
-                    <input type="text" id="searchInput" placeholder="Search leads..." style="padding: 0.8rem 1.5rem; border-radius: 30px; border: 1px solid rgba(0,0,0,0.1); width: 250px; font-family: inherit;">
-                    <button id="refreshBtn" class="btn btn-outline">Refresh</button>
-                </div>
+        <div id="adminDashboard" style="display: none;">
+            <div class="admin-nav">
+                <h2>CRM Dashboard</h2>
+                <button id="refreshBtn" class="btn btn-outline">Refresh Data</button>
             </div>
             
-            <div id="leadsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem;">
-                <!-- Cards will be injected here -->
-                <div id="loadingState" style="grid-column: 1 / -1; text-align: center; padding: 4rem;">Loading data...</div>
+            <div class="stats-header">
+                <div class="stat-card">
+                    <h3 id="statTotalLeads">0</h3>
+                    <p>Total Investors</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="statTotalCap">₹0</h3>
+                    <p>Estimated Capital Pool</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="statTopInd">-</h3>
+                    <p>Top Interest</p>
+                </div>
+            </div>
+
+            <div class="toolbar">
+                <input type="text" id="searchInput" placeholder="Search names, emails, phones..." class="form-input" style="width: 250px; margin: 0;">
+                <select id="filterStatus" class="form-input" style="width: 150px; margin: 0; padding: 0.5rem;">
+                    <option value="All">All Statuses</option>
+                    <option value="New Lead">New Lead</option>
+                    <option value="Contacted">Contacted</option>
+                    <option value="Proposal">Proposal</option>
+                    <option value="Closed">Closed</option>
+                </select>
+                <select id="filterAgent" class="form-input" style="width: 150px; margin: 0; padding: 0.5rem;">
+                    <option value="All">All Agents</option>
+                    <option value="Unassigned">Unassigned</option>
+                    <option value="Agent 1">Agent 1</option>
+                    <option value="Agent 2">Agent 2</option>
+                </select>
+                
+                <div class="bulk-actions">
+                    <button id="exportCsvBtn" class="btn btn-outline" style="padding: 0.5rem 1rem;">Export CSV</button>
+                    <button id="bulkEmailBtn" class="btn btn-primary" style="padding: 0.5rem 1rem;">Broadcast Email</button>
+                </div>
+            </div>
+
+            <div id="leadsGrid" class="leads-grid">
+                <div id="loadingState" style="grid-column: 1 / -1; text-align: center; padding: 4rem;">Loading CRM data...</div>
             </div>
         </div>
     </main>
 
-    <script src="js/main.js"></script>
+    <!-- Bulk Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <h3 style="margin-bottom: 1rem;">Send Broadcast Email</h3>
+            <p style="font-size: 0.85rem; margin-bottom: 1rem; color: var(--text-secondary);">Sending to <span id="bulkCount">0</span> selected leads (filtered).</p>
+            <input type="text" id="bulkSubject" class="form-input" placeholder="Email Subject" style="margin-bottom: 1rem;">
+            <textarea id="bulkBody" class="form-input" rows="6" placeholder="HTML or Plain Text Body" style="margin-bottom: 1rem;"></textarea>
+            <div style="display: flex; gap: 1rem;">
+                <button onclick="document.getElementById('emailModal').style.display='none'" class="btn btn-outline" style="flex: 1;">Cancel</button>
+                <button id="sendBulkBtn" class="btn btn-primary" style="flex: 1;">Send Now</button>
+            </div>
+        </div>
+    </div>
+
     <script src="js/api.js"></script>
     <script>
-
         function escapeHTML(str) {
             if (!str) return "-";
             return str.toString().replace(/[&<>'"]/g, tag => ({
-                "&": "&amp;",
-                "<": "&lt;",
-                ">": "&gt;",
-                "'": "&#39;",
-                '"': "&quot;"
+                "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;"
             }[tag] || tag));
         }
 
-        window.copyData = function(text, btn) {
-            if(!text || text === 'undefined') return;
-            navigator.clipboard.writeText(text);
-            const originalText = btn.textContent;
-            btn.textContent = 'Copied!';
-            btn.style.backgroundColor = 'var(--accent)';
-            btn.style.color = '#fff';
-            setTimeout(() => {
-                btn.textContent = originalText;
-                btn.style.backgroundColor = 'transparent';
-                btn.style.color = 'var(--text-primary)';
-            }, 2000);
-        };
-
-        // Toggle Meeting Form
-        window.toggleMeetingForm = function(btn) {
-            const form = btn.nextElementSibling;
-            if (form.style.display === "none") {
-                form.style.display = "block";
-                btn.innerText = "Cancel";
-            } else {
-                form.style.display = "none";
-                btn.innerText = "Schedule Google Meet";
-            }
-        };
-
-        // Schedule Meeting
-        window.scheduleMeeting = async function(email, name, btn) {
-            const form = btn.parentElement;
-            const dateInput = form.querySelector(".meeting-date").value;
-            const timeInput = form.querySelector(".meeting-time").value;
-
-            if (!dateInput || !timeInput) {
-                alert("Please select both a date and a time.");
-                return;
-            }
-
-            btn.disabled = true;
-            btn.innerText = "Scheduling...";
-
-            try {
-                await KYApi.scheduleMeeting(email, name, dateInput, timeInput);
-                alert(`Meeting successfully scheduled! A Google Calendar invite has been sent to ${email}.`);
-                form.style.display = "none";
-                form.previousElementSibling.innerText = "Meeting Scheduled ✓";
-                form.previousElementSibling.disabled = true;
-                form.previousElementSibling.style.background = "#e2e8f0";
-                form.previousElementSibling.style.color = "#475569";
-                form.previousElementSibling.style.border = "none";
-            } catch (error) {
-                alert("Failed to schedule: " + error.message);
-                btn.disabled = false;
-                btn.innerText = "Send Invite";
-            }
-        };
+        let allLeads = [];
+        let filteredLeads = [];
+        const passInput = document.getElementById('adminPassword');
+        const loginBtn = document.getElementById('loginBtn');
+        const searchInput = document.getElementById('searchInput');
+        const filterStatus = document.getElementById('filterStatus');
+        const filterAgent = document.getElementById('filterAgent');
 
         document.addEventListener('DOMContentLoaded', () => {
-            const loginScreen = document.getElementById('adminLogin');
-            const dashboard = document.getElementById('adminDashboard');
-            const loginBtn = document.getElementById('loginBtn');
-            const passInput = document.getElementById('adminPassword');
-            const loginError = document.getElementById('loginError');
-            const leadsGrid = document.getElementById('leadsGrid');
-            const searchInput = document.getElementById('searchInput');
-            let allLeads = [];
-
             const savedPass = sessionStorage.getItem('ky_admin_auth');
             if (savedPass) {
-                loginScreen.style.display = 'none';
-                dashboard.style.display = 'block';
+                document.getElementById('adminLogin').style.display = 'none';
+                document.getElementById('adminDashboard').style.display = 'block';
                 loadData(savedPass).catch(() => {
-                    // If auth fails with the saved password, clear it and show login
                     sessionStorage.removeItem('ky_admin_auth');
-                    dashboard.style.display = 'none';
-                    loginScreen.style.display = 'block';
+                    document.getElementById('adminDashboard').style.display = 'none';
+                    document.getElementById('adminLogin').style.display = 'block';
                 });
             }
 
             loginBtn.addEventListener('click', async () => {
                 const pass = passInput.value;
                 if (!pass) return;
-                
                 loginBtn.textContent = 'Verifying...';
                 try {
-                    const submissions = await KYApi.getRegistrations(pass);
+                    await loadData(pass);
                     sessionStorage.setItem('ky_admin_auth', pass);
-                    loginScreen.style.display = 'none';
-                    dashboard.style.display = 'block';
-                    allLeads = submissions.reverse();
-                    renderLeads(allLeads);
+                    document.getElementById('adminLogin').style.display = 'none';
+                    document.getElementById('adminDashboard').style.display = 'block';
                 } catch (error) {
-                    loginError.style.display = 'block';
+                    document.getElementById('loginError').style.display = 'block';
                 } finally {
-                    loginBtn.textContent = 'Login to Dashboard';
+                    loginBtn.textContent = 'Unlock Dashboard';
                 }
             });
 
             document.getElementById('refreshBtn').addEventListener('click', () => loadData(sessionStorage.getItem('ky_admin_auth')));
-
-            searchInput.addEventListener('input', (e) => {
-                const term = e.target.value.toLowerCase();
-                const filtered = allLeads.filter(lead => {
-                    const searchable = (lead[1] + ' ' + lead[2] + ' ' + lead[3] + ' ' + lead[4] + ' ' + lead[6]).toLowerCase();
-                    return searchable.includes(term);
-                });
-                renderLeads(filtered);
+            searchInput.addEventListener('input', applyFilters);
+            filterStatus.addEventListener('change', applyFilters);
+            filterAgent.addEventListener('change', applyFilters);
+            
+            document.getElementById('exportCsvBtn').addEventListener('click', exportCSV);
+            document.getElementById('bulkEmailBtn').addEventListener('click', () => {
+                document.getElementById('bulkCount').textContent = filteredLeads.length;
+                document.getElementById('emailModal').style.display = 'flex';
             });
-
-            async function loadData(pass) {
-                const refreshBtn = document.getElementById('refreshBtn');
-                refreshBtn.textContent = 'Refreshing...';
-                leadsGrid.innerHTML = '<div id="loadingState" style="grid-column: 1 / -1; text-align: center; padding: 4rem;">Loading data...</div>';
-                
-                try {
-                    const submissions = await KYApi.getRegistrations(pass);
-                    if (submissions.length === 0) {
-                        leadsGrid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 4rem;">No leads found.</div>';
-                        return;
-                    }
-                    
-                    allLeads = submissions.reverse();
-                    renderLeads(allLeads);
-                } catch (error) {
-                    leadsGrid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; color: red; padding: 4rem;">Error loading data.</div>`;
-                    throw error;
-                } finally {
-                    refreshBtn.textContent = 'Refresh';
-                }
-            }
-
-            function renderLeads(leads) {
-                leadsGrid.innerHTML = '';
-                if(leads.length === 0) {
-                    leadsGrid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 4rem;">No matching leads.</div>';
-                    return;
-                }
-                leads.forEach(originalRow => {
-                    const row = originalRow.map(escapeHTML);
-                    const date = row[0] !== "-" ? new Date(originalRow[0]).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "-";
-
-                    
-                    const card = document.createElement('div');
-                    card.className = 'glass-panel';
-                    card.style.padding = '1.5rem';
-                    card.style.display = 'flex';
-                    card.style.flexDirection = 'column';
-                    card.style.gap = '1rem';
-                    card.style.transition = 'transform 0.2s';
-                    card.onmouseover = () => card.style.transform = 'translateY(-5px)';
-                    card.onmouseout = () => card.style.transform = 'translateY(0)';
-
-                    card.innerHTML = `
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 1rem; margin-bottom: 1rem;">
-                            <div>
-                                <h3 style="margin-bottom: 0.2rem;">${row[1] || 'Unknown'}</h3>
-                                <p style="font-size: 0.8rem; color: var(--text-secondary);">${date}</p>
-                            </div>
-                            <div style="background: rgba(156, 123, 56, 0.1); color: var(--accent); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: bold;">
-                                ₹${row[5] || '-'}
-                            </div>
-                        </div>
-
-                        <div style="font-size: 0.85rem; margin-top: -0.5rem;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                                <span><strong>Email:</strong> <span style="color: var(--text-secondary);">${row[2] || '-'}</span></span>
-                                <button onclick="copyData('${row[2]}', this)" class="btn btn-outline" style="padding: 0.2rem 0.6rem; font-size: 0.7rem; min-width: 50px;">Copy</button>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 1rem; margin-bottom: 1rem;">
-                                <span><strong>Phone:</strong> <span style="color: var(--text-secondary);">${row[3] || '-'}</span></span>
-                                <button onclick="copyData('${row[3]}', this)" class="btn btn-outline" style="padding: 0.2rem 0.6rem; font-size: 0.7rem; min-width: 50px;">Copy</button>
-                            </div>
-                        </div>
-
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; font-size: 0.85rem;">
-                            <div><strong>Interest:</strong><br>${row[4] || '-'}</div>
-                            <div><strong>Location:</strong><br>${row[6] || '-'}</div>
-                            <div><strong>Occupation:</strong><br>${row[7] || '-'}</div>
-                            <div><strong>Timeline:</strong><br>${row[11] || '-'}</div>
-                            <div><strong>Type:</strong><br>${row[13] || '-'}</div>
-                            <div><strong>Risk:</strong><br>${row[14] || '-'}</div>
-                            <div style="grid-column: 1/-1;"><strong>Goal:</strong><br><span style="color:var(--text-secondary)">${row[10] || '-'}</span></div>
-                        </div>
-
-                        <div style="margin-top: 1.5rem; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 1rem;">
-                            <button onclick="toggleMeetingForm(this)" class="btn btn-outline" style="width: 100%; font-size: 0.8rem;">Schedule Google Meet</button>
-                            
-                            <div class="meeting-form" style="display: none; margin-top: 1rem; background: #f1f5f9; padding: 1rem; border-radius: 4px; border: 1px solid rgba(0,0,0,0.05);">
-                                <label style="font-size: 0.75rem; font-weight: bold; color: var(--text-secondary);">Date</label>
-                                <input type="date" class="meeting-date" style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; border: 1px solid #ccc; border-radius: 4px; font-family: inherit;">
-                                
-                                <label style="font-size: 0.75rem; font-weight: bold; color: var(--text-secondary);">Time</label>
-                                <input type="time" class="meeting-time" style="width: 100%; padding: 0.5rem; margin-bottom: 1rem; border: 1px solid #ccc; border-radius: 4px; font-family: inherit;">
-                                
-                                <button onclick="scheduleMeeting('${row[2]}', '${row[1]}', this)" class="btn btn-primary" style="width: 100%; font-size: 0.8rem;">Send Invite</button>
-                            </div>
-                        </div>
-                    `;
-                    leadsGrid.appendChild(card);
-                });
-            }
+            document.getElementById('sendBulkBtn').addEventListener('click', sendBulkEmail);
         });
+
+        async function loadData(pass) {
+            const grid = document.getElementById('leadsGrid');
+            grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 4rem;">Loading CRM...</div>';
+            
+            try {
+                const submissions = await KYApi.getRegistrations(pass);
+                allLeads = submissions.reverse();
+                updateStats();
+                applyFilters();
+            } catch (error) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: red;">Error loading data.</div>`;
+                throw error;
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('statTotalLeads').textContent = allLeads.length;
+            
+            let totalCap = 0;
+            let indCount = {};
+            
+            allLeads.forEach(row => {
+                const capStr = row[5] || ""; // Capital
+                if (capStr.includes("50000+")) totalCap += 50000;
+                else if (capStr.includes("20000-")) totalCap += 20000;
+                else if (capStr.includes("10000-")) totalCap += 10000;
+                else totalCap += 5000;
+                
+                const ind = row[4]; // Interest
+                if (ind) indCount[ind] = (indCount[ind] || 0) + 1;
+            });
+            
+            document.getElementById('statTotalCap').textContent = `₹${totalCap.toLocaleString()}+`;
+            
+            let topInd = "-";
+            let maxCount = 0;
+            for (let ind in indCount) {
+                if (indCount[ind] > maxCount) { maxCount = indCount[ind]; topInd = ind; }
+            }
+            document.getElementById('statTopInd').textContent = topInd;
+        }
+
+        function applyFilters() {
+            const term = searchInput.value.toLowerCase();
+            const statusFilter = filterStatus.value;
+            const agentFilter = filterAgent.value;
+            
+            filteredLeads = allLeads.filter(lead => {
+                const searchable = (lead[1] + ' ' + lead[2] + ' ' + lead[3] + ' ' + lead[4] + ' ' + lead[6]).toLowerCase();
+                const matchesSearch = searchable.includes(term);
+                const matchesStatus = statusFilter === 'All' || lead[15] === statusFilter;
+                const matchesAgent = agentFilter === 'All' || lead[21] === agentFilter;
+                return matchesSearch && matchesStatus && matchesAgent;
+            });
+            
+            renderLeads(filteredLeads);
+        }
+
+        function renderLeads(leads) {
+            const grid = document.getElementById('leadsGrid');
+            grid.innerHTML = '';
+            if(leads.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center;">No matching leads.</div>';
+                return;
+            }
+            
+            leads.forEach((row, index) => {
+                const email = row[2];
+                const date = row[0] ? new Date(row[0]).toLocaleDateString() : "-";
+                const score = parseInt(row[17]) || 50;
+                const scoreClass = score >= 80 ? 'score-high' : (score >= 50 ? 'score-med' : 'score-low');
+                
+                let docsHtml = '';
+                try {
+                    const docs = JSON.parse(row[19] || "[]");
+                    docs.forEach(d => {
+                        docsHtml += `<li><a href="${d.url}" target="_blank" style="color:var(--accent); text-decoration:none; font-size:0.8rem;">📄 ${escapeHTML(d.name)}</a></li>`;
+                    });
+                } catch(e) {}
+                
+                const card = document.createElement('div');
+                card.className = 'glass-panel';
+                card.style.padding = '1.5rem';
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                        <div>
+                            <h3 style="margin: 0;">${escapeHTML(row[1])}</h3>
+                            <p style="font-size: 0.8rem; margin: 0; color: var(--text-secondary);">${date}</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <span class="score-badge ${scoreClass}">Score: ${score}</span>
+                            <button onclick="setReminder('${email}', '${escapeHTML(row[1])}')" class="btn btn-outline" style="display:block; margin-top: 0.5rem; padding: 0.2rem 0.5rem; font-size: 0.7rem;">🔔 Remind in 3 Days</button>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; font-size: 0.85rem; margin-bottom: 1rem;">
+                        <div><strong>Status:</strong><br>
+                            <select class="status-dropdown" onchange="updateLeadField('${email}', 'Status', this.value)">
+                                <option value="New Lead" ${row[15]=='New Lead'?'selected':''}>New Lead</option>
+                                <option value="Contacted" ${row[15]=='Contacted'?'selected':''}>Contacted</option>
+                                <option value="Proposal" ${row[15]=='Proposal'?'selected':''}>Proposal</option>
+                                <option value="Closed" ${row[15]=='Closed'?'selected':''}>Closed</option>
+                            </select>
+                        </div>
+                        <div><strong>Agent:</strong><br>
+                            <select class="agent-dropdown" onchange="updateLeadField('${email}', 'Agent', this.value)">
+                                <option value="Unassigned" ${row[21]=='Unassigned'?'selected':''}>Unassigned</option>
+                                <option value="Agent 1" ${row[21]=='Agent 1'?'selected':''}>Agent 1</option>
+                                <option value="Agent 2" ${row[21]=='Agent 2'?'selected':''}>Agent 2</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div style="font-size: 0.8rem; margin-bottom: 1rem;">
+                        <div>📧 ${escapeHTML(row[2])}</div>
+                        <div>📱 ${escapeHTML(row[3])}</div>
+                        <div style="margin-top: 0.5rem;"><strong>Capital:</strong> ₹${escapeHTML(row[5])}</div>
+                        <div><strong>Interest:</strong> ${escapeHTML(row[4])}</div>
+                    </div>
+                    
+                    <div style="background: rgba(0,0,0,0.02); padding: 0.8rem; border-radius: 4px; margin-bottom: 1rem;">
+                        <strong style="font-size: 0.8rem;">Internal Notes:</strong>
+                        <textarea class="form-input" rows="2" style="font-size:0.8rem; padding:0.5rem; margin-top:0.3rem;" onblur="updateLeadField('${email}', 'Notes', this.value)">${escapeHTML(row[16] || '')}</textarea>
+                    </div>
+                    
+                    <div style="background: #e0f2fe; padding: 0.8rem; border-radius: 4px; margin-bottom: 1rem; border: 1px solid #bae6fd;">
+                        <strong style="font-size: 0.8rem; color: #0369a1;">📅 Schedule Strategy Call (Google Meet)</strong>
+                        <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+                            <input type="date" id="meetDate_${index}" class="form-input" style="padding:0.3rem; font-size:0.8rem; margin:0; flex: 1;">
+                            <input type="time" id="meetTime_${index}" class="form-input" style="padding:0.3rem; font-size:0.8rem; margin:0; flex: 1;">
+                        </div>
+                        <button onclick="scheduleMeeting('${email}', '${escapeHTML(row[1])}', ${index})" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem; padding: 0.4rem; font-size: 0.8rem; background: #0284c7;">Schedule & Send Invite</button>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <strong style="font-size: 0.8rem;">Documents:</strong>
+                        <ul style="margin: 0.3rem 0; padding-left: 1rem;">${docsHtml}</ul>
+                        <div style="display:flex; gap:0.5rem;">
+                            <input type="text" id="docName_${index}" placeholder="Doc Name" class="form-input" style="padding:0.3rem; font-size:0.8rem; margin:0;">
+                            <input type="url" id="docUrl_${index}" placeholder="URL" class="form-input" style="padding:0.3rem; font-size:0.8rem; margin:0;">
+                            <button onclick="addDoc('${email}', ${index}, '${escapeHTML(row[19] || "[]")}')" class="btn btn-outline" style="padding:0.3rem; font-size:0.7rem;">Add</button>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 0.5rem; margin-top: auto;">
+                        <button onclick="window.open('https://wa.me/${escapeHTML(row[3])}?text=Hi%20${escapeHTML(row[1])},%20this%20is%20KY%20Intelligence')" class="btn btn-primary" style="flex: 1; background: #25d366; padding: 0.4rem; font-size: 0.8rem;">WhatsApp</button>
+                        <button onclick="window.open('mailto:${escapeHTML(row[2])}?subject=KY%20Business%20Proposal')" class="btn btn-primary" style="flex: 1; background: #3b82f6; padding: 0.4rem; font-size: 0.8rem;">Email</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+        
+        async function updateLeadField(email, field, value) {
+            try {
+                await KYApi.updateLead(email, field, value, sessionStorage.getItem('ky_admin_auth'));
+            } catch (e) {
+                alert("Failed to update: " + e.message);
+            }
+        }
+        
+        async function addDoc(email, idx, existingDocsStr) {
+            const name = document.getElementById(`docName_${idx}`).value;
+            const url = document.getElementById(`docUrl_${idx}`).value;
+            if (!name || !url) return alert("Fill both name and url");
+            
+            try {
+                let docs = JSON.parse(existingDocsStr.replace(/&quot;/g, '"'));
+                docs.push({ name, url });
+                await KYApi.updateLead(email, 'Documents', JSON.stringify(docs), sessionStorage.getItem('ky_admin_auth'));
+                document.getElementById('refreshBtn').click();
+            } catch(e) { alert("Error adding doc: " + e.message); }
+        }
+        
+        async function scheduleMeeting(email, name, idx) {
+            const date = document.getElementById(`meetDate_${idx}`).value;
+            const time = document.getElementById(`meetTime_${idx}`).value;
+            if (!date || !time) return alert("Please select date and time.");
+            
+            try {
+                // Using KYApi.scheduleMeeting that was previously appended to js/api.js, or direct API call
+                if (window.KYApi && window.KYApi.scheduleMeeting) {
+                    await window.KYApi.scheduleMeeting(email, name, date, time);
+                } else {
+                    // Fallback to manual fetch
+                    await fetch(GOOGLE_SCRIPT_URL, {
+                        method: "POST",
+                        body: JSON.stringify({ action: "scheduleMeeting", email, name, date, time, pass: sessionStorage.getItem('ky_admin_auth') }),
+                        headers: { "Content-Type": "text/plain;charset=utf-8" }
+                    });
+                }
+                alert(`Meeting invite sent to ${email} via Google Calendar.`);
+                document.getElementById('refreshBtn').click();
+            } catch (e) {
+                alert("Failed to schedule meeting: " + e.message);
+            }
+        }
+        
+        async function setReminder(email, name) {
+            const d = new Date();
+            d.setDate(d.getDate() + 3);
+            const dateStr = d.toISOString();
+            try {
+                await KYApi.updateLead(email, 'ReminderDate', dateStr, sessionStorage.getItem('ky_admin_auth'));
+                alert(`Reminder set for 3 days from now for ${name}`);
+            } catch(e) {
+                alert("Failed to set reminder: " + e.message);
+            }
+        }
+        
+        function exportCSV() {
+            let csvContent = "data:text/csv;charset=utf-8,";
+            const headers = ["Date", "Name", "Email", "Phone", "Interest", "Capital", "Status", "Score", "Agent"];
+            csvContent += headers.join(",") + "\r\n";
+            
+            filteredLeads.forEach(row => {
+                const r = [ row[0], row[1], row[2], row[3], row[4], row[5], row[15], row[17], row[21] ];
+                csvContent += r.map(v => `"${(v||'').toString().replace(/"/g, '""')}"`).join(",") + "\r\n";
+            });
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "ky_leads.csv");
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        }
+        
+        async function sendBulkEmail() {
+            const subject = document.getElementById('bulkSubject').value;
+            const body = document.getElementById('bulkBody').value;
+            if (!subject || !body) return alert("Fill subject and body");
+            
+            const emails = filteredLeads.map(l => l[2]);
+            const btn = document.getElementById('sendBulkBtn');
+            btn.textContent = 'Sending...';
+            try {
+                await KYApi.bulkBroadcast(emails, subject, body, sessionStorage.getItem('ky_admin_auth'));
+                alert("Broadcast sent successfully!");
+                document.getElementById('emailModal').style.display = 'none';
+            } catch(e) {
+                alert("Failed: " + e.message);
+            } finally {
+                btn.textContent = 'Send Now';
+            }
+        }
     </script>
 </body>
 </html>

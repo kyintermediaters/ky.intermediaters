@@ -18,15 +18,38 @@ Copy and paste the following code into the script editor:
 const SHEET_NAME = 'Registrations';
 const OTP_SHEET = 'OTP_Cache';
 
-// Run this function once manually to setup the headers
+// -------------------------------------------------------------
+// SETUP & UTILITIES
+// -------------------------------------------------------------
+
 function setup() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   
   let sheet = ss.getSheetByName(SHEET_NAME);
   if (!sheet) {
     sheet = ss.insertSheet(SHEET_NAME);
-    sheet.appendRow(['Timestamp', 'Name', 'Email', 'Phone', 'Interest', 'Capital', 'Location', 'Occupation', 'Experience', 'Motivation', 'Goal', 'Timeline', 'Time Comm.', 'Venture Type', 'Risk']);
-    sheet.getRange("A1:O1").setFontWeight("bold");
+  }
+  
+  // Define columns 1-23
+  const headers = [
+    'Timestamp', 'Name', 'Email', 'Phone', 'Interest', 'Capital', 'Location', 
+    'Occupation', 'Experience', 'Motivation', 'Goal', 'Timeline', 'Time Comm.', 
+    'Venture Type', 'Risk', 'Status', 'Notes', 'Score', 'ReminderDate', 
+    'Documents', 'ActivityLog', 'Agent', 'ClientID'
+  ];
+  
+  // Set headers safely without overwriting data if it exists
+  const existingHeaders = sheet.getRange(1, 1, 1, sheet.getLastColumn() || 1).getValues()[0];
+  if (existingHeaders[0] !== 'Timestamp') {
+      sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+      sheet.getRange("A1:W1").setFontWeight("bold");
+  } else if (existingHeaders.length < headers.length) {
+      // Append missing headers
+      const missing = headers.slice(existingHeaders.length);
+      if (missing.length > 0) {
+          sheet.getRange(1, existingHeaders.length + 1, 1, missing.length).setValues([missing]);
+          sheet.getRange(1, 1, 1, headers.length).setFontWeight("bold");
+      }
   }
 
   let otpSheet = ss.getSheetByName(OTP_SHEET);
@@ -36,6 +59,37 @@ function setup() {
     otpSheet.hideSheet(); // Hide it so it doesn't clutter the UI
   }
 }
+
+function calculateLeadScore(data) {
+    let score = 50; // base score
+    if (data.budget === '50000+') score += 20;
+    else if (data.budget === '20000-50000') score += 10;
+    
+    if (data.timeline === 'Immediate') score += 15;
+    else if (data.timeline === '1-3 Months') score += 5;
+    
+    if (data.experience === 'Some' || data.experience === 'Extensive') score += 10;
+    return Math.min(score, 100);
+}
+
+function generateUUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+function getColumnMapping() {
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+    const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+    let map = {};
+    headers.forEach((h, i) => map[h] = i + 1);
+    return map;
+}
+
+// -------------------------------------------------------------
+// POST HANDLER (Writes & Updates)
+// -------------------------------------------------------------
 
 function doPost(e) {
   try {
@@ -52,10 +106,8 @@ function doPost(e) {
       let otpSheet = ss.getSheetByName(OTP_SHEET);
       if (!otpSheet) { setup(); otpSheet = ss.getSheetByName(OTP_SHEET); }
 
-      // Save OTP to cache
       otpSheet.appendRow([new Date(), email, otp]);
 
-      // Send Email
       MailApp.sendEmail({
         to: email,
         subject: "Your KY Intermediater's Verification Code",
@@ -80,30 +132,23 @@ function doPost(e) {
       const data = otpSheet.getDataRange().getValues();
       let isValid = false;
 
-      // Check from bottom to top for latest OTP
       for (let i = data.length - 1; i > 0; i--) {
         const row = data[i];
         const rowTime = new Date(row[0]).getTime();
         const rowEmail = row[1];
         const rowOtp = row[2].toString();
-
-        // Expire after 10 mins (600,000 ms)
         const isExpired = (new Date().getTime() - rowTime) > 600000;
 
         if (rowEmail === email) {
-            if (rowOtp === otp && !isExpired) {
-                isValid = true;
-            }
-            break; // Found the latest one, no need to check older ones
+            if (rowOtp === otp && !isExpired) isValid = true;
+            break;
         }
       }
 
       if (isValid) {
-        return ContentService.createTextOutput(JSON.stringify({ status: 'success' }))
-          .setMimeType(ContentService.MimeType.JSON);
+        return ContentService.createTextOutput(JSON.stringify({ status: 'success' })).setMimeType(ContentService.MimeType.JSON);
       } else {
-        return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: 'Invalid or expired OTP' }))
-          .setMimeType(ContentService.MimeType.JSON);
+        return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: 'Invalid or expired OTP' })).setMimeType(ContentService.MimeType.JSON);
       }
     }
 
@@ -111,20 +156,21 @@ function doPost(e) {
     if (params.action === 'register') {
       const data = params.data;
       let sheet = ss.getSheetByName(SHEET_NAME);
-      
       if (!sheet) { setup(); sheet = ss.getSheetByName(SHEET_NAME); }
       
-      // Append row to sheet
+      const clientId = generateUUID();
+      const score = calculateLeadScore(data);
+      const initialLog = JSON.stringify([{ time: new Date().toISOString(), action: "Registered" }]);
+
       sheet.appendRow([
         new Date(), data.name, data.email, data.phone, data.interest,
         data.budget, data.location, data.occupation, data.experience,
         data.motivation, data.goal, data.timeline, data.time,
-        data.venture_type, data.risk
+        data.venture_type, data.risk,
+        "New Lead", "", score, "", "[]", initialLog, "Unassigned", clientId
       ]);
 
-      // Send Confirmation Email automatically
       try {
-        // Email to Client
         MailApp.sendEmail({
             to: data.email,
             subject: "Application Received | KY Intermediater's",
@@ -132,55 +178,30 @@ function doPost(e) {
                 <h2>Welcome to KY, ${data.name}.</h2>
                 <p>We have successfully received your business profile and capital details.</p>
                 <p>Our algorithm is currently pairing your profile with a dedicated business analyst. We will reach out within 48 hours to schedule your 1-on-1 strategy call.</p>
+                <p>You can track your application status securely here: <a href="https://kyintermediaters.vercel.app/portal.html?id=${clientId}">Client Portal</a></p>
                 <br>
                 <p>Best Regards,</p>
                 <p><strong>The KY Intelligence Team</strong></p>
             </div>`
         });
-
-        // Email to Admin
-        const adminEmail = "ky.intermediaters@gmail.com";
-        const adminHtmlBody = `<div style="font-family: sans-serif; color: #333;">
-            <h2>New Registration: ${data.name}</h2>
-            <p><strong>Email:</strong> ${data.email}</p>
-            <p><strong>Phone:</strong> ${data.phone}</p>
-            <p><strong>Interest:</strong> ${data.interest}</p>
-            <p><strong>Capital:</strong> ${data.budget}</p>
-            <p><strong>Location:</strong> ${data.location}</p>
-            <p><strong>Occupation:</strong> ${data.occupation}</p>
-            <p><strong>Experience:</strong> ${data.experience}</p>
-            <p><strong>Motivation:</strong> ${data.motivation}</p>
-            <p><strong>Goal:</strong> ${data.goal}</p>
-            <p><strong>Timeline:</strong> ${data.timeline}</p>
-            <p><strong>Time Comm.:</strong> ${data.time}</p>
-            <p><strong>Venture Type:</strong> ${data.venture_type}</p>
-            <p><strong>Risk Tolerance:</strong> ${data.risk}</p>
-            <hr>
-            <p><a href="https://ky-intermediaters.vercel.app/admin.html">Login to Admin Dashboard</a></p>
-        </div>`;
-        
-        MailApp.sendEmail({
-            to: adminEmail,
-            subject: `New Lead: ${data.name} - ${data.budget}`,
-            htmlBody: adminHtmlBody
-        });
-
-      } catch (e) {
-          // Ignore email failure so the registration still succeeds
-      }
+      } catch (e) { }
       
-      return ContentService.createTextOutput(JSON.stringify({ status: 'success' }))
+      return ContentService.createTextOutput(JSON.stringify({ status: 'success', clientId: clientId }))
         .setMimeType(ContentService.MimeType.JSON);
     }
 
-    // 4. Schedule Calendar Meeting
+    // 4. Admin Auth Check for subsequent actions
+    if (params.pass !== 'adminkypass' && params.action !== 'sendOTP' && params.action !== 'verifyOTP' && params.action !== 'register') {
+        return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: 'Unauthorized' })).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // 5. Schedule Calendar Meeting
     if (params.action === "scheduleMeeting") {
       const { email, name, date, time } = params;
       if (!email || !date || !time) throw new Error("Email, Date, and Time are required.");
 
-      // Combine date and time
       const startTime = new Date(`${date}T${time}:00`);
-      const endTime = new Date(startTime.getTime() + (60 * 60 * 1000)); // 1 hour meeting
+      const endTime = new Date(startTime.getTime() + (60 * 60 * 1000));
 
       CalendarApp.getDefaultCalendar().createEvent(
         `Strategy Call: ${name} & KY Intelligence Team`,
@@ -193,8 +214,49 @@ function doPost(e) {
         }
       );
 
-      return ContentService.createTextOutput(JSON.stringify({ status: "success" }))
-        .setMimeType(ContentService.MimeType.JSON);
+      // Log activity
+      updateLeadActivity(email, `Scheduled Meeting on ${date} at ${time}`);
+
+      return ContentService.createTextOutput(JSON.stringify({ status: "success" })).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // 6. Update Lead (CRM)
+    if (params.action === 'updateLead') {
+        const { email, field, value } = params;
+        const sheet = ss.getSheetByName(SHEET_NAME);
+        const data = sheet.getDataRange().getValues();
+        const map = getColumnMapping();
+        
+        for (let i = 1; i < data.length; i++) {
+            if (data[i][2] === email) { // Col C is Email (index 2)
+                const colIndex = map[field];
+                if (!colIndex) throw new Error("Invalid field name: " + field);
+                
+                sheet.getRange(i + 1, colIndex).setValue(value);
+                
+                if (field === 'Status') {
+                    updateLeadActivity(email, `Status changed to ${value}`);
+                }
+                
+                return ContentService.createTextOutput(JSON.stringify({ status: "success" })).setMimeType(ContentService.MimeType.JSON);
+            }
+        }
+        throw new Error("Lead not found");
+    }
+
+    // 7. Bulk Action Broadcast Email
+    if (params.action === 'bulkBroadcast') {
+        const { emails, subject, body } = params;
+        if (!emails || emails.length === 0) throw new Error("No emails selected");
+        
+        emails.forEach(email => {
+            try {
+                MailApp.sendEmail({ to: email, subject: subject, htmlBody: body });
+                updateLeadActivity(email, `Sent broadcast: ${subject}`);
+            } catch(e) {}
+        });
+        
+        return ContentService.createTextOutput(JSON.stringify({ status: "success" })).setMimeType(ContentService.MimeType.JSON);
     }
 
     return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: 'Invalid POST action' }))
@@ -206,36 +268,102 @@ function doPost(e) {
   }
 }
 
+function updateLeadActivity(email, logText) {
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+    const data = sheet.getDataRange().getValues();
+    const map = getColumnMapping();
+    
+    for (let i = 1; i < data.length; i++) {
+        if (data[i][2] === email) {
+            let logs = [];
+            const logCol = map['ActivityLog'];
+            try {
+                const currentLogs = sheet.getRange(i + 1, logCol).getValue();
+                logs = JSON.parse(currentLogs || "[]");
+            } catch (e) { logs = []; }
+            
+            logs.push({ time: new Date().toISOString(), action: logText });
+            sheet.getRange(i + 1, logCol).setValue(JSON.stringify(logs));
+            return;
+        }
+    }
+}
+
+// -------------------------------------------------------------
+// GET HANDLER (Reads)
+// -------------------------------------------------------------
+
 function doGet(e) {
   try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = ss.getSheetByName(SHEET_NAME);
+    
     if (e.parameter.action === 'getRegistrations') {
-      // Basic Authentication
       if (e.parameter.pass !== 'adminkypass') {
-        return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: 'Unauthorized' }))
-          .setMimeType(ContentService.MimeType.JSON);
+        return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: 'Unauthorized' })).setMimeType(ContentService.MimeType.JSON);
       }
-
-      const ss = SpreadsheetApp.getActiveSpreadsheet();
-      const sheet = ss.getSheetByName(SHEET_NAME);
-      
-      if (!sheet) {
-         return ContentService.createTextOutput(JSON.stringify({ status: 'success', data: [] }))
-          .setMimeType(ContentService.MimeType.JSON);
-      }
+      if (!sheet) return ContentService.createTextOutput(JSON.stringify({ status: 'success', data: [] })).setMimeType(ContentService.MimeType.JSON);
       
       const data = sheet.getDataRange().getValues();
-      if (data.length > 0) data.shift(); // Remove header row
+      if (data.length > 0) data.shift(); // Remove header
       
-      return ContentService.createTextOutput(JSON.stringify({ status: 'success', data: data }))
-        .setMimeType(ContentService.MimeType.JSON);
+      return ContentService.createTextOutput(JSON.stringify({ status: 'success', data: data })).setMimeType(ContentService.MimeType.JSON);
     }
     
-    return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: 'Invalid GET action' }))
-      .setMimeType(ContentService.MimeType.JSON);
+    if (e.parameter.action === 'getPortalData') {
+      const clientId = e.parameter.id;
+      if (!clientId) throw new Error("Missing ID");
+      
+      const data = sheet.getDataRange().getValues();
+      const map = getColumnMapping();
+      
+      for (let i = 1; i < data.length; i++) {
+          if (data[i][map['ClientID']-1] === clientId) {
+              const status = data[i][map['Status']-1] || "Processing";
+              const logs = JSON.parse(data[i][map['ActivityLog']-1] || "[]");
+              const agent = data[i][map['Agent']-1] || "Unassigned";
+              const docs = JSON.parse(data[i][map['Documents']-1] || "[]");
+              return ContentService.createTextOutput(JSON.stringify({ 
+                  status: 'success', 
+                  data: { status, logs, agent, docs } 
+              })).setMimeType(ContentService.MimeType.JSON);
+          }
+      }
+      throw new Error("Invalid Link");
+    }
+    
+    return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: 'Invalid GET action' })).setMimeType(ContentService.MimeType.JSON);
   } catch (error) {
-    return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: error.toString() }))
-      .setMimeType(ContentService.MimeType.JSON);
+    return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: error.toString() })).setMimeType(ContentService.MimeType.JSON);
   }
+}
+
+// -------------------------------------------------------------
+// CRON JOBS (Triggers)
+// -------------------------------------------------------------
+
+function checkReminders() {
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+    const data = sheet.getDataRange().getValues();
+    const map = getColumnMapping();
+    
+    const today = new Date().toISOString().split('T')[0];
+    
+    data.forEach((row, i) => {
+        if (i === 0) return;
+        const reminderDate = row[map['ReminderDate']-1];
+        if (reminderDate && reminderDate.toString().startsWith(today)) {
+            const email = row[2];
+            const name = row[1];
+            MailApp.sendEmail({
+                to: "ky.intermediaters@gmail.com", // Admin Email
+                subject: `CRM Reminder: Follow up with ${name}`,
+                body: `You set a reminder to follow up with ${name} (${email}) today.`
+            });
+            // Clear reminder
+            sheet.getRange(i + 1, map['ReminderDate']).setValue("");
+        }
+    });
 }
 ```
 
@@ -243,23 +371,21 @@ function doGet(e) {
 1. In the toolbar above the code, select the `setup` function from the dropdown.
 2. Click the **Run** button.
 3. Google will ask for permissions. Click **Review permissions**, choose your Google account, click **Advanced**, and then click **Go to Untitled project (unsafe)**. Finally, click **Allow**.
-4. Check your Google Sheet; you should see a new tab called "Registrations" with bolded column headers.
+4. Check your Google Sheet; you should see new CRM columns added to the right side of the "Registrations" tab.
 
-## Step 5: Deploy as Web App
-1. In the top right corner of the Apps Script editor, click the **Deploy** button.
-2. Select **New deployment**.
-3. Click the gear icon next to "Select type" and choose **Web app**.
-4. Fill in the details:
-   - **Description**: KY API
-   - **Execute as**: Me (your email)
-   - **Who has access**: **Anyone** *(This is required so the public form can submit data)*
+## Step 5: Setup Daily Reminders (Triggers)
+1. On the left sidebar of Apps Script, click the **Triggers** icon (looks like an alarm clock).
+2. Click **+ Add Trigger** in the bottom right.
+3. Choose which function to run: `checkReminders`
+4. Select event source: **Time-driven**
+5. Select type of time based trigger: **Day timer**
+6. Select time of day: **8am to 9am**
+7. Click Save.
+
+## Step 6: Deploy as Web App
+1. In the top right corner, click **Deploy** > **New deployment**.
+2. Select type: **Web app**.
+3. Execute as: **Me**
+4. Who has access: **Anyone**
 5. Click **Deploy**.
-6. Copy the **Web app URL** that is generated.
-
-## Step 6: Connect to the Frontend
-1. Open the file `js/api.js` in your project.
-2. Find line 5:
-   `const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE';`
-3. Replace `'YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE'` with the Web App URL you just copied. Keep it inside the quotes.
-
-Done! Your website is now fully connected to your Google Sheet database.
+6. **IMPORTANT:** Copy the new Web App URL and update it in `js/api.js`.

@@ -3,14 +3,14 @@
 // ==========================================
 
 // IMPORTANT: Replace this with your actual Web App URL after deploying the Apps Script
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby4YPoy4D47WtqQ2G45UkdR1izEIrT0pLt3Zb4Nwx4vRMorjsz2nc8QEcEYbvCguK2E/exec';
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVqvW13YGuqzdNIhSP_4y5sMmU2yRG8O1ausqVFZyu2QG2z5957limOeD0IWXJNNkf/exec";
 
 /**
  * Submits registration data to Google Sheets
  * @param {Object} formData 
  */
 async function submitRegistration(formData) {
-    if (GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE') {
+    if (!GOOGLE_SCRIPT_URL) {
         throw new Error('Google Script URL not configured. Please set it up first.');
     }
 
@@ -46,7 +46,7 @@ async function submitRegistration(formData) {
  * Fetches all registrations from Google Sheets for the Admin Dashboard
  */
 async function fetchRegistrations(pass) {
-    if (GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE') {
+    if (!GOOGLE_SCRIPT_URL) {
         throw new Error('Google Script URL not configured. Please set it up first.');
     }
 
@@ -70,7 +70,7 @@ async function fetchRegistrations(pass) {
  * @param {string} email
  */
 async function sendOTP(email) {
-    if (GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE') throw new Error('Setup Google Script URL first.');
+    if (!GOOGLE_SCRIPT_URL) throw new Error('Setup Google Script URL first.');
     const response = await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         body: JSON.stringify({ action: 'sendOTP', email: email }),
@@ -87,7 +87,7 @@ async function sendOTP(email) {
  * @param {string} otp
  */
 async function verifyOTP(email, otp) {
-    if (GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE') throw new Error('Setup Google Script URL first.');
+    if (!GOOGLE_SCRIPT_URL) throw new Error('Setup Google Script URL first.');
     const response = await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         body: JSON.stringify({ action: 'verifyOTP', email: email, otp: otp }),
@@ -106,7 +106,7 @@ async function verifyOTP(email, otp) {
  * @param {string} time
  */
 async function scheduleMeeting(email, name, date, time) {
-    if (GOOGLE_SCRIPT_URL === "YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE") throw new Error("Setup Google Script URL first.");
+    if (!GOOGLE_SCRIPT_URL) throw new Error("Setup Google Script URL first.");
     const response = await fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
         body: JSON.stringify({ action: "scheduleMeeting", email: email, name: name, date: date, time: time }),
@@ -126,3 +126,53 @@ window.KYApi = {
     verifyOTP,
     scheduleMeeting
 };
+
+/**
+ * Updates a specific field for a lead in the CRM
+ */
+async function updateLead(email, field, value, pass) {
+    if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "") throw new Error("API not configured.");
+    
+    const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({ action: "updateLead", email, field, value, pass }),
+        headers: { "Content-Type": "text/plain;charset=utf-8" }
+    });
+    
+    const result = await response.json();
+    if (result.status !== "success") throw new Error(result.message);
+    return true;
+}
+
+/**
+ * Sends a mass broadcast email to selected leads
+ */
+async function bulkBroadcast(emails, subject, body, pass) {
+    if (!GOOGLE_SCRIPT_URL) throw new Error("API not configured.");
+    
+    const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({ action: "bulkBroadcast", emails, subject, body, pass }),
+        headers: { "Content-Type": "text/plain;charset=utf-8" }
+    });
+    
+    const result = await response.json();
+    if (result.status !== "success") throw new Error(result.message);
+    return true;
+}
+
+/**
+ * Fetches status tracker data for the Client Portal
+ */
+async function fetchPortalData(clientId) {
+    if (!GOOGLE_SCRIPT_URL) throw new Error("API not configured.");
+    
+    const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getPortalData&id=${encodeURIComponent(clientId)}`);
+    const result = await response.json();
+    
+    if (result.status !== "success") throw new Error(result.message);
+    return result.data;
+}
+
+// Re-export new functions
+Object.assign(window.KYApi, { updateLead, bulkBroadcast, fetchPortalData });
