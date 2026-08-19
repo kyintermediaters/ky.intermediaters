@@ -138,7 +138,12 @@
             if (savedPass) {
                 loginScreen.style.display = 'none';
                 dashboard.style.display = 'block';
-                loadData(savedPass);
+                loadData(savedPass).catch(() => {
+                    // If auth fails with the saved password, clear it and show login
+                    sessionStorage.removeItem('ky_admin_auth');
+                    dashboard.style.display = 'none';
+                    loginScreen.style.display = 'block';
+                });
             }
 
             loginBtn.addEventListener('click', async () => {
@@ -187,6 +192,7 @@
                     renderLeads(allLeads);
                 } catch (error) {
                     leadsGrid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; color: red; padding: 4rem;">Error loading data.</div>`;
+                    throw error;
                 } finally {
                     refreshBtn.textContent = 'Refresh';
                 }
