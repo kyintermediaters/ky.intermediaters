@@ -81,17 +81,17 @@ p { color: var(--text-secondary); margin-bottom: 1rem; }
 
 /* Header */
 header {
-    padding: 1.5rem 0; position: fixed; width: 100%; top: 0; z-index: 100;
+    padding: 0.8rem 0; position: fixed; width: 100%; top: 0; z-index: 100;
     background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(16px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.5); transition: all 0.4s ease;
 }
-header.scrolled { padding: 1rem 0; background: rgba(255, 255, 255, 0.7); box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+header.scrolled { padding: 0.5rem 0; background: rgba(255, 255, 255, 0.7); box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
 .nav-container { display: flex; justify-content: space-between; align-items: center; }
 .logo { display: inline-flex; align-items: center; text-decoration: none; }
-.logo img { height: 90px; width: auto; object-fit: contain; transition: transform 0.3s ease; }
-footer .logo img { height: 130px; }
-.nav-links { display: flex; gap: 2.5rem; align-items: center; }
-.nav-links a { color: var(--text-secondary); text-decoration: none; font-weight: 600; font-size: 0.95rem; }
+.logo img { height: 60px; width: auto; object-fit: contain; transition: transform 0.3s ease; }
+footer .logo img { height: 100px; }
+.nav-links { display: flex; gap: 2rem; align-items: center; }
+.nav-links a { color: var(--text-secondary); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
 .nav-links a:hover { color: var(--text-primary); }
 
 /* Buttons */
@@ -257,9 +257,12 @@ footer { padding: 4rem 0; border-top: 1px solid rgba(0,0,0,0.05); margin-top: 5r
     .cinematic-stats h3 { font-size: 3.5rem; }
 
     /* Navigation */
-    .nav-container { flex-direction: column; gap: 1rem; padding: 1rem; }
-    .nav-links { flex-wrap: wrap; justify-content: center; gap: 1rem; }
-    .logo img { height: 60px; }
+    header { padding: 0.5rem 0; }
+    .nav-container { flex-direction: row; flex-wrap: wrap; justify-content: space-between; padding: 0.2rem 1rem; }
+    .nav-links { flex-wrap: wrap; justify-content: center; gap: 0.8rem; flex: 1; }
+    .nav-links a { font-size: 0.8rem; }
+    .nav-links .btn { padding: 0.4rem 1rem !important; font-size: 0.8rem !important; }
+    .logo img { height: 45px; }
 
     /* Forms & Containers */
     .container { padding: 0 1.5rem; }
