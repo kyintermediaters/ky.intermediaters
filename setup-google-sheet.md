@@ -209,6 +209,12 @@ function doPost(e) {
 function doGet(e) {
   try {
     if (e.parameter.action === 'getRegistrations') {
+      // Basic Authentication
+      if (e.parameter.pass !== 'adminkypass') {
+        return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: 'Unauthorized' }))
+          .setMimeType(ContentService.MimeType.JSON);
+      }
+
       const ss = SpreadsheetApp.getActiveSpreadsheet();
       const sheet = ss.getSheetByName(SHEET_NAME);
       

@@ -56,6 +56,18 @@
     <script src="js/main.js"></script>
     <script src="js/api.js"></script>
     <script>
+
+        function escapeHTML(str) {
+            if (!str) return "-";
+            return str.toString().replace(/[&<>'"]/g, tag => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                "'": "&#39;",
+                """: "&quot;"
+            }[tag] || tag));
+        }
+
         window.copyData = function(text, btn) {
             if(!text || text === 'undefined') return;
             navigator.clipboard.writeText(text);
@@ -122,24 +134,33 @@
             const searchInput = document.getElementById('searchInput');
             let allLeads = [];
 
-            if (sessionStorage.getItem('ky_admin_auth') === 'true') {
+            const savedPass = sessionStorage.getItem('ky_admin_auth');
+            if (savedPass) {
                 loginScreen.style.display = 'none';
                 dashboard.style.display = 'block';
-                loadData();
+                loadData(savedPass);
             }
 
-            loginBtn.addEventListener('click', () => {
-                if (passInput.value === 'adminkypass') {
-                    sessionStorage.setItem('ky_admin_auth', 'true');
+            loginBtn.addEventListener('click', async () => {
+                const pass = passInput.value;
+                if (!pass) return;
+                
+                loginBtn.textContent = 'Verifying...';
+                try {
+                    const submissions = await KYApi.getRegistrations(pass);
+                    sessionStorage.setItem('ky_admin_auth', pass);
                     loginScreen.style.display = 'none';
                     dashboard.style.display = 'block';
-                    loadData();
-                } else {
+                    allLeads = submissions.reverse();
+                    renderLeads(allLeads);
+                } catch (error) {
                     loginError.style.display = 'block';
+                } finally {
+                    loginBtn.textContent = 'Login to Dashboard';
                 }
             });
 
-            document.getElementById('refreshBtn').addEventListener('click', loadData);
+            document.getElementById('refreshBtn').addEventListener('click', () => loadData(sessionStorage.getItem('ky_admin_auth')));
 
             searchInput.addEventListener('input', (e) => {
                 const term = e.target.value.toLowerCase();
@@ -150,13 +171,13 @@
                 renderLeads(filtered);
             });
 
-            async function loadData() {
+            async function loadData(pass) {
                 const refreshBtn = document.getElementById('refreshBtn');
                 refreshBtn.textContent = 'Refreshing...';
                 leadsGrid.innerHTML = '<div id="loadingState" style="grid-column: 1 / -1; text-align: center; padding: 4rem;">Loading data...</div>';
                 
                 try {
-                    const submissions = await KYApi.getRegistrations();
+                    const submissions = await KYApi.getRegistrations(pass);
                     if (submissions.length === 0) {
                         leadsGrid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 4rem;">No leads found.</div>';
                         return;
@@ -177,9 +198,10 @@
                     leadsGrid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 4rem;">No matching leads.</div>';
                     return;
                 }
+                leads.forEach(originalRow => {
+                    const row = originalRow.map(escapeHTML);
+                    const date = row[0] !== "-" ? new Date(originalRow[0]).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "-";
 
-                leads.forEach(row => {
-                    const date = new Date(row[0]).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
                     
                     const card = document.createElement('div');
                     card.className = 'glass-panel';

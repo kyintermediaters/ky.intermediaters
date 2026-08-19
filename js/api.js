@@ -45,13 +45,13 @@ async function submitRegistration(formData) {
 /**
  * Fetches all registrations from Google Sheets for the Admin Dashboard
  */
-async function fetchRegistrations() {
+async function fetchRegistrations(pass) {
     if (GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE') {
         throw new Error('Google Script URL not configured. Please set it up first.');
     }
 
     try {
-        const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getRegistrations`);
+        const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getRegistrations&pass=${encodeURIComponent(pass)}`);
         const result = await response.json();
         
         if (result.status === 'success') {
