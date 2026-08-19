@@ -49,39 +49,3 @@ window.addEventListener('load', () => {
     }
 });
 
-// Capital Slider Logic
-document.addEventListener("DOMContentLoaded", () => {
-    const slider = document.getElementById("capitalSlider");
-    const sliderTitle = document.getElementById("sliderTitle");
-    const sliderDesc = document.getElementById("sliderDesc");
-    
-    if (slider) {
-        const ventureData = {
-            1: { title: "Local Service Arbitrage", desc: "High-margin, low-overhead service businesses leveraging digital marketing in underserved local markets." },
-            2: { title: "Niche E-Commerce / D2C", desc: "Sourcing premium products with high unit margins and strong brand narratives. Focus on high LTV." },
-            3: { title: "B2B Micro-SaaS", desc: "Solving a very specific workflow problem for an industry willing to pay recurring subscriptions." },
-            4: { title: "Marketplace / Platform", desc: "Capital-intensive structural plays connecting fragmented supply with high-demand consumers." }
-        };
-
-        slider.addEventListener("input", (e) => {
-            const val = e.target.value;
-            sliderTitle.innerText = ventureData[val].title;
-            sliderDesc.innerText = ventureData[val].desc;
-            
-            // Highlight the correct label
-            const labels = document.querySelectorAll(".slider-labels span");
-            labels.forEach((label, index) => {
-                if (index + 1 == val) {
-                    label.style.color = "var(--text-primary)";
-                    label.style.fontWeight = "800";
-                } else {
-                    label.style.color = "var(--text-secondary)";
-                    label.style.fontWeight = "600";
-                }
-            });
-        });
-        
-        // Trigger initial state
-        slider.dispatchEvent(new Event("input"));
-    }
-});
