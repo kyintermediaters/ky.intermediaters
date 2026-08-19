@@ -49,7 +49,7 @@ h1, h2, h3, h4, h5, h6 { font-weight: 800; line-height: 1.1; color: var(--text-p
 p { color: var(--text-secondary); margin-bottom: 1rem; }
 
 .text-gradient {
-    background: linear-gradient(270deg, #1e293b, #9c7b38, #1e293b);
+    background: linear-gradient(270deg, #0a192f, #1d4ed8, #0a192f);
     background-size: 200% 200%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -97,7 +97,7 @@ footer .logo img { height: 100px; }
 
 /* GSAP Hero Classes */
 .full-screen-hero { height: 100vh; display: flex; align-items: center; text-align: center; }
-.hero-title { font-size: 5rem; letter-spacing: -2px; margin-bottom: 2rem; }
+.hero-title { font-size: 4rem; letter-spacing: -2px; margin-bottom: 2rem; }
 .hero-desc { font-size: 1.3rem; max-width: 650px; margin: 0 auto 3rem auto; }
 .line { display: block; overflow: hidden; padding-bottom: 0.5rem; }
 .line-inner { display: inline-block; }
@@ -203,16 +203,9 @@ footer { padding: 4rem 0; border-top: 1px solid rgba(0,0,0,0.05); margin-top: 5r
     outline: none;
     border-color: var(--accent);
     background: #fff;
-    box-shadow: 0 0 0 3px rgba(156, 123, 56, 0.1);
+    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.2);
 }
 
-/* Custom Cursor */
-@media (min-width: 900px) {
-    body, a, button, input, textarea, select { cursor: none !important; }
-    .custom-cursor { position: fixed; top: 0; left: 0; width: 24px; height: 24px; border: 2px solid var(--accent); border-radius: 50%; pointer-events: none; z-index: 99999; transform: translate(-50%, -50%); transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease; }
-    .custom-cursor.hover { width: 60px; height: 60px; background-color: rgba(156, 123, 56, 0.1); border-color: rgba(156, 123, 56, 0.5);  }
-}
-@media (max-width: 899px) { .custom-cursor { display: none; } }
 
 /* Preloader */
 #preloader { position: fixed; inset: 0; background: var(--bg-color); z-index: 100000; display: flex; align-items: center; justify-content: center; transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
