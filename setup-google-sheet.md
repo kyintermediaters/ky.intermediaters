@@ -298,6 +298,33 @@ function doGet(e) {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     const sheet = ss.getSheetByName(SHEET_NAME);
     
+    if (e.parameter.action === 'updateLead') {
+        if (e.parameter.pass !== 'adminkypass') return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: 'Unauthorized' })).setMimeType(ContentService.MimeType.JSON);
+        const { email, field, value } = e.parameter;
+        const data = sheet.getDataRange().getValues();
+        const map = getColumnMapping();
+        for (let i = 1; i < data.length; i++) {
+            if (data[i][2] === email) {
+                const colIndex = map[field];
+                if (!colIndex) throw new Error("Invalid field name: " + field);
+                sheet.getRange(i + 1, colIndex).setValue(value);
+                if (field === 'Status') updateLeadActivity(email, `Status changed to ${value}`);
+                return ContentService.createTextOutput(JSON.stringify({ status: "success" })).setMimeType(ContentService.MimeType.JSON);
+            }
+        }
+        throw new Error("Lead not found");
+    }
+    if (e.parameter.action === 'scheduleMeeting') {
+        if (e.parameter.pass !== 'adminkypass') return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: 'Unauthorized' })).setMimeType(ContentService.MimeType.JSON);
+        const { email, name, date, time } = e.parameter;
+        if (!email || !date || !time) throw new Error("Email, Date, and Time are required.");
+        const startTime = new Date(`${date}T${time}:00`);
+        const endTime = new Date(startTime.getTime() + (60 * 60 * 1000));
+        CalendarApp.getDefaultCalendar().createEvent(`Strategy Call: ${name} & KY Intelligence Team`, startTime, endTime, { guests: email, sendInvites: true, description: "Your 1-on-1 strategy call with the KY Intelligence Team." });
+        updateLeadActivity(email, `Scheduled Meeting on ${date} at ${time}`);
+        return ContentService.createTextOutput(JSON.stringify({ status: "success" })).setMimeType(ContentService.MimeType.JSON);
+    }
+
     if (e.parameter.action === 'getRegistrations') {
       if (e.parameter.pass !== 'adminkypass') {
         return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: 'Unauthorized' })).setMimeType(ContentService.MimeType.JSON);

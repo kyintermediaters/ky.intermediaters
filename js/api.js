@@ -107,11 +107,9 @@ async function verifyOTP(email, otp) {
  */
 async function scheduleMeeting(email, name, date, time) {
     if (!GOOGLE_SCRIPT_URL) throw new Error("Setup Google Script URL first.");
-    const response = await fetch(GOOGLE_SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify({ action: "scheduleMeeting", email: email, name: name, date: date, time: time }),
-        headers: { "Content-Type": "text/plain;charset=utf-8" }
-    });
+    const pass = sessionStorage.getItem('ky_admin_auth') || 'adminkypass';
+    const url = `${GOOGLE_SCRIPT_URL}?action=scheduleMeeting&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&date=${encodeURIComponent(date)}&time=${encodeURIComponent(time)}&pass=${encodeURIComponent(pass)}`;
+    const response = await fetch(url);
     const result = await response.json();
     if (result.status !== "success") throw new Error(result.message);
     return true;
@@ -133,11 +131,8 @@ window.KYApi = {
 async function updateLead(email, field, value, pass) {
     if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "") throw new Error("API not configured.");
     
-    const response = await fetch(GOOGLE_SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify({ action: "updateLead", email, field, value, pass }),
-        headers: { "Content-Type": "text/plain;charset=utf-8" }
-    });
+    const url = `${GOOGLE_SCRIPT_URL}?action=updateLead&email=${encodeURIComponent(email)}&field=${encodeURIComponent(field)}&value=${encodeURIComponent(value)}&pass=${encodeURIComponent(pass)}`;
+    const response = await fetch(url);
     
     const result = await response.json();
     if (result.status !== "success") throw new Error(result.message);
