@@ -91,8 +91,9 @@ module.exports = async function handler(req, res) {
                 to: data.email,
                 subject: "Application Received | KY Intermediater's",
                 html: `<div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-    <div style="background-color: #0f172a; padding: 30px; text-align: center; border-bottom: 3px solid #d4af37;">
-        <h1 style="color: #ffffff; margin: 0; font-size: 24px; letter-spacing: 2px;">KY INTERMEDIATER'S</h1>
+    <div style="background-color: #0f172a; padding: 30px; text-align: center; border-bottom: 4px solid #d4af37;">
+        <img src="https://kyintermediaters.vercel.app/images/favicon.png" alt="KY Intermediater's Logo" style="height: 60px; margin-bottom: 15px;">
+        <h1 style="color: #ffffff; margin: 0; font-size: 22px; letter-spacing: 2px; text-transform: uppercase;">KY Intermediater's</h1>
     </div>
     <div style="padding: 40px 30px; background-color: #ffffff; color: #334155; line-height: 1.6;">
         <h2 style="color: #0f172a; font-size: 20px; margin-top: 0;">Welcome to KY, ${data.name}.</h2>
