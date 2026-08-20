@@ -19,6 +19,9 @@
   },
   "homepage": "https://github.com/kyintermediaters/ky.intermediaters#readme",
   "dependencies": {
+    "ics": "^3.12.0",
+    "mongoose": "^9.9.3",
+    "nodemailer": "^9.0.5",
     "uuid": "^14.0.1"
   }
 }
