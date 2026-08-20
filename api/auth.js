@@ -34,8 +34,27 @@ module.exports = async function handler(req, res) {
                     from: process.env.EMAIL_USER,
                     to: email,
                     subject: 'Your KY Security Code',
-                    text: `Your verification code is: ${otp}
-This code expires in 10 minutes.`
+                    text: `Your verification code is: ${otp}`, html: `<div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+    <div style="background-color: #0f172a; padding: 30px; text-align: center; border-bottom: 4px solid #d4af37;">
+        <img src="https://kyintermediaters.vercel.app/images/favicon.png" alt="KY Intermediater's Logo" style="height: 60px; margin-bottom: 15px;">
+        <h1 style="color: #ffffff; margin: 0; font-size: 22px; letter-spacing: 2px; text-transform: uppercase;">KY Intermediater's</h1>
+    </div>
+    <div style="padding: 40px 30px; background-color: #ffffff; color: #334155; line-height: 1.6;">
+        
+        <h2 style="color: #0f172a; font-size: 20px; margin-top: 0;">Secure Portal Authentication</h2>
+        <p>You requested access to the KY Intermediater's secure portal.</p>
+        <p>Please use the following One-Time Password to complete your verification:</p>
+        <div style="text-align: center; margin: 30px 0;">
+            <span style="font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #d4af37; background-color: #0f172a; padding: 15px 30px; border-radius: 4px;">${otp}</span>
+        </div>
+        <p style="font-size: 14px; color: #64748b; text-align: center;">This code will expire in 10 minutes. Do not share this code with anyone.</p>
+
+    </div>
+    <div style="background-color: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #e2e8f0;">
+        <p style="margin: 0; font-size: 13px; color: #94a3b8;">&copy; ${new Date().getFullYear()} KY Intermediater's Desk. All rights reserved.</p>
+        <p style="margin: 5px 0 0; font-size: 12px; color: #cbd5e1;">Bangalore, India</p>
+    </div>
+</div>`
                 });
             } else {
                 console.warn("EMAIL_USER not set, OTP not sent via email. OTP is:", otp);
