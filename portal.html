@@ -138,4 +138,16 @@
                     document.getElementById('docsSection').style.display = 'block';
                     let docsHTML = '';
                     data.docs.forEach(doc => {
-                        docsHTML += `<li style="margin-bottom: 0.5rem;"><a href="${doc.url}" target="_blank" style="color: var(--accent); font-weight: bold; text-decoration: none;">ðÓ„ ÒEFö2ææÖWÓÂöãÂöÆ“æ°¢Ò“°¢Fö7VÖVçBævWDVÆVÖVçD'”–B‚vFö74Æ—7Br’æ–ææW$…DÔÂÒFö74…DÔÃ°¢Ð ¢Ò6F6‚†R’°¢Fö7VÖVçBævWDVÆVÖVçD'”–B‚vÆöF–ærr’ç7G–ÆRæF—7Æ’ÒvæöæRs°¢Fö7VÖVçBævWDVÆVÖVçD'”–B‚vW'&÷$&÷‚r’ç7G–ÆRæF—7Æ’Òv&Æö6²s°¢Ð¢Ò“°¢Â÷67&—Cà£Âö&öG“à£Âö‡FÖÃà
+                        docsHTML += `<li style="margin-bottom: 0.5rem;"><a href="${doc.url}" target="_blank" style="color: var(--accent); font-weight: bold; text-decoration: none;">ðŸ“„ ${doc.name}</a></li>`;
+                    });
+                    document.getElementById('docsList').innerHTML = docsHTML;
+                }
+            } catch (error) {
+                console.error(error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('errorBox').style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
