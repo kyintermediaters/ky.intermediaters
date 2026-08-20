@@ -3,7 +3,7 @@
 // ==========================================
 
 // IMPORTANT: Replace this with your actual Web App URL after deploying the Apps Script
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxriQcZ4p_PPwFdYGHtnUcEoy5rHEeu6IEu92f79ihf4UwhBCQLX0hvpmI8OSoTlSo/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwvxt5MVEKZ4Xmq1vwsquuPf6uaPZ4KsZPRbhKmTVDFLQ-mOTGLWjz-a2CTnrM8LcZX/exec";
 
 /**
  * Submits registration data to Google Sheets
