@@ -38,19 +38,8 @@ function setup() {
     'Documents', 'ActivityLog', 'Agent', 'ClientID'
   ];
   
-  // Set headers safely without overwriting data if it exists
-  const existingHeaders = sheet.getRange(1, 1, 1, sheet.getLastColumn() || 1).getValues()[0];
-  if (existingHeaders[0] !== 'Timestamp') {
-      sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
-      sheet.getRange("A1:W1").setFontWeight("bold");
-  } else if (existingHeaders.length < headers.length) {
-      // Append missing headers
-      const missing = headers.slice(existingHeaders.length);
-      if (missing.length > 0) {
-          sheet.getRange(1, existingHeaders.length + 1, 1, missing.length).setValues([missing]);
-          sheet.getRange(1, 1, 1, headers.length).setFontWeight("bold");
-      }
-  }
+  sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+  sheet.getRange(1, 1, 1, headers.length).setFontWeight("bold");
 
   let otpSheet = ss.getSheetByName(OTP_SHEET);
   if (!otpSheet) {
@@ -61,7 +50,7 @@ function setup() {
 }
 
 function calculateLeadScore(data) {
-    let score = 50; // base score
+    let score = 0;
     if (data.budget === '50000+') score += 20;
     else if (data.budget === '20000-50000') score += 10;
     

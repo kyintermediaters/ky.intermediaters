@@ -110,7 +110,7 @@
                 statusSteps.forEach((stepName, i) => {
                     const stepNum = i + 1;
                     let stateClass = '';
-                    if stepNum < currentStepIndex) stateClass = 'completed';
+                    if (stepNum < currentStepIndex) stateClass = 'completed';
                     else if (stepNum === currentStepIndex) stateClass = 'active';
 
                     stepsHTML += `
