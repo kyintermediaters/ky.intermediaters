@@ -101,6 +101,17 @@
             <div id="docsSection" class="glass-panel" style="padding: 2rem; margin-top: 2rem; display: none;">
                 <h3 style="margin-bottom: 1rem; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 0.5rem;">Secure Documents</h3>
                 <ul id="docsList" style="list-style: none; padding: 0;"></ul>
+                
+                <div style="margin-top: 1.5rem; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 1.5rem;">
+                    <h4 style="margin-bottom: 1rem;">Upload Document</h4>
+                    <input type="file" id="fileUpload" style="margin-bottom: 1rem;">
+                    <button id="uploadBtn" class="btn btn-outline" style="width: 100%;">Upload Securely</button>
+                </div>
+            </div>
+            
+            <div id="clientMarketplace" style="display: none; margin-top: 2rem;">
+                <h2 style="text-align: center; margin-bottom: 2rem; color: #0f172a;">KY Deal Marketplace</h2>
+                <div id="clientDealsContainer" style="display: grid; gap: 1.5rem;"></div>
             </div>
         </div>
     </main>
@@ -197,6 +208,7 @@
                 document.getElementById('activityLogContainer').innerHTML = logsHTML;
                 
                 // Docs
+                
                 if (data.docs && data.docs.length > 0) {
                     document.getElementById('docsSection').style.display = 'block';
                     let docsHTML = '';
@@ -205,6 +217,50 @@
                     });
                     document.getElementById('docsList').innerHTML = docsHTML;
                 }
+                
+                // File Upload Logic
+                document.getElementById('uploadBtn').addEventListener('click', async () => {
+                    const fileInput = document.getElementById('fileUpload');
+                    if (!fileInput.files[0]) return alert("Please select a file.");
+                    
+                    const file = fileInput.files[0];
+                    const btn = document.getElementById('uploadBtn');
+                    btn.textContent = 'Uploading...';
+                    
+                    const reader = new FileReader();
+                    reader.onload = async (e) => {
+                        const base64Data = e.target.result.split(',')[1];
+                        try {
+                            await KYApi.uploadDocument(id, file.name, base64Data);
+                            alert("Document uploaded successfully!");
+                            window.location.reload();
+                        } catch(err) {
+                            alert(err.message);
+                            btn.textContent = 'Upload Securely';
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                });
+                
+                // Marketplace Logic
+                if (data.deals && data.deals.length > 0) {
+                    document.getElementById('clientMarketplace').style.display = 'block';
+                    let mHtml = '';
+                    data.deals.forEach(d => {
+                        mHtml += `
+                            <div class="glass-panel" style="padding: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h4 style="margin: 0 0 0.5rem 0; color: #d4af37;">${d.title}</h4>
+                                    <p style="margin: 0; font-size: 0.9rem; color: #334155;"><strong>${d.industry}</strong> | ${d.capital}</p>
+                                    <p style="margin: 0.5rem 0 0 0; font-size: 0.85rem; color: #64748b;">${d.description}</p>
+                                </div>
+                                <button onclick="KYApi.requestIntro('${id}', '${d.title}').then(() => alert('Intro requested!')).catch(e => alert(e.message))" class="btn">Request Intro</button>
+                            </div>
+                        `;
+                    });
+                    document.getElementById('clientDealsContainer').innerHTML = mHtml;
+                }
+
             } catch (error) {
                 console.error(error);
                 document.getElementById('loading').style.display = 'none';
