@@ -212,6 +212,92 @@
             document.getElementById('sendBulkBtn').addEventListener('click', sendBulkEmail);
         });
 
+        
+        function switchTab(tab) {
+            document.getElementById('leadsView').style.display = tab === 'leads' ? 'block' : 'none';
+            document.getElementById('analyticsView').style.display = tab === 'analytics' ? 'block' : 'none';
+            document.getElementById('marketplaceView').style.display = tab === 'marketplace' ? 'block' : 'none';
+            document.getElementById('settingsView').style.display = tab === 'settings' ? 'block' : 'none';
+            
+            document.getElementById('tabLeads').className = tab === 'leads' ? 'btn' : 'btn btn-outline';
+            document.getElementById('tabAnalytics').className = tab === 'analytics' ? 'btn' : 'btn btn-outline';
+            document.getElementById('tabMarketplace').className = tab === 'marketplace' ? 'btn' : 'btn btn-outline';
+            document.getElementById('tabSettings').className = tab === 'settings' ? 'btn' : 'btn btn-outline';
+            
+            if (tab === 'analytics' && !window.chartsRendered) {
+                renderCharts();
+                window.chartsRendered = true;
+            }
+            if (tab === 'marketplace') loadDeals();
+        }
+        
+        let leadDataStore = [];
+        
+        function renderCharts() {
+            const capitalCounts = { '<$20k':0, '$20k-$50k':0, '$50k-$100k':0, '$100k+':0 };
+            const statusCounts = {};
+            
+            leadDataStore.forEach(row => {
+                const cap = parseInt((row[5] || '0').replace(/[^0-9]/g, '')) || 0;
+                if (cap >= 100000) capitalCounts['$100k+']++;
+                else if (cap >= 50000) capitalCounts['$50k-$100k']++;
+                else if (cap >= 20000) capitalCounts['$20k-$50k']++;
+                else capitalCounts['<$20k']++;
+                
+                const stat = row[15] || 'New Lead';
+                statusCounts[stat] = (statusCounts[stat] || 0) + 1;
+            });
+            
+            new Chart(document.getElementById('capitalChart'), { type: 'doughnut', data: { labels: Object.keys(capitalCounts), datasets: [{ data: Object.values(capitalCounts), backgroundColor: ['#e2e8f0', '#94a3b8', '#d4af37', '#0f172a'] }] } });
+            new Chart(document.getElementById('statusChart'), { type: 'bar', data: { labels: Object.keys(statusCounts), datasets: [{ label: 'Leads', data: Object.values(statusCounts), backgroundColor: '#d4af37' }] } });
+        }
+        
+        async function loadDeals() {
+            try {
+                const deals = await KYApi.getDeals(sessionStorage.getItem('ky_admin_auth'));
+                let html = '';
+                deals.forEach(d => {
+                    html += `<div style="background: white; padding: 1.5rem; border-radius: 4px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                <div><h4 style="margin: 0 0 0.5rem 0; color: #0f172a;">${d.title}</h4>
+                                <p style="margin: 0; font-size: 0.9rem; color: #64748b;">${d.industry} | ${d.capital} | Status: ${d.status}</p></div>
+                             </div>`;
+                });
+                document.getElementById('dealsContainer').innerHTML = html;
+            } catch(e) { console.error(e); }
+        }
+        
+        async function createNewDeal() {
+            const deal = {
+                title: document.getElementById('dealTitle').value,
+                capital: document.getElementById('dealCapital').value,
+                industry: document.getElementById('dealIndustry').value,
+                description: document.getElementById('dealDesc').value
+            };
+            if(!deal.title) return alert("Title required");
+            try {
+                await KYApi.createDeal(sessionStorage.getItem('ky_admin_auth'), deal);
+                alert("Deal Published!");
+                loadDeals();
+            } catch(e) { alert(e.message); }
+        }
+
+        async function createAnalyst() {
+            const u = document.getElementById('analystUser').value;
+            const p = document.getElementById('analystPass').value;
+            if(!u || !p) return alert("Fill all fields");
+            try {
+                const res = await fetch('/api/admin', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'createAdmin', pass: sessionStorage.getItem('ky_admin_auth'), username: u, password: p, role: 'analyst' })
+                });
+                const r = await res.json();
+                if(r.status === 'success') {
+                    alert("Analyst created!");
+                } else { alert(r.message); }
+            } catch(e) { alert(e.message); }
+        }
+
         async function loadData(pass) {
             const grid = document.getElementById('leadsGrid');
             grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 4rem;">Loading CRM...</div>';
