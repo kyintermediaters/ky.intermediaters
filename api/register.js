@@ -1,6 +1,8 @@
 const connectToDatabase = require('./utils/db');
 const Lead = require('./models/Lead');
 const nodemailer = require('nodemailer');
+// Twilio config
+const twilioClient = (process.env.TWILIO_SID && process.env.TWILIO_TOKEN) ? require('twilio')(process.env.TWILIO_SID, process.env.TWILIO_TOKEN) : null;
 
 // Calculate score based on Lead data
 function calculateScore(data) {

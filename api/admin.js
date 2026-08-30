@@ -1,6 +1,8 @@
 const connectToDatabase = require('./utils/db');
 const Lead = require('./models/Lead');
 const Deal = require('./models/Deal');
+const AdminUser = require('./models/AdminUser');
+const { v4: uuidv4 } = require('uuid');
 const nodemailer = require('nodemailer');
 
 module.exports = async function handler(req, res) {
@@ -26,10 +28,50 @@ module.exports = async function handler(req, res) {
             body = req.query; // GET requests use query params
         }
 
-        const pass = body.pass;
-        if (pass !== (process.env.ADMIN_PASS || 'adminkypass')) {
+
+        // Auth logic: Support legacy ADMIN_PASS or new RBAC token
+        let isAdmin = false;
+        let adminRole = 'superadmin'; // legacy default
+        
+        if (body.action === 'adminLogin') {
+            const user = await AdminUser.findOne({ username: body.username, password: body.password });
+            if (user) {
+                user.token = uuidv4();
+                await user.save();
+                return res.status(200).json({ status: 'success', token: user.token, role: user.role });
+            }
+            return res.status(401).json({ status: 'error', message: 'Invalid credentials' });
+        }
+        
+        if (body.action === 'createAdmin') {
+            // Must use master pass to create first admin
+            if (body.pass !== (process.env.ADMIN_PASS || 'adminkypass')) {
+                return res.status(401).json({ status: 'error', message: 'Unauthorized to create admins' });
+            }
+            await AdminUser.create({ username: body.username, password: body.password, role: body.role });
+            return res.status(200).json({ status: 'success' });
+        }
+
+        const pass = body.pass || body.token;
+        if (pass === (process.env.ADMIN_PASS || 'adminkypass')) {
+            isAdmin = true;
+        } else {
+            const user = await AdminUser.findOne({ token: pass });
+            if (user) {
+                isAdmin = true;
+                adminRole = user.role;
+            }
+        }
+
+        if (!isAdmin) {
             return res.status(401).json({ status: 'error', message: 'Unauthorized' });
         }
+        
+        // Protect certain routes from analysts
+        if (adminRole === 'analyst' && (body.action === 'bulkBroadcast' || body.action === 'deleteDeal')) {
+            return res.status(403).json({ status: 'error', message: 'Analysts cannot perform this action.' });
+        }
+
 
         
         if (body.action === 'getDeals') {
