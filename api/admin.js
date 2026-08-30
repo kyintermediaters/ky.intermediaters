@@ -1,5 +1,6 @@
 const connectToDatabase = require('./utils/db');
 const Lead = require('./models/Lead');
+const Deal = require('./models/Deal');
 const nodemailer = require('nodemailer');
 
 module.exports = async function handler(req, res) {
@@ -28,6 +29,22 @@ module.exports = async function handler(req, res) {
         const pass = body.pass;
         if (pass !== (process.env.ADMIN_PASS || 'adminkypass')) {
             return res.status(401).json({ status: 'error', message: 'Unauthorized' });
+        }
+
+        
+        if (body.action === 'getDeals') {
+            const deals = await Deal.find({}).sort({ timestamp: -1 });
+            return res.status(200).json({ status: 'success', data: deals });
+        }
+        
+        if (body.action === 'createDeal') {
+            await Deal.create({ title: body.title, capital: body.capital, description: body.description, industry: body.industry });
+            return res.status(200).json({ status: 'success' });
+        }
+        
+        if (body.action === 'deleteDeal') {
+            await Deal.findByIdAndDelete(body.id);
+            return res.status(200).json({ status: 'success' });
         }
 
         if (body.action === 'getRegistrations') {

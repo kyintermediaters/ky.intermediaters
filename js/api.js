@@ -103,3 +103,47 @@ async function signNDA(clientId) {
 }
 
 window.KYApi.signNDA = signNDA;
+
+async function uploadDocument(clientId, fileName, fileData) {
+    const response = await fetch('/api/portal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'uploadDoc', id: clientId, fileName, fileData })
+    });
+    const result = await response.json();
+    if (result.status !== 'success') throw new Error(result.message);
+    return result.url;
+}
+window.KYApi.uploadDocument = uploadDocument;
+
+async function requestIntro(clientId, dealTitle) {
+    const response = await fetch('/api/portal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'requestIntro', id: clientId, dealTitle })
+    });
+    const result = await response.json();
+    if (result.status !== 'success') throw new Error(result.message);
+    return true;
+}
+window.KYApi.requestIntro = requestIntro;
+
+async function getDeals(pass) {
+    const response = await fetch(`/api/admin?action=getDeals&pass=${encodeURIComponent(pass)}`);
+    const result = await response.json();
+    if (result.status !== 'success') throw new Error(result.message);
+    return result.data;
+}
+window.KYApi.getDeals = getDeals;
+
+async function createDeal(pass, dealData) {
+    const response = await fetch('/api/admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'createDeal', pass, ...dealData })
+    });
+    const result = await response.json();
+    if (result.status !== 'success') throw new Error(result.message);
+    return true;
+}
+window.KYApi.createDeal = createDeal;
