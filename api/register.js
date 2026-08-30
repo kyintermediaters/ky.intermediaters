@@ -5,21 +5,31 @@ const nodemailer = require('nodemailer');
 // Calculate score based on Lead data
 function calculateScore(data) {
     let score = 0;
-    if (data.budget === '50000+') score += 20;
-    else if (data.budget === '20000-50000') score += 10;
     
-    if (data.timeline === 'Immediate') score += 15;
-    else if (data.timeline === '1-3 Months') score += 5;
+    // Capital (Max 40)
+    const cap = parseInt((data.capital || '0').replace(/[^0-9]/g, '')) || 0;
+    if (cap >= 100000) score += 40;
+    else if (cap >= 50000) score += 30;
+    else if (cap >= 20000) score += 15;
+    else score += 5;
     
-    if (data.experience === 'Experienced') score += 10;
-    else if (data.experience === 'Some') score += 5;
+    // Experience (Max 20)
+    if (data.experience && data.experience.includes('Experienced')) score += 20;
+    else if (data.experience && data.experience.includes('Some')) score += 10;
+    else score += 5;
     
-    if (data.time === 'Full-Time') score += 10;
+    // Timeline (Max 20)
+    if (data.timeline && data.timeline.includes('Immediate')) score += 20;
+    else if (data.timeline && data.timeline.includes('1-3 Months')) score += 15;
+    else if (data.timeline && data.timeline.includes('3-6 Months')) score += 10;
+    else score += 5;
     
-    if (data.venture_type === 'Franchise') score += 5;
-    else if (data.venture_type === 'Scalable Startup') score += 15;
+    // Time Commitment (Max 20)
+    if (data.timeComm && data.timeComm.includes('Full-Time')) score += 20;
+    else if (data.timeComm && data.timeComm.includes('Part-Time')) score += 10;
+    else score += 5;
     
-    return score;
+    return Math.min(score, 100);
 }
 
 module.exports = async function handler(req, res) {

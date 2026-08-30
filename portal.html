@@ -52,6 +52,34 @@
             Invalid or Expired Tracking Link.
         </div>
 
+        
+        <div id="ndaWall" class="glass-panel" style="display: none; padding: 2rem; margin-bottom: 2rem;">
+            <h2 style="color: #0f172a; border-bottom: 2px solid #d4af37; padding-bottom: 0.5rem; margin-bottom: 1.5rem;">Non-Disclosure Agreement</h2>
+            <div style="background: rgba(0,0,0,0.02); padding: 1.5rem; height: 200px; overflow-y: scroll; border: 1px solid #e2e8f0; font-size: 0.9rem; color: #334155; margin-bottom: 1.5rem; border-radius: 4px;">
+                <p><strong>CONFIDENTIALITY AGREEMENT</strong></p>
+                <p>By clicking "I Agree" below, you acknowledge and agree that any information, documents, business plans, or financial data disclosed by KY Intermediater's or its clients is strictly confidential.</p>
+                <p>You agree not to disclose, share, or use this confidential information for any purpose other than evaluating a potential business transaction through our platform.</p>
+                <p>Your digital signature, IP address, and timestamp will be securely recorded.</p>
+            </div>
+            <button id="signNdaBtn" class="btn" style="width: 100%; font-size: 1.1rem;">I Agree & Sign NDA</button>
+        </div>
+        
+        <div id="meetingSection" class="glass-panel" style="display: none; padding: 2rem; margin-bottom: 2rem;">
+            <h3 style="margin-bottom: 1rem; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 0.5rem;">Schedule Strategy Call</h3>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">Pick a time to speak with your assigned analyst.</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <input type="date" id="meetDate" class="input-field" required>
+                <select id="meetTime" class="input-field" required>
+                    <option value="">Select Time</option>
+                    <option value="10:00">10:00 AM</option>
+                    <option value="11:30">11:30 AM</option>
+                    <option value="14:00">2:00 PM</option>
+                    <option value="16:00">4:00 PM</option>
+                </select>
+            </div>
+            <button id="bookMeetBtn" class="btn" style="width: 100%;">Book Meeting</button>
+        </div>
+
         <div id="trackerData" style="display: none;">
             <div class="glass-panel" style="padding: 2rem; margin-bottom: 2rem;">
                 <h3 style="margin-bottom: 1rem; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 0.5rem;">Assigned Analyst</h3>
@@ -99,7 +127,42 @@
             try {
                 const data = await KYApi.fetchPortalData(id);
                 document.getElementById('loading').style.display = 'none';
+                
+                if (!data.ndaSigned) {
+                    document.getElementById('ndaWall').style.display = 'block';
+                    document.getElementById('signNdaBtn').addEventListener('click', async () => {
+                        document.getElementById('signNdaBtn').textContent = 'Signing...';
+                        try {
+                            await KYApi.signNDA(id);
+                            window.location.reload();
+                        } catch(e) {
+                            alert(e.message);
+                            document.getElementById('signNdaBtn').textContent = 'I Agree & Sign NDA';
+                        }
+                    });
+                    return;
+                }
+                
                 document.getElementById('trackerData').style.display = 'block';
+                
+                if (data.status === 'Verified' || data.status === 'Contacted') {
+                    document.getElementById('meetingSection').style.display = 'block';
+                    document.getElementById('bookMeetBtn').addEventListener('click', async () => {
+                        const d = document.getElementById('meetDate').value;
+                        const t = document.getElementById('meetTime').value;
+                        if(!d || !t) return alert("Select date and time");
+                        
+                        document.getElementById('bookMeetBtn').textContent = 'Booking...';
+                        try {
+                            await KYApi.scheduleMeeting(data.email, data.name, d, t);
+                            alert("Meeting Booked! Check your email for the calendar invite.");
+                            window.location.reload();
+                        } catch(e) {
+                            alert(e.message);
+                            document.getElementById('bookMeetBtn').textContent = 'Book Meeting';
+                        }
+                    });
+                }
                 
                 document.getElementById('agentName').textContent = data.agent;
                 

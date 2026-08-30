@@ -12,19 +12,38 @@ module.exports = async function handler(req, res) {
     try {
         await connectToDatabase();
         
-        let id = req.query.id;
+        let body = {};
+        if (req.method === 'POST') {
+            try { body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body; } catch(e) { body = req.body; }
+        } else {
+            body = req.query;
+        }
+        
+        const id = body.id;
         if (!id) return res.status(400).json({ status: 'error', message: 'Missing ID' });
         
         const lead = await Lead.findOne({ clientId: id });
         if (!lead) return res.status(404).json({ status: 'error', message: 'Invalid Link' });
         
+        if (req.method === 'POST' && body.action === 'signNDA') {
+            lead.ndaSigned = true;
+            lead.ndaTimestamp = new Date().toISOString();
+            const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'Unknown IP';
+            lead.activityLog.push({ time: lead.ndaTimestamp, action: `Signed Digital NDA (IP: ${ip})` });
+            await lead.save();
+            return res.status(200).json({ status: 'success' });
+        }
+        
         return res.status(200).json({ 
             status: 'success', 
             data: { 
+                name: lead.name,
+                email: lead.email,
                 status: lead.status, 
                 logs: lead.activityLog, 
                 agent: lead.agent, 
-                docs: lead.documents 
+                docs: lead.documents,
+                ndaSigned: lead.ndaSigned
             } 
         });
     } catch (error) {

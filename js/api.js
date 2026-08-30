@@ -90,3 +90,16 @@ window.KYApi = {
     bulkBroadcast,
     fetchPortalData
 };
+
+async function signNDA(clientId) {
+    const response = await fetch('/api/portal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'signNDA', id: clientId })
+    });
+    const result = await response.json();
+    if (result.status !== 'success') throw new Error(result.message);
+    return true;
+}
+
+window.KYApi.signNDA = signNDA;

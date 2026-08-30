@@ -28,7 +28,11 @@ const leadSchema = new mongoose.Schema({
     
     // Portal Fields
     documents: { type: Array, default: [] },
-    activityLog: { type: Array, default: [] }
+    activityLog: { type: Array, default: [] },
+    
+    // Legal
+    ndaSigned: { type: Boolean, default: false },
+    ndaTimestamp: { type: String, default: '' }
 });
 
 module.exports = mongoose.models.Lead || mongoose.model('Lead', leadSchema);
