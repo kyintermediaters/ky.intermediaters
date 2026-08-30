@@ -1,5 +1,5 @@
-const connectToDatabase = require('./utils/db');
-const Lead = require('./models/Lead');
+const connectToDatabase = require('../lib/utils/db');
+const Lead = require('../lib/models/Lead');
 const nodemailer = require('nodemailer');
 
 const TEMPLATE = `

@@ -1,7 +1,7 @@
-const connectToDatabase = require('./utils/db');
-const Lead = require('./models/Lead');
-const Deal = require('./models/Deal');
-const AdminUser = require('./models/AdminUser');
+const connectToDatabase = require('../lib/utils/db');
+const Lead = require('../lib/models/Lead');
+const Deal = require('../lib/models/Deal');
+const AdminUser = require('../lib/models/AdminUser');
 const { v4: uuidv4 } = require('uuid');
 const nodemailer = require('nodemailer');
 

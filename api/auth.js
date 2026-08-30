@@ -1,5 +1,5 @@
-const connectToDatabase = require('./utils/db');
-const OTP = require('./models/OTP');
+const connectToDatabase = require('../lib/utils/db');
+const OTP = require('../lib/models/OTP');
 const nodemailer = require('nodemailer');
 
 module.exports = async function handler(req, res) {

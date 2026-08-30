@@ -1,6 +1,6 @@
-const connectToDatabase = require('./utils/db');
-const Lead = require('./models/Lead');
-const Deal = require('./models/Deal');
+const connectToDatabase = require('../lib/utils/db');
+const Lead = require('../lib/models/Lead');
+const Deal = require('../lib/models/Deal');
 const { put } = require('@vercel/blob');
 
 module.exports = async function handler(req, res) {
