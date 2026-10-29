@@ -1,3 +1,266 @@
+/* ==========================================================================
+   CLARION EDITORIAL THEME FOR KY INTERMEDIATER'S
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg-color: #FAF7F2;
+    --text-primary: #121212;
+    --text-secondary: #626d66;
+    --glass-bg: #FFFFFF;
+    --glass-border: rgba(15, 77, 63, 0.15);
+    --glass-shadow: 0 10px 30px rgba(15, 77, 63, 0.05);
+    --accent: #0F4D3F;
+    --accent-hover: #09372d;
+    --blush: #EBC7BE;
+    --ivory: #FAF7F2;
+    --emerald: #0F4D3F;
+    --ink: #121212;
+    --quiet: #626d66;
+    --hairline: rgba(15, 77, 63, 0.15);
+    --primary: #0F4D3F;
+    --error: #dc2626;
+    --success: #0F4D3F;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Editorial Typography */
+h1, h2, h3, h4, h5, h6, .section-title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 600;
+    line-height: 1.15;
+    color: var(--emerald);
+    letter-spacing: -0.02em;
+}
+
+h1 em, h2 em, h3 em {
+    font-style: italic;
+    font-weight: 400;
+}
+
+p {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    font-family: 'Manrope', sans-serif;
+}
+
+/* Header & Navigation */
+header {
+    background: var(--ivory) !important;
+    border-bottom: 1px solid var(--hairline) !important;
+    backdrop-filter: blur(10px);
+}
+
+header a {
+    color: var(--emerald) !important;
+}
+
+.nav-links a {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--emerald) !important;
+}
+
+/* Editorial Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.8rem;
+    border-radius: 99px;
+    text-decoration: none;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    background: var(--emerald);
+    color: var(--ivory);
+    border: 1px solid var(--emerald);
+}
+
+.btn:hover {
+    background: var(--accent-hover);
+    color: var(--ivory);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(15, 77, 63, 0.25);
+}
+
+.btn-primary {
+    background: var(--emerald) !important;
+    color: var(--ivory) !important;
+    border-color: var(--emerald) !important;
+}
+
+.btn-primary:hover {
+    background: var(--accent-hover) !important;
+    color: var(--ivory) !important;
+}
+
+.btn-outline {
+    background: transparent !important;
+    border: 1px solid var(--hairline) !important;
+    color: var(--emerald) !important;
+}
+
+.btn-outline:hover {
+    background: var(--emerald) !important;
+    color: var(--ivory) !important;
+}
+
+.btn-large {
+    padding: 1.1rem 2.8rem;
+    font-size: 1rem;
+}
+
+/* Editorial Cards & Panels */
+.glass-panel {
+    background: #FFFFFF !important;
+    border: 1px solid var(--hairline) !important;
+    border-radius: 6px !important;
+    box-shadow: var(--glass-shadow) !important;
+    padding: 2.5rem;
+}
+
+/* Inputs & Form Elements */
+.form-group label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--quiet);
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input, .form-group select, .form-group textarea, .form-input, .input-field {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--hairline);
+    border-radius: 5px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.95rem;
+    background: #FFFFFF;
+    color: var(--ink);
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus, .form-input:focus, .input-field:focus {
+    outline: none;
+    border-color: var(--emerald);
+    box-shadow: 0 0 0 3px rgba(15, 77, 63, 0.12);
+}
+
+/* Step Trackers (Portal) */
+.step::after {
+    background: var(--hairline) !important;
+}
+
+.step-circle {
+    background: rgba(15, 77, 63, 0.08) !important;
+    color: var(--emerald) !important;
+    font-family: 'IBM Plex Mono', monospace !important;
+    border: 1px solid var(--hairline);
+}
+
+.step.active .step-circle {
+    background: var(--emerald) !important;
+    color: var(--ivory) !important;
+    border-color: var(--emerald) !important;
+}
+
+.step.completed .step-circle {
+    background: var(--emerald) !important;
+    color: var(--ivory) !important;
+    border-color: var(--emerald) !important;
+}
+
+.step.completed::after {
+    background: var(--emerald) !important;
+}
+
+/* Stat Cards (Admin CRM) */
+.stat-card {
+    background: #FFFFFF !important;
+    border: 1px solid var(--hairline) !important;
+    box-shadow: var(--glass-shadow) !important;
+    border-radius: 6px !important;
+}
+
+.stat-card h3 {
+    font-family: 'Cormorant Garamond', Georgia, serif !important;
+    color: var(--emerald) !important;
+    font-size: 2.6rem !important;
+    font-weight: 600 !important;
+}
+
+.stat-card p {
+    font-family: 'IBM Plex Mono', monospace !important;
+    color: var(--quiet) !important;
+    font-size: 0.8rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+}
+
+/* Score Badges */
+.score-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+}
+
+.score-high {
+    background: rgba(15, 77, 63, 0.12);
+    color: var(--emerald);
+    border: 1px solid rgba(15, 77, 63, 0.25);
+}
+
+.score-med {
+    background: rgba(212, 175, 55, 0.15);
+    color: #854d0e;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.score-low {
+    background: rgba(220, 38, 38, 0.1);
+    color: #991b1b;
+    border: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+/* Toolbar in Admin */
+.toolbar {
+    background: #FFFFFF !important;
+    border: 1px solid var(--hairline) !important;
+    border-radius: 6px !important;
+    box-shadow: var(--glass-shadow) !important;
+}
+
+/* Preloader */
+#preloader {
+    background: var(--ivory) !important;
+}
+
+
 /* Base styles and variables */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
