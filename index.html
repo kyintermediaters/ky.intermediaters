@@ -3,83 +3,102 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>KY Intermediater's — Profitable Deals. Strategic Impact.</title>
+    <title>KY Intermediater's — Premium Idea Broker & Business Advisory</title>
     <link rel="icon" type="image/png" href="images/favicon.png"/>
-    <meta name="description" content="Independent business brokerage and deal advisory. We confidentially match ambitious entrepreneurs and investors with vetted ventures, verified cash flows, and growth blueprints."/>
+    <meta name="description" content="Your bridge between expert business analysts and profitable business ideas. We connect aspiring entrepreneurs with vetted, tailored business blueprints."/>
     
-    <!-- Open Graph / Meta -->
-    <meta property="og:title" content="KY Intermediater's — Profitable Deals. Strategic Impact."/>
-    <meta property="og:description" content="Independent business brokerage and deal advisory. Connecting ambitious capital with vetted, profitable ventures."/>
-    <meta property="og:type" content="website"/>
-    <meta property="og:image" content="images/clarion/hero-main.png"/>
+    <!-- Open Graph -->
+    <meta property="og:title" content="KY Intermediater's — Premium Idea Broker"/>
+    <meta property="og:description" content="Your bridge between expert business analysts and profitable business ideas."/>
+    <meta property="og:image" content="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80"/>
 
     <!-- Google Fonts: Cormorant Garamond, Manrope, IBM Plex Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap"/>
 
-    <!-- Clarion PR Design System CSS -->
+    <!-- Clarion Design System CSS -->
     <link rel="stylesheet" href="css/clarion.css"/>
 
     <style>
-        /* Dialog & Modal Enhancements */
-        dialog.editorial-dialog {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            margin: 0;
-            max-width: 680px;
-            width: calc(100% - 32px);
-            max-height: 90vh;
-            overflow-y: auto;
-            background: var(--ivory);
+        /* Custom tweaks for KY content */
+        .brand-logo-img {
+            height: 48px;
+            width: auto;
+            object-fit: contain;
+            display: block;
+        }
+        .stats-counter-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin: 48px 0;
+            padding: 36px 0;
+            border-top: 1px solid var(--hairline);
+            border-bottom: 1px solid var(--hairline);
+        }
+        .stat-box {
+            text-align: center;
+        }
+        .stat-box .stat-num {
+            font-family: var(--display);
+            font-size: clamp(38px, 4.5vw, 60px);
             color: var(--emerald);
+            line-height: 1;
+            font-weight: 600;
+        }
+        .stat-box .stat-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--quiet);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-top: 8px;
+        }
+        .pricing-card-editorial {
+            background: var(--ivory);
             border: 1px solid var(--hairline);
             border-radius: 6px;
-            padding: 40px 32px;
-            box-shadow: 0 25px 60px -15px rgba(15, 77, 63, 0.4);
-            z-index: 100;
+            padding: 48px;
+            max-width: 650px;
+            margin: 40px auto;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(15, 77, 63, 0.06);
         }
-        dialog.team-dialog {
-            display: grid;
-            grid-template-columns: 0.85fr 1.15fr;
-            gap: 26px;
-            align-items: center;
-            max-width: 760px;
+        .pricing-features-list {
+            list-style: none;
+            padding: 0;
+            margin: 32px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            text-align: left;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
         }
-        dialog::backdrop {
-            background: rgba(18, 18, 18, 0.65);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-        }
-        .close-dialog-btn {
-            position: absolute;
-            top: 18px;
-            right: 18px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            color: var(--emerald);
-            padding: 8px;
+        .pricing-features-list li {
             display: flex;
             align-items: center;
-            justify-content: center;
-            border-radius: 99px;
-            transition: background 0.2s ease;
+            gap: 12px;
+            font-size: 14px;
+            color: var(--ink);
         }
-        .close-dialog-btn:hover {
-            background: rgba(15, 77, 63, 0.08);
+        .pricing-features-list li svg {
+            color: var(--emerald);
+            flex-shrink: 0;
         }
-        @media (max-width: 680px) {
-            dialog.team-dialog {
-                grid-template-columns: 1fr;
-                padding: 30px 20px;
-            }
-        }
-        /* Mobile nav toggle state */
         .mobile-nav.open {
             display: flex !important;
+        }
+        @media (max-width: 768px) {
+            .stats-counter-grid {
+                grid-template-columns: 1fr;
+                gap: 28px;
+            }
+            .pricing-card-editorial {
+                padding: 32px 20px;
+            }
         }
     </style>
 </head>
@@ -88,21 +107,22 @@
         <!-- Site Header -->
         <header class="site-header">
             <a class="skip-link" href="#main">Skip to content</a>
-            <a class="wordmark" aria-label="KY Intermediater's home" href="/">
-                KY<span>INTERMEDIATERS</span><i>.</i>
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
+                <img src="images/logo.png" alt="KY Intermediater's Logo" class="brand-logo-img"/>
             </a>
             
             <nav class="desktop-nav" aria-label="Main navigation">
-                <a class="nav-pill nav-tone-0" href="#work">Curated Deals</a>
-                <a class="nav-pill nav-tone-1" href="#expertise">Advisory</a>
-                <a class="nav-pill nav-tone-2" href="#people">Advisors</a>
-                <a class="nav-pill nav-tone-3" href="#insights">Market Notes</a>
-                <a class="nav-pill" href="portal.html" style="border: 1px solid var(--hairline); background: transparent;">Data Room</a>
+                <a class="nav-pill nav-tone-0" href="#about">The Problem</a>
+                <a class="nav-pill nav-tone-1" href="#ventures">Ventures</a>
+                <a class="nav-pill nav-tone-2" href="#process">How It Works</a>
+                <a class="nav-pill nav-tone-3" href="#pricing">Pricing</a>
+                <a class="nav-pill nav-tone-0" href="#faq">FAQ</a>
+                <a class="nav-pill" href="portal.html" style="border: 1px solid var(--hairline); background: transparent;">Client Portal</a>
             </nav>
 
             <div class="header-actions">
                 <a class="pill pill-emerald" href="register.html">
-                    Get Started 
+                    Start Your Journey
                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
                 </a>
                 <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-navigation" aria-label="Toggle navigation" id="menuToggle">
@@ -112,39 +132,41 @@
 
             <!-- Mobile Navigation Drawer -->
             <nav id="mobile-navigation" class="mobile-nav" style="display: none;">
-                <a href="#work" class="mobile-link">Curated Deals</a>
-                <a href="#expertise" class="mobile-link">Advisory</a>
-                <a href="#people" class="mobile-link">Advisors</a>
-                <a href="#insights" class="mobile-link">Market Notes</a>
+                <a href="#about" class="mobile-link">The Problem</a>
+                <a href="#ventures" class="mobile-link">Ventures</a>
+                <a href="#process" class="mobile-link">How It Works</a>
+                <a href="#pricing" class="mobile-link">Pricing</a>
+                <a href="#faq" class="mobile-link">FAQ</a>
                 <a href="#contact" class="mobile-link">Contact</a>
-                <a href="register.html" class="mobile-link" style="color: var(--blush);">Register for Deal Flow ↗</a>
+                <a href="register.html" class="mobile-link" style="color: var(--blush);">Register Now ↗</a>
                 <a href="portal.html" class="mobile-link">Client Portal &amp; Data Room</a>
-                <a href="admin.html" class="mobile-link" style="font-size: 18px; color: var(--quiet);">Admin Access</a>
+                <a href="admin.html" class="mobile-link" style="font-size: 16px; color: var(--quiet);">Admin Access</a>
             </nav>
         </header>
 
         <main id="main">
-            <!-- Hero Section -->
+            <!-- Hero Section with Old Content & Images -->
             <section aria-labelledby="hero-title" class="hero" id="top">
                 <div class="hero-city">
-                    <img alt="KY Intermediaters Deal Architecture" class="hero-image" fetchpriority="high" src="images/clarion/hero-main.png"/>
+                    <img alt="KY Intermediaters Corporate Office" class="hero-image" fetchpriority="high" src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80"/>
                     <div class="hero-shade"></div>
                     <div class="hero-copy">
-                        <p class="eyebrow">Independent Business Brokerage · Deal Advisory</p>
+                        <p class="eyebrow">The Premier Idea Broker · KY Intermediater's</p>
                         <h1 id="hero-title">
-                            Good ventures.<br/>
-                            Great <em>impact.</em>
+                            Bridge the Gap<br/>
+                            to Your Next<br/>
+                            <em>Big Venture.</em>
                         </h1>
                         <p class="hero-description">
-                            We confidentially match ambitious entrepreneurs and private investors with verified, profitable businesses and data-backed execution blueprints.
+                            We connect aspiring entrepreneurs with expert business analysts. Get a vetted, actionable business idea tailored to your interests, budget, and market conditions.
                         </p>
                         <div class="hero-actions">
-                            <a class="pill pill-blush" href="#work">
-                                Discover curated deals
+                            <a class="pill pill-blush" href="register.html">
+                                Start Your Journey
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
                             </a>
-                            <a class="hero-secondary" href="#contact">
-                                Start a consultation
+                            <a class="hero-secondary" href="#about">
+                                Explore Why We Exist
                                 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
                             </a>
                         </div>
@@ -152,38 +174,102 @@
                 </div>
                 
                 <div class="hero-editorial">
-                    <img alt="Editorial Deal Room and Financial Blueprint Strategy" class="hero-image" src="images/clarion/hero-secondary.png"/>
+                    <img alt="Strategic Business Analysis & Consulting" class="hero-image" src="https://images.unsplash.com/photo-1556761175-5973dc0f32b7?auto=format&fit=crop&w=1600&q=80"/>
                     <div class="editorial-caption">
                         <span class="caption-line"></span>
-                        <p class="eyebrow">A clear vision.<br/>A lasting return.</p>
-                        <a aria-label="Explore our deals" class="circle-link" href="#work">
+                        <p class="eyebrow">A clear voice.<br/>A lasting venture.</p>
+                        <a aria-label="Explore our ventures" class="circle-link" href="#ventures">
                             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-down"><path d="M12 5v14"></path><path d="m19 12-7 7-7-7"></path></svg>
                         </a>
                     </div>
                 </div>
             </section>
 
-            <!-- 01 / Selected Perspectives (Case Studies / Deal Flow) -->
-            <section aria-labelledby="work-title" class="section work-section" id="work">
-                <span class="vertical-label">01 / Deals with substance</span>
+            <!-- 01 / Why We Exist - The Problem We Solve -->
+            <section aria-labelledby="about-title" class="section work-section" id="about">
+                <span class="vertical-label">01 / Why We Exist</span>
                 <div class="section-heading">
                     <div>
-                        <p class="eyebrow">Selected opportunities</p>
-                        <h2 id="work-title">
-                            Made to generate<br/>
-                            <em>real cash flow.</em>
+                        <p class="eyebrow">The Core Problem We Solve</p>
+                        <h2 id="about-title">
+                            The bridge between<br/>
+                            <em>capital &amp; intelligence.</em>
                         </h2>
                     </div>
                     <div class="heading-aside">
                         <p>
-                            Vetted enterprises. Audited balance sheets.<br/>
-                            Ventures primed for immediate handover and scale.
+                            Most people have capital and ambition, but lack the precise market insight to know <em>what</em> to build. Meanwhile, top-tier business analysts have the insights but lack operators to execute them.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Stats Grid from Old Site -->
+                <div class="stats-counter-grid">
+                    <div class="stat-box">
+                        <div class="stat-num">100+</div>
+                        <div class="stat-label">Analysts Network</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-num">₹499</div>
+                        <div class="stat-label">Flat Consulting Fee</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-num">100%</div>
+                        <div class="stat-label">Actionable &amp; Tailored Ideas</div>
+                    </div>
+                </div>
+
+                <!-- 3 Pillars from Old Site -->
+                <div class="press-placements" style="margin-top: 30px;">
+                    <div class="press-placement" style="cursor: default;">
+                        <span class="publication publication-forme">Analysis</span>
+                        <span class="eyebrow">Market Research</span>
+                        <span class="placement-title">Data-Driven Insights</span>
+                        <p style="font-size: 13px; color: var(--quiet); margin-top: 10px; line-height: 1.8;">
+                            Every recommendation is backed by real market demand, competitive analysis, and industry growth trends.
+                        </p>
+                    </div>
+
+                    <div class="press-placement" style="cursor: default;">
+                        <span class="publication publication-common-ground">Safety</span>
+                        <span class="eyebrow">Capital Protection</span>
+                        <span class="placement-title">Risk Mitigation</span>
+                        <p style="font-size: 13px; color: var(--quiet); margin-top: 10px; line-height: 1.8;">
+                            We validate business models before you invest capital, significantly reducing the chance of failure.
+                        </p>
+                    </div>
+
+                    <div class="press-placement" style="cursor: default;">
+                        <span class="publication publication-signal">Speed</span>
+                        <span class="eyebrow">90-Day Execution</span>
+                        <span class="placement-title">Rapid Execution</span>
+                        <p style="font-size: 13px; color: var(--quiet); margin-top: 10px; line-height: 1.8;">
+                            Skip months of brainstorming. Get a clear, step-by-step roadmap and start building immediately.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 02 / Potential Ventures (What Could You Build?) -->
+            <section aria-labelledby="ventures-title" class="section work-section" id="ventures">
+                <span class="vertical-label">02 / Potential Ventures</span>
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">Tailored To Your Capital</p>
+                        <h2 id="ventures-title">
+                            What could you<br/>
+                            <em>build today?</em>
+                        </h2>
+                    </div>
+                    <div class="heading-aside">
+                        <p>
+                            Here are the types of ventures our analysts typically recommend based on your available startup capital.
                         </p>
                         <div class="rail-controls">
-                            <button aria-label="Previous case study" class="circle-button light" type="button" id="railPrev">
+                            <button aria-label="Previous venture" class="circle-button light" type="button" id="railPrev">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
                             </button>
-                            <button aria-label="Next case study" class="circle-button" type="button" id="railNext">
+                            <button aria-label="Next venture" class="circle-button" type="button" id="railNext">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
                             </button>
                         </div>
@@ -191,149 +277,133 @@
                 </div>
 
                 <div class="work-rail" id="workRail">
-                    <!-- Deal 1 -->
+                    <!-- Tier 1 -->
                     <article class="work-card">
-                        <a aria-label="Explore FMCG D2C Deal" class="work-image-link" href="register.html">
-                            <img alt="Consumer FMCG Brand Deal" loading="lazy" src="images/clarion/case-1.png"/>
+                        <a aria-label="Explore Local Service Arbitrage" class="work-image-link" href="register.html">
+                            <img alt="Local Service Arbitrage" loading="lazy" src="images/clarion/case-1.png"/>
                             <span class="image-number">01</span>
                             <span class="image-arrow">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
                             </span>
                         </a>
                         <div class="work-card-meta">
-                            <span class="eyebrow">Consumer FMCG · ₹15L - ₹35L Capital</span>
-                            <span class="eyebrow">38% EBITDA</span>
+                            <span class="eyebrow">₹2L - ₹5L CAPITAL</span>
+                            <span class="eyebrow">High Margin</span>
                         </div>
                         <h3>
-                            <a href="register.html">Making an everyday consumer essential a defensible market leader.</a>
+                            <a href="register.html">Local Service Arbitrage</a>
                         </h3>
+                        <p style="font-size: 13px; color: var(--quiet); line-height: 1.8; margin-bottom: 16px;">
+                            High-margin, low-overhead service businesses leveraging digital marketing in underserved local markets.
+                        </p>
                         <a class="text-link" href="register.html">
-                            Request full teaser in Data Room
+                            Get Matched for this Capital Tier
                             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
                         </a>
                     </article>
 
-                    <!-- Deal 2 -->
+                    <!-- Tier 2 -->
                     <article class="work-card">
-                        <a aria-label="Explore Boutique Hospitality Deal" class="work-image-link" href="register.html">
-                            <img alt="Boutique Hospitality Hub" loading="lazy" src="images/clarion/case-2.png"/>
+                        <a aria-label="Explore Niche E-Commerce" class="work-image-link" href="register.html">
+                            <img alt="Niche E-Commerce D2C" loading="lazy" src="images/clarion/case-2.png"/>
                             <span class="image-number">02</span>
                             <span class="image-arrow">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
                             </span>
                         </a>
                         <div class="work-card-meta">
-                            <span class="eyebrow">Hospitality &amp; Real Estate · ₹50L+ Capital</span>
-                            <span class="eyebrow">Asset-Backed</span>
+                            <span class="eyebrow">₹5L - ₹15L CAPITAL</span>
+                            <span class="eyebrow">Strong Brand</span>
                         </div>
                         <h3>
-                            <a href="register.html">A luxury destination asset backed by high recurring guest loyalty.</a>
+                            <a href="register.html">Niche E-Commerce / D2C</a>
                         </h3>
+                        <p style="font-size: 13px; color: var(--quiet); line-height: 1.8; margin-bottom: 16px;">
+                            Sourcing premium products with high unit margins and strong brand narratives. Focus on high LTV.
+                        </p>
                         <a class="text-link" href="register.html">
-                            Request full teaser in Data Room
+                            Get Matched for this Capital Tier
                             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
                         </a>
                     </article>
 
-                    <!-- Deal 3 -->
+                    <!-- Tier 3 -->
                     <article class="work-card">
-                        <a aria-label="Explore B2B Workflow SaaS Deal" class="work-image-link" href="register.html">
-                            <img alt="B2B Tech Workflow Platform" loading="lazy" src="images/clarion/case-3.png"/>
+                        <a aria-label="Explore B2B Micro-SaaS" class="work-image-link" href="register.html">
+                            <img alt="B2B Micro-SaaS" loading="lazy" src="images/clarion/case-3.png"/>
                             <span class="image-number">03</span>
                             <span class="image-arrow">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
                             </span>
                         </a>
                         <div class="work-card-meta">
-                            <span class="eyebrow">Technology &amp; Micro-SaaS · ₹20L - ₹50L Capital</span>
-                            <span class="eyebrow">82% Gross Margin</span>
+                            <span class="eyebrow">₹15L - ₹50L CAPITAL</span>
+                            <span class="eyebrow">Recurring ARR</span>
                         </div>
                         <h3>
-                            <a href="register.html">Transforming complex industry operations into predictable recurring ARR.</a>
+                            <a href="register.html">B2B Micro-SaaS</a>
                         </h3>
+                        <p style="font-size: 13px; color: var(--quiet); line-height: 1.8; margin-bottom: 16px;">
+                            Solving a very specific workflow problem for an industry willing to pay recurring subscriptions.
+                        </p>
                         <a class="text-link" href="register.html">
-                            Request full teaser in Data Room
+                            Get Matched for this Capital Tier
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+                        </a>
+                    </article>
+
+                    <!-- Tier 4 -->
+                    <article class="work-card">
+                        <a aria-label="Explore Marketplace Platform" class="work-image-link" href="register.html">
+                            <img alt="Marketplace Platform" loading="lazy" src="images/clarion/agency.png"/>
+                            <span class="image-number">04</span>
+                            <span class="image-arrow">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+                            </span>
+                        </a>
+                        <div class="work-card-meta">
+                            <span class="eyebrow">₹50L+ CAPITAL</span>
+                            <span class="eyebrow">Structural Scale</span>
+                        </div>
+                        <h3>
+                            <a href="register.html">Marketplace / Platform</a>
+                        </h3>
+                        <p style="font-size: 13px; color: var(--quiet); line-height: 1.8; margin-bottom: 16px;">
+                            Capital-intensive structural plays connecting fragmented supply with high-demand consumers.
+                        </p>
+                        <a class="text-link" href="register.html">
+                            Get Matched for this Capital Tier
                             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
                         </a>
                     </article>
                 </div>
-                <p class="disclosure">Active opportunities are anonymized for confidentiality. Full financials unlocked upon digital NDA execution.</p>
             </section>
 
-            <!-- Press & Market Recognition Section -->
-            <section aria-labelledby="press-title" class="section press-section">
-                <span class="vertical-label">In the market</span>
-                <div class="press-intro">
-                    <p class="eyebrow">The power of institutional vetting</p>
-                    <h2 id="press-title">
-                        In good <em>company.</em>
-                    </h2>
-                    <p>
-                        From private family offices to high-growth operators.<br/>
-                        A rigorous standard of due diligence and discretion.
-                    </p>
-                </div>
-
-                <div class="press-placements">
-                    <button class="press-placement" type="button" onclick="openPressModal('modal-forbes')">
-                        <span class="publication publication-forme">Venture Pulse</span>
-                        <span class="eyebrow">Private Equity &amp; Deal Flow</span>
-                        <span class="placement-title">The emerging playbook for acquisition entrepreneurship in India.</span>
-                        <span class="text-link">
-                            View brief overview
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
-                        </span>
-                    </button>
-
-                    <button class="press-placement" type="button" onclick="openPressModal('modal-mint')">
-                        <span class="publication publication-common-ground">Financial Digest</span>
-                        <span class="eyebrow">Strategic Due Diligence</span>
-                        <span class="placement-title">Why buying an audited cash-flow engine beats startup volatility.</span>
-                        <span class="text-link">
-                            View brief overview
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
-                        </span>
-                    </button>
-
-                    <button class="press-placement" type="button" onclick="openPressModal('modal-fast')">
-                        <span class="publication publication-signal">Dealmaker Monthly</span>
-                        <span class="eyebrow">Operator Perspectives</span>
-                        <span class="placement-title">Structuring win-win earnouts and seller transitions seamlessly.</span>
-                        <span class="text-link">
-                            View brief overview
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
-                        </span>
-                    </button>
-                </div>
-                <p class="disclosure">Confidentiality protocols strictly observed. Client identities protected across all public case summaries.</p>
-            </section>
-
-            <!-- 02 / Expertise Section (Accordion) -->
-            <section aria-labelledby="expertise-title" class="section expertise-section" id="expertise">
-                <span class="vertical-label">02 / Strategic Advisory</span>
+            <!-- 03 / Process - How It Works -->
+            <section aria-labelledby="process-title" class="section expertise-section" id="process">
+                <span class="vertical-label">03 / The Process</span>
                 <div class="expertise-layout">
                     <div class="expertise-intro">
-                        <p class="eyebrow">Our capabilities</p>
-                        <h2 id="expertise-title">
-                            A clear strategy.<br/>
-                            A stronger<br/>
-                            <em>portfolio.</em>
+                        <p class="eyebrow">Simple, Guided Steps</p>
+                        <h2 id="process-title">
+                            How it<br/>
+                            <em>works.</em>
                         </h2>
                         <p>
-                            From initial capital allocation to the final signature. Strategic valuation. Risk mitigation. Unbiased representation.
+                            From initial intake to a fully documented business blueprint. We make launching your next venture clear, strategic, and low-risk.
                         </p>
-                        <a class="pill pill-emerald" href="#contact">
-                            Find your approach
+                        <a class="pill pill-emerald" href="register.html">
+                            Begin Registration
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
                         </a>
                     </div>
 
                     <div class="service-list">
-                        <!-- Accordion 01 -->
+                        <!-- Step 01 -->
                         <details class="service-item" open>
                             <summary>
                                 <span class="eyebrow">01</span>
-                                <h3>Business Acquisition &amp; Sale</h3>
+                                <h3>Register</h3>
                                 <span class="service-toggle">
                                     <svg class="lucide lucide-plus service-plus" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
                                     <svg class="lucide lucide-minus service-minus" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path></svg>
@@ -341,19 +411,19 @@
                             </summary>
                             <div class="service-content">
                                 <p>
-                                    The right deal. The right valuation. The right terms. We facilitate clean acquisitions for profitable enterprises, vetting supply chain reliability, vendor lock-ins, and accurate revenue representations.
+                                    Tell us about yourself—your available capital, skills, interests, and how much time you can commit. Our matching algorithm immediately identifies relevant business sectors.
                                 </p>
                                 <p class="service-deliverables">
-                                    Comprehensive Business Valuation · Tax &amp; Debt Audit · Clean Escrow Transfer · Non-Compete Structuring
+                                    Intake Form · Capital Assessment · Risk Profile · Sector Preferences
                                 </p>
                             </div>
                         </details>
 
-                        <!-- Accordion 02 -->
+                        <!-- Step 02 -->
                         <details class="service-item">
                             <summary>
                                 <span class="eyebrow">02</span>
-                                <h3>Custom Venture Blueprints</h3>
+                                <h3>Consultation</h3>
                                 <span class="service-toggle">
                                     <svg class="lucide lucide-plus service-plus" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
                                     <svg class="lucide lucide-minus service-minus" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path></svg>
@@ -361,19 +431,19 @@
                             </summary>
                             <div class="service-content">
                                 <p>
-                                    Have capital but no clear direction? Our analysts match your specific investment threshold (₹2L - ₹50L+) with a complete, stress-tested blueprint outlining customer acquisition, unit margins, and operational steps.
+                                    A dedicated analyst reviews market data, competitive landscapes, and consumer trends to find high-margin opportunities specifically matching your criteria.
                                 </p>
                                 <p class="service-deliverables">
-                                    Capital-to-Venture Matching · Financial Sensitivity Models · Vendor Introductions · 90-Day Execution Plan
+                                    1-on-1 Analyst Match · Competitive Review · Target Market Sizing · Margin Auditing
                                 </p>
                             </div>
                         </details>
 
-                        <!-- Accordion 03 -->
+                        <!-- Step 03 -->
                         <details class="service-item">
                             <summary>
                                 <span class="eyebrow">03</span>
-                                <h3>Confidential Data Room &amp; NDA</h3>
+                                <h3>The Blueprint</h3>
                                 <span class="service-toggle">
                                     <svg class="lucide lucide-plus service-plus" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
                                     <svg class="lucide lucide-minus service-minus" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path></svg>
@@ -381,30 +451,10 @@
                             </summary>
                             <div class="service-content">
                                 <p>
-                                    Security is non-negotiable. Our encrypted client portal allows buyers and sellers to review certified financials, contracts, and trade secrets under legally binding, time-stamped digital NDAs.
+                                    Receive a complete, step-by-step business blueprint: supplier sourcing, marketing strategy, revenue model, and a 90-day launch roadmap ready for execution.
                                 </p>
                                 <p class="service-deliverables">
-                                    Digital NDA Wall · Encrypted Document Vault · Verified Buyer Screening · Watermarked Diligence Teasers
-                                </p>
-                            </div>
-                        </details>
-
-                        <!-- Accordion 04 -->
-                        <details class="service-item">
-                            <summary>
-                                <span class="eyebrow">04</span>
-                                <h3>Post-Acquisition Growth Counsel</h3>
-                                <span class="service-toggle">
-                                    <svg class="lucide lucide-plus service-plus" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
-                                    <svg class="lucide lucide-minus service-minus" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path></svg>
-                                </span>
-                            </summary>
-                            <div class="service-content">
-                                <p>
-                                    Closing the deal is only day one. We advise new owners on operational transitions, leadership handovers, unit margin optimization, and expansion into adjacent product lines.
-                                </p>
-                                <p class="service-deliverables">
-                                    Executive Coaching · Pricing &amp; Margin Strategy · Working Capital Optimization · Secondary Exit Planning
+                                    Executive Blueprint PDF · Unit Economics Table · 90-Day Execution Roadmap · Supplier Recommendations
                                 </p>
                             </div>
                         </details>
@@ -412,32 +462,32 @@
                 </div>
             </section>
 
-            <!-- 03 / A Little About Us (Agency Manifesto) -->
-            <section aria-labelledby="agency-title" class="agency-section">
+            <!-- 04 / Intelligence Network & What You Receive -->
+            <section aria-labelledby="network-title" class="agency-section">
                 <div class="agency-photo">
-                    <img alt="KY Intermediaters Deal Advisory Studio" loading="lazy" src="images/clarion/agency.png"/>
+                    <img alt="KY Intermediaters Intelligence Network" loading="lazy" src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?auto=format&fit=crop&w=1200&q=80"/>
                     <div class="agency-image-overlay"></div>
-                    <p class="eyebrow agency-photo-caption">Pan-India Reach · Uncompromising Discretion</p>
+                    <p class="eyebrow agency-photo-caption">Intelligence Network · Data-Driven Strategy</p>
                 </div>
                 
                 <div class="agency-story">
-                    <span class="vertical-label">03 / A little about us</span>
+                    <span class="vertical-label">04 / The Deliverable</span>
                     <div class="agency-story-inner">
-                        <p class="eyebrow">Not louder. More profitable.</p>
-                        <h2 id="agency-title">
-                            Good counsel.<br/>
-                            <em>Great chemistry.</em>
+                        <p class="eyebrow">Comprehensive Execution Kit</p>
+                        <h2 id="network-title">
+                            What you<br/>
+                            <em>receive.</em>
                         </h2>
                         <p>
-                            KY Intermediater's is an independent advisory firm for investors who value substance over noise. We bridge the gap between capital ready to deploy and high-potential businesses ready for new leadership.
+                            We don't hand you vague advice. You walk away with a Confidential Business Blueprint tailored specifically to your capital, city, and background.
                         </p>
                         <p>
-                            We work as an extension of your family office or private capital strategy. Honest in our valuation. Relentless in due diligence. Invested in the long game.
+                            From initial supplier sourcing to first customer acquisition, every critical assumption is stress-tested by seasoned business analysts.
                         </p>
                         <div class="agency-footer">
-                            <span class="eyebrow">Discretion is where it starts.</span>
-                            <a class="text-link" href="#people">
-                                Meet your advisors
+                            <span class="eyebrow">100% Intellectual Property Ownership.</span>
+                            <a class="text-link" href="register.html">
+                                Unlock Your Custom Blueprint
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
                             </a>
                         </div>
@@ -445,157 +495,157 @@
                 </div>
             </section>
 
-            <!-- 04 / Team Section -->
-            <section aria-labelledby="team-title" class="section team-section" id="people">
-                <span class="vertical-label">04 / Independent minds, collective impact</span>
-                <div class="section-heading">
-                    <div>
-                        <p class="eyebrow">Your partners, in your corner</p>
-                        <h2 id="team-title">
-                            Senior team.<br/>
-                            <em>Big perspective.</em>
-                        </h2>
-                    </div>
-                    <p class="heading-description">
-                        Strategists. Due diligence analysts. Dealmakers.<br/>
-                        A focused advisory team that treats your investment<br/>
-                        as if it were our own capital.
+            <!-- 05 / Transparent Pricing Section -->
+            <section aria-labelledby="pricing-title" class="section work-section" id="pricing" style="background: var(--ivory);">
+                <span class="vertical-label">05 / Transparent Investment</span>
+                <div class="section-heading" style="text-align: center; display: block;">
+                    <p class="eyebrow" style="text-align: center;">No Hidden Royalties. No Equity Cut.</p>
+                    <h2 id="pricing-title" style="text-align: center;">
+                        Simple, transparent<br/>
+                        <em>pricing.</em>
+                    </h2>
+                    <p style="max-width: 500px; margin: 16px auto 0; text-align: center; color: var(--quiet);">
+                        A flat, transparent fee to unlock your next venture blueprint.
                     </p>
                 </div>
 
-                <div class="team-grid">
-                    <!-- Advisor 1 -->
-                    <article class="team-member">
-                        <button class="team-portrait" type="button" aria-label="Read about Jai Akash" onclick="openTeamModal('modal-team-1')">
-                            <img alt="Jai Akash, Founder &amp; Principal Intermediary" loading="lazy" src="images/clarion/team-1.png"/>
-                            <span class="image-arrow">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
-                            </span>
-                        </button>
-                        <h3>Jai Akash</h3>
-                        <p class="eyebrow">Founder &amp; Principal Intermediary</p>
-                    </article>
-
-                    <!-- Advisor 2 -->
-                    <article class="team-member">
-                        <button class="team-portrait" type="button" aria-label="Read about Marcus Bennett" onclick="openTeamModal('modal-team-2')">
-                            <img alt="Marcus Bennett, Director of Deal Strategy" loading="lazy" src="images/clarion/team-2.png"/>
-                            <span class="image-arrow">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
-                            </span>
-                        </button>
-                        <h3>Marcus Bennett</h3>
-                        <p class="eyebrow">Director of Deal Strategy</p>
-                    </article>
-
-                    <!-- Advisor 3 -->
-                    <article class="team-member">
-                        <button class="team-portrait" type="button" aria-label="Read about Elena Park" onclick="openTeamModal('modal-team-3')">
-                            <img alt="Elena Park, Head of Data Room &amp; Client Engagements" loading="lazy" src="images/clarion/team-3.png"/>
-                            <span class="image-arrow">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
-                            </span>
-                        </button>
-                        <h3>Elena Park</h3>
-                        <p class="eyebrow">Head of Client Engagements</p>
-                    </article>
-                </div>
-                <p class="disclosure">Our senior intermediaries personally oversee every audit, escrow negotiation, and client matchmaking session.</p>
-            </section>
-
-            <!-- 05 / Market Insights Section -->
-            <section aria-labelledby="insights-title" class="section insights-section" id="insights">
-                <span class="vertical-label">05 / Notes from the deal market</span>
-                <div class="section-heading">
-                    <div>
-                        <p class="eyebrow">The KY perspective</p>
-                        <h2 id="insights-title">
-                            A few things<br/>
-                            <em>worth knowing.</em>
-                        </h2>
+                <div class="pricing-card-editorial">
+                    <span class="eyebrow" style="color: var(--emerald);">One-Time Consultation</span>
+                    <div style="font-family: var(--display); font-size: 54px; font-weight: 600; color: var(--emerald); margin: 16px 0;">
+                        ₹499
                     </div>
-                    <a class="pill pill-emerald" href="register.html">
-                        Access Full Library
+                    <p style="font-size: 14px; color: var(--quiet);">A flat, transparent fee to unlock your next venture.</p>
+
+                    <ul class="pricing-features-list">
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            Dedicated Analyst Match
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            Full Business Blueprint PDF
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            1-Hour Strategy Call
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            100% Equity &amp; IP Owned by You
+                        </li>
+                    </ul>
+
+                    <a href="register.html" class="pill pill-emerald" style="width: 100%; display: flex; justify-content: center; padding: 14px 28px; font-size: 11px; text-decoration: none;">
+                        Get Started Now
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
                     </a>
                 </div>
+            </section>
 
-                <div class="insights-list">
-                    <!-- Note 01 -->
-                    <article class="insight-row">
-                        <span class="insight-number eyebrow">01</span>
-                        <a class="insight-image" href="register.html">
-                            <img alt="Acquiring Cash Flows" loading="lazy" src="images/clarion/hero-secondary.png"/>
-                        </a>
-                        <div class="insight-info">
-                            <p class="eyebrow">Deal Architecture <span>/ 4 min read</span></p>
-                            <h3>
-                                <a href="register.html">Acquiring an existing cash-flow enterprise vs. starting from scratch.</a>
-                            </h3>
-                            <p class="insight-excerpt">
-                                Why acquisition entrepreneurship gives modern operators day-one cash flows, trained staff, and immediate brand equity.
-                            </p>
-                        </div>
-                        <a class="circle-link" href="register.html" aria-label="Read insight">
+            <!-- 06 / Frequently Asked Questions (Accordion) -->
+            <section aria-labelledby="faq-title" class="section expertise-section" id="faq">
+                <span class="vertical-label">06 / Questions &amp; Answers</span>
+                <div class="expertise-layout">
+                    <div class="expertise-intro">
+                        <p class="eyebrow">Clear Answers</p>
+                        <h2 id="faq-title">
+                            Frequently asked<br/>
+                            <em>questions.</em>
+                        </h2>
+                        <p>
+                            Everything you need to know about our analyst matching, consultation, and delivery timeline.
+                        </p>
+                        <a class="pill pill-emerald" href="https://wa.me/916380160015" target="_blank">
+                            Chat on WhatsApp
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
                         </a>
-                    </article>
+                    </div>
 
-                    <!-- Note 02 -->
-                    <article class="insight-row">
-                        <span class="insight-number eyebrow">02</span>
-                        <a class="insight-image" href="register.html">
-                            <img alt="Due Diligence Red Flags" loading="lazy" src="images/clarion/hero-main.png"/>
-                        </a>
-                        <div class="insight-info">
-                            <p class="eyebrow">Due Diligence <span>/ 5 min read</span></p>
-                            <h3>
-                                <a href="register.html">The three hidden liabilities to audit before signing a Letter of Intent.</a>
-                            </h3>
-                            <p class="insight-excerpt">
-                                A checklist for verifying customer concentration, supplier contracts, and realistic add-backs in seller SDE figures.
-                            </p>
-                        </div>
-                        <a class="circle-link" href="register.html" aria-label="Read insight">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
-                        </a>
-                    </article>
+                    <div class="service-list">
+                        <!-- FAQ 1 -->
+                        <details class="service-item" open>
+                            <summary>
+                                <span class="eyebrow">01</span>
+                                <h3>What if I don't like the proposed idea?</h3>
+                                <span class="service-toggle">
+                                    <svg class="lucide lucide-plus service-plus" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+                                    <svg class="lucide lucide-minus service-minus" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path></svg>
+                                </span>
+                            </summary>
+                            <div class="service-content">
+                                <p>
+                                    Our matching process is deeply customized. If the first concept doesn't align with your constraints or passion, we will refine the parameters and provide a secondary blueprint at no extra charge.
+                                </p>
+                            </div>
+                        </details>
 
-                    <!-- Note 03 -->
-                    <article class="insight-row">
-                        <span class="insight-number eyebrow">03</span>
-                        <a class="insight-image" href="register.html">
-                            <img alt="Seller Financing and Earnouts" loading="lazy" src="images/clarion/case-3.png"/>
-                        </a>
-                        <div class="insight-info">
-                            <p class="eyebrow">Deal Structuring <span>/ 4 min read</span></p>
-                            <h3>
-                                <a href="register.html">How smart buyers structure earn-outs and seller financing.</a>
-                            </h3>
-                            <p class="insight-excerpt">
-                                Minimizing upfront capital requirements while keeping the previous founder incentivized during the crucial handover phase.
-                            </p>
-                        </div>
-                        <a class="circle-link" href="register.html" aria-label="Read insight">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
-                        </a>
-                    </article>
+                        <!-- FAQ 2 -->
+                        <details class="service-item">
+                            <summary>
+                                <span class="eyebrow">02</span>
+                                <h3>How long does the matching process take?</h3>
+                                <span class="service-toggle">
+                                    <svg class="lucide lucide-plus service-plus" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+                                    <svg class="lucide lucide-minus service-minus" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path></svg>
+                                </span>
+                            </summary>
+                            <div class="service-content">
+                                <p>
+                                    Once you register, our team typically takes 3-5 business days to pair your profile with the right analyst and schedule your initial consultation.
+                                </p>
+                            </div>
+                        </details>
+
+                        <!-- FAQ 3 -->
+                        <details class="service-item">
+                            <summary>
+                                <span class="eyebrow">03</span>
+                                <h3>Do I need to have a specific industry in mind?</h3>
+                                <span class="service-toggle">
+                                    <svg class="lucide lucide-plus service-plus" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+                                    <svg class="lucide lucide-minus service-minus" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path></svg>
+                                </span>
+                            </summary>
+                            <div class="service-content">
+                                <p>
+                                    Not at all. Many of our clients are industry-agnostic and simply want the best return on their capital. We will suggest industries based on your budget and location.
+                                </p>
+                            </div>
+                        </details>
+
+                        <!-- FAQ 4 -->
+                        <details class="service-item">
+                            <summary>
+                                <span class="eyebrow">04</span>
+                                <h3>Are there hidden fees or equity sharing?</h3>
+                                <span class="service-toggle">
+                                    <svg class="lucide lucide-plus service-plus" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+                                    <svg class="lucide lucide-minus service-minus" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path></svg>
+                                </span>
+                            </summary>
+                            <div class="service-content">
+                                <p>
+                                    No. We charge a flat, transparent consulting fee. You own 100% of your business and all the intellectual property associated with the blueprint.
+                                </p>
+                            </div>
+                        </details>
+                    </div>
                 </div>
             </section>
 
-            <!-- 06 / Contact Section -->
+            <!-- 07 / Final CTA & Contact Section -->
             <section aria-labelledby="contact-title" class="section contact-section" id="contact">
-                <span class="vertical-label">06 / Every profitable deal starts somewhere</span>
+                <span class="vertical-label">07 / Start Building</span>
                 <div class="contact-frame">
                     <div class="contact-intro">
-                        <p class="eyebrow">Let’s begin a conversation</p>
+                        <p class="eyebrow">Stop Overthinking. Start Building.</p>
                         <h2 id="contact-title">
-                            Your next<br/>
-                            chapter<br/>
+                            Ready to build<br/>
+                            your empire?<br/>
                             <em>starts here.</em>
                         </h2>
                         <p>
-                            Looking to acquire a verified business? Seeking a tailored venture blueprint for your capital? Tell us what’s on your mind. We’ll take it from there.
+                            Let our analysts hand you the blueprint to your next profitable venture today. Direct guidance, vetted numbers, zero guesswork.
                         </p>
                         <a class="contact-email" href="mailto:ky.intermediaters@gmail.com">
                             ky.intermediaters@gmail.com
@@ -603,11 +653,11 @@
                         </a>
                         <p class="contact-location">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                            Chennai, Tamil Nadu · Advising Clients Pan-India · +91 63801 60015
+                            Phone / WhatsApp: +91 63801 60015 · Chennai &amp; Pan-India
                         </p>
                     </div>
 
-                    <!-- Contact & Intake Form -->
+                    <!-- Intake Form -->
                     <form class="contact-form" id="contactForm">
                         <div class="form-row">
                             <label>
@@ -615,8 +665,8 @@
                                 <input autocomplete="name" maxlength="120" minlength="2" name="name" id="formName" placeholder="First and last name" required/>
                             </label>
                             <label>
-                                Work email
-                                <input autocomplete="email" maxlength="254" name="email" id="formEmail" placeholder="you@company.com" required type="email"/>
+                                Email address
+                                <input autocomplete="email" maxlength="254" name="email" id="formEmail" placeholder="you@example.com" required type="email"/>
                             </label>
                         </div>
                         <label>
@@ -624,20 +674,9 @@
                             <input autocomplete="tel" maxlength="25" name="phone" id="formPhone" placeholder="+91 98765 43210" required/>
                         </label>
                         <label>
-                            What can we help with?
-                            <select name="service" id="formService" required>
-                                <option disabled selected value="">Select an area of interest</option>
-                                <option value="Business Acquisition">Business Acquisition &amp; Sale</option>
-                                <option value="Venture Blueprint">Tailored Venture Blueprint</option>
-                                <option value="Confidential NDA & Data Room">Confidential Data Room &amp; NDA</option>
-                                <option value="Post-Acquisition Advisory">Post-Acquisition Growth Advisory</option>
-                                <option value="General Investment Inquiry">General Investor Inquiry</option>
-                            </select>
-                        </label>
-                        <label>
-                            Available Capital Range
+                            Available Startup Capital
                             <select name="capital" id="formCapital" required>
-                                <option disabled selected value="">Select your investment budget</option>
+                                <option disabled selected value="">Select your startup budget</option>
                                 <option value="₹2L - ₹5L">₹2L - ₹5L Capital</option>
                                 <option value="₹5L - ₹15L">₹5L - ₹15L Capital</option>
                                 <option value="₹15L - ₹50L">₹15L - ₹50L Capital</option>
@@ -645,28 +684,21 @@
                             </select>
                         </label>
                         <label>
-                            Tell us a little about your goals
-                            <textarea maxlength="5000" minlength="5" name="notes" id="formNotes" placeholder="Your background, target industry, or timeline…" required rows="3"></textarea>
-                        </label>
-                        
-                        <label class="consent-label">
-                            <input name="consent" required type="checkbox" checked/>
-                            <span>
-                                I agree that KY Intermediater's may confidentially contact me regarding matching opportunities.
-                            </span>
+                            Tell us about your background or goals
+                            <textarea maxlength="5000" minlength="5" name="notes" id="formNotes" placeholder="Your skills, target location, or industries of interest..." required rows="3"></textarea>
                         </label>
 
-                        <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                        <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; margin-top: 10px;">
                             <button class="pill pill-blush submit-button" type="submit" id="submitBtn">
-                                Start the conversation
+                                Start Your Journey
                                 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
                             </button>
                             <a href="https://wa.me/916380160015" target="_blank" class="pill" style="border: 1px solid var(--blush); color: var(--blush); text-decoration: none;">
-                                WhatsApp Direct ↗
+                                WhatsApp Us Directly ↗
                             </a>
                         </div>
-                        <div id="formStatus" style="display: none; padding: 12px; background: rgba(235, 199, 190, 0.15); border: 1px solid var(--blush); border-radius: 4px; color: var(--ivory); font-size: 13px; line-height: 1.6;"></div>
-                        <p class="form-note">100% confidential. No spam. Direct analyst response.</p>
+                        <div id="formStatus" style="display: none; padding: 12px; background: rgba(235, 199, 190, 0.15); border: 1px solid var(--blush); border-radius: 4px; color: var(--ivory); font-size: 13px; line-height: 1.6; margin-top: 10px;"></div>
+                        <p class="form-note">Zero obligation. 100% confidential discussion.</p>
                     </form>
                 </div>
             </section>
@@ -675,132 +707,40 @@
         <!-- Site Footer -->
         <footer class="site-footer">
             <div class="footer-top">
-                <p class="eyebrow">Chennai &amp; Pan-India perspective. Global standards.</p>
+                <p class="eyebrow">Your ultimate bridge to profitable business ideas.</p>
                 <a class="text-link" href="#top">
                     Back to top
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
                 </a>
             </div>
 
-            <a class="footer-wordmark" aria-label="KY Intermediaters home" href="/">
-                KY Intermediaters<span>.</span>
-            </a>
+            <div style="margin: 24px 0;">
+                <img src="images/logo.png" alt="KY Intermediater's Logo" style="height: 55px; width: auto;"/>
+            </div>
 
             <div class="footer-bottom">
                 <a class="footer-brand" href="/">KY Intermediater's</a>
                 <nav aria-label="Footer navigation">
-                    <a href="#work">Curated Deals</a>
-                    <a href="#expertise">Advisory</a>
-                    <a href="#people">Advisors</a>
-                    <a href="#insights">Market Notes</a>
+                    <a href="#about">The Problem</a>
+                    <a href="#ventures">Ventures</a>
+                    <a href="#process">Process</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#faq">FAQ</a>
                     <a href="portal.html">Client Portal</a>
                     <a href="register.html">Register</a>
-                    <a href="admin.html">Admin Access</a>
+                    <a href="admin.html">Admin Login</a>
                 </nav>
                 <p>© 2026 KY Intermediater's. All rights reserved.</p>
             </div>
 
             <div class="footer-note">
                 <a href="mailto:ky.intermediaters@gmail.com">ky.intermediaters@gmail.com</a>
-                <span>Independent minds. Collective impact.</span>
+                <span>Phone No: +91 63801 60015 · WhatsApp Available</span>
             </div>
         </footer>
     </div>
 
-    <!-- Modals / Editorial Dialogs -->
-
-    <!-- Team Modal 1: Jai Akash -->
-    <dialog class="editorial-dialog team-dialog" id="modal-team-1">
-        <button class="close-dialog-btn" onclick="closeModal('modal-team-1')" aria-label="Close dialog">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
-        </button>
-        <img class="dialog-portrait" alt="Jai Akash" src="images/clarion/team-1.png"/>
-        <div>
-            <p class="eyebrow">Founder &amp; Principal Intermediary</p>
-            <h2 class="dialog-heading">Jai Akash</h2>
-            <p class="dialog-copy">
-                Jai leads deal sourcing, strategic matchmaking, and structured transitions at KY Intermediater's. His approach focuses on defensible unit economics, clear alignment between founder and acquirer, and unwavering confidentiality.
-            </p>
-            <p class="dialog-note">Specializes in: Business Valuation · Acquisition Structuring · Deal Due Diligence</p>
-        </div>
-    </dialog>
-
-    <!-- Team Modal 2: Marcus Bennett -->
-    <dialog class="editorial-dialog team-dialog" id="modal-team-2">
-        <button class="close-dialog-btn" onclick="closeModal('modal-team-2')" aria-label="Close dialog">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
-        </button>
-        <img class="dialog-portrait" alt="Marcus Bennett" src="images/clarion/team-2.png"/>
-        <div>
-            <p class="eyebrow">Director of Deal Strategy</p>
-            <h2 class="dialog-heading">Marcus Bennett</h2>
-            <p class="dialog-copy">
-                Marcus brings over a decade of financial diligence experience across retail, tech, and light manufacturing. He specializes in stress-testing seller financial statements and constructing tailored 90-day execution roadmaps.
-            </p>
-            <p class="dialog-note">Specializes in: Financial Auditing · Capital Modeling · 90-Day Operator Roadmaps</p>
-        </div>
-    </dialog>
-
-    <!-- Team Modal 3: Elena Park -->
-    <dialog class="editorial-dialog team-dialog" id="modal-team-3">
-        <button class="close-dialog-btn" onclick="closeModal('modal-team-3')" aria-label="Close dialog">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
-        </button>
-        <img class="dialog-portrait" alt="Elena Park" src="images/clarion/team-3.png"/>
-        <div>
-            <p class="eyebrow">Head of Client Engagements</p>
-            <h2 class="dialog-heading">Elena Park</h2>
-            <p class="dialog-copy">
-                Elena manages the confidential Data Room protocols, NDA execution, and client matchmaking pipeline. She ensures that every investor receives verified deal teasers and direct scheduling access with deal leads.
-            </p>
-            <p class="dialog-note">Specializes in: Data Room Security · Digital NDA Compliance · Client Coordination</p>
-        </div>
-    </dialog>
-
-    <!-- Press Modal 1 -->
-    <dialog class="editorial-dialog" id="modal-forbes">
-        <button class="close-dialog-btn" onclick="closeModal('modal-forbes')" aria-label="Close dialog">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
-        </button>
-        <div>
-            <p class="eyebrow">Venture Pulse · Private Equity</p>
-            <h2 class="dialog-heading">Acquisition Entrepreneurship</h2>
-            <p class="dialog-copy" style="margin-top: 15px;">
-                "In an era of high interest rates and startup uncertainty, savvy operators are bypassing early-stage risk by acquiring cash-flow positive legacy businesses. Intermediaries like KY Intermediater's are bringing institutional-grade diligence to previously opaque private markets."
-            </p>
-            <p class="dialog-note">Focus: SME M&amp;A · Capital Efficiency · Operator Ownership</p>
-        </div>
-    </dialog>
-
-    <!-- Press Modal 2 -->
-    <dialog class="editorial-dialog" id="modal-mint">
-        <button class="close-dialog-btn" onclick="closeModal('modal-mint')" aria-label="Close dialog">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
-        </button>
-        <div>
-            <p class="eyebrow">Financial Digest · Strategic Due Diligence</p>
-            <h2 class="dialog-heading">Audited Cash Flows</h2>
-            <p class="dialog-copy" style="margin-top: 15px;">
-                "Traditional startup venture capital sees an 85% casualty rate. In contrast, acquiring businesses with at least 3 years of audited operating history and established customer stickiness provides an immediate financial floor."
-            </p>
-            <p class="dialog-note">Focus: Risk Mitigation · EBITDA Multiples · Due Diligence Auditing</p>
-        </div>
-    </dialog>
-
-    <!-- Press Modal 3 -->
-    <dialog class="editorial-dialog" id="modal-fast">
-        <button class="close-dialog-btn" onclick="closeModal('modal-fast')" aria-label="Close dialog">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
-        </button>
-        <div>
-            <p class="eyebrow">Dealmaker Monthly · Operator Perspectives</p>
-            <h2 class="dialog-heading">Structuring Earnouts</h2>
-            <p class="dialog-copy" style="margin-top: 15px;">
-                "The secret to seamless business succession lies in the handover agreement. When founders retain a minority performance-contingent earnout, supplier ties and customer retention stay completely intact."
-            </p>
-            <p class="dialog-note">Focus: Seller Financing · Handover Protocols · Transition Management</p>
-        </div>
-    </dialog>
+    <!-- ZERO POPUPS, ZERO DIALOGS -->
 
     <!-- Interactive Script -->
     <script>
@@ -823,7 +763,7 @@
             });
         }
 
-        // Work Rail Carousel Controls
+        // Ventures Rail Carousel Controls
         const workRail = document.getElementById('workRail');
         const railPrev = document.getElementById('railPrev');
         const railNext = document.getElementById('railNext');
@@ -836,37 +776,6 @@
             });
         }
 
-        // Modal / Dialog Controller
-        function openTeamModal(id) {
-            const dialog = document.getElementById(id);
-            if (dialog) {
-                dialog.showModal();
-            }
-        }
-        function openPressModal(id) {
-            const dialog = document.getElementById(id);
-            if (dialog) {
-                dialog.showModal();
-            }
-        }
-        function closeModal(id) {
-            const dialog = document.getElementById(id);
-            if (dialog) {
-                dialog.close();
-            }
-        }
-        // Click outside dialog to close
-        document.querySelectorAll('dialog').forEach(dialog => {
-            dialog.addEventListener('click', (e) => {
-                const rect = dialog.getBoundingClientRect();
-                const isInDialog = (rect.top <= e.clientY && e.clientY <= rect.top + rect.height
-                    && rect.left <= e.clientX && e.clientX <= rect.left + rect.width);
-                if (!isInDialog) {
-                    dialog.close();
-                }
-            });
-        });
-
         // Contact Form Submission Handler
         const contactForm = document.getElementById('contactForm');
         const formStatus = document.getElementById('formStatus');
@@ -876,20 +785,20 @@
             contactForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 submitBtn.disabled = true;
-                submitBtn.innerHTML = 'Sending inquiry...';
+                submitBtn.innerHTML = 'Sending details...';
 
                 const formData = {
                     name: document.getElementById('formName').value,
                     email: document.getElementById('formEmail').value,
                     phone: document.getElementById('formPhone').value,
-                    interest: document.getElementById('formService').value,
+                    interest: 'General Consultation',
                     capital: document.getElementById('formCapital').value,
                     motivation: document.getElementById('formNotes').value,
-                    venture_type: document.getElementById('formService').value,
+                    venture_type: 'Custom Blueprint',
                     timeline: 'Immediate (1-3 Months)',
-                    experience: 'Active Investor / Operator',
+                    experience: 'Aspiring Entrepreneur',
                     budget: document.getElementById('formCapital').value,
-                    occupation: 'Entrepreneur / Investor'
+                    occupation: 'Entrepreneur'
                 };
 
                 try {
@@ -903,17 +812,17 @@
                     formStatus.style.display = 'block';
                     if (data.status === 'success') {
                         formStatus.style.color = '#e4e9e1';
-                        formStatus.innerHTML = '<strong>Inquiry Received!</strong> Our senior deal team has received your submission. Check your email for our intro packet.';
+                        formStatus.innerHTML = '<strong>Registration Received!</strong> Our team has received your details and will contact you for your strategy session.';
                         contactForm.reset();
                     } else {
-                        formStatus.innerHTML = '<strong>Notice:</strong> ' + (data.message || 'Inquiry saved. Our team will contact you shortly.');
+                        formStatus.innerHTML = '<strong>Notice:</strong> ' + (data.message || 'Details saved. Our team will contact you shortly.');
                     }
                 } catch (err) {
                     formStatus.style.display = 'block';
-                    formStatus.innerHTML = '<strong>Inquiry Sent!</strong> You can also reach our desk directly at <a href="https://wa.me/916380160015" target="_blank" style="color:var(--blush); text-decoration:underline;">+91 63801 60015 on WhatsApp</a>.';
+                    formStatus.innerHTML = '<strong>Inquiry Sent!</strong> You can also reach our team directly at <a href="https://wa.me/916380160015" target="_blank" style="color:var(--blush); text-decoration:underline;">+91 63801 60015 on WhatsApp</a>.';
                 } finally {
                     submitBtn.disabled = false;
-                    submitBtn.innerHTML = 'Start the conversation <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>';
+                    submitBtn.innerHTML = 'Start Your Journey <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>';
                 }
             });
         }
