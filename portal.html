@@ -46,25 +46,78 @@
     </header>
 
     <main class="container tracker-container">
-        <h1 style="text-align: center; margin-bottom: 1rem;">Application Tracker</h1>
-        <p style="text-align: center; color: var(--text-secondary); margin-bottom: 3rem;">Track the real-time status of your venture application.</p>
+        <h1 style="text-align: center; margin-bottom: 0.5rem;">Application Tracker &amp; Data Room</h1>
+        <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2.5rem;">Track the real-time status of your venture application, execute agreements, and access deal materials.</p>
 
-        <div id="loading" style="text-align: center; padding: 4rem;">Loading securely...</div>
-        
-        <div id="errorBox" style="display: none; text-align: center; color: red; padding: 2rem; background: #fee2e2; border-radius: 4px;">
-            Invalid or Expired Tracking Link.
+        <!-- Direct Lookup Box (shown if no ?id= or if ID not found) -->
+        <div id="portalLookupBox" class="glass-panel" style="display: none; max-width: 500px; margin: 1rem auto 3rem; text-align: center;">
+            <div style="width: 54px; height: 54px; background: rgba(15, 77, 63, 0.08); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; color: var(--emerald);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </div>
+            <h2 style="margin-bottom: 0.5rem; font-size: 1.8rem; color: var(--emerald);">Access Your Client Portal</h2>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem;">Enter your registered Email Address or Registration ID to view your live status, documents, and NDA.</p>
+            
+            <form id="lookupForm" onsubmit="handleLookup(event)">
+                <div class="form-group" style="text-align: left; margin-bottom: 1rem;">
+                    <label for="lookupInput">Registered Email or Registration ID</label>
+                    <input type="text" id="lookupInput" placeholder="e.g. innovexahub.bangalore@gmail.com" class="form-input" required>
+                </div>
+                <button type="submit" id="lookupSubmitBtn" class="btn btn-primary" style="width: 100%;">Access Portal</button>
+                <div id="lookupError" style="display: none; color: #dc2626; font-size: 0.85rem; margin-top: 1rem; padding: 0.75rem; background: rgba(220, 38, 38, 0.08); border-radius: 4px;"></div>
+            </form>
+            
+            <div style="margin-top: 1.5rem; border-top: 1px solid var(--hairline); padding-top: 1rem;">
+                <p style="font-size: 0.85rem; color: var(--quiet); margin: 0;">Need to register? <a href="register.html" style="color: var(--emerald); font-weight: 600; text-decoration: underline;">Complete your profile here</a></p>
+            </div>
         </div>
 
+        <div id="loading" style="text-align: center; padding: 3rem;">Loading securely...</div>
         
+        <div id="errorBox" style="display: none; text-align: center; color: #991b1b; padding: 1.5rem; background: #fee2e2; border-radius: 4px; margin-bottom: 2rem;">
+            <p style="margin: 0; font-weight: 600;">Invalid or Expired Tracking Link.</p>
+            <p style="margin: 0.5rem 0 0; font-size: 0.85rem;">You can access your portal directly by entering your email address below.</p>
+        </div>
+
+        <!-- Applicant Header Badge -->
+        <div id="applicantHeader" class="glass-panel" style="padding: 1.5rem 2rem; margin-bottom: 2rem; display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; text-transform: uppercase; color: var(--quiet); letter-spacing: 0.1em;">Verified Applicant</div>
+                    <h2 id="clientNameDisplay" style="margin: 0.2rem 0; font-size: 1.6rem; color: var(--emerald);"></h2>
+                    <p id="clientEmailDisplay" style="margin: 0; font-size: 0.85rem; color: var(--text-secondary);"></p>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; text-transform: uppercase; color: var(--quiet); letter-spacing: 0.1em;">Registration ID</div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; justify-content: flex-end; margin-top: 0.2rem;">
+                        <code id="clientRegNoDisplay" style="font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; background: rgba(15,77,63,0.08); padding: 0.35rem 0.65rem; border-radius: 4px; color: var(--emerald); font-weight: 600;"></code>
+                        <button type="button" id="copyRegHeaderBtn" class="btn btn-outline" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;">Copy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NDA Wall Section -->
         <div id="ndaWall" class="glass-panel" style="display: none; padding: 2rem; margin-bottom: 2rem;">
-            <h2 style="color: #0F4D3F; border-bottom: 2px solid #0F4D3F; padding-bottom: 0.5rem; margin-bottom: 1.5rem;">Non-Disclosure Agreement</h2>
-            <div style="background: rgba(0,0,0,0.02); padding: 1.5rem; height: 200px; overflow-y: scroll; border: 1px solid #e2e8f0; font-size: 0.9rem; color: #334155; margin-bottom: 1.5rem; border-radius: 4px;">
+            <h2 style="color: #0F4D3F; border-bottom: 2px solid #0F4D3F; padding-bottom: 0.5rem; margin-bottom: 1rem;">Non-Disclosure Agreement</h2>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem;">To protect proprietary financial blueprints, client introductions, and schedule your 1-on-1 strategy call, please sign the digital confidentiality agreement below.</p>
+            <div style="background: rgba(0,0,0,0.02); padding: 1.5rem; height: 180px; overflow-y: scroll; border: 1px solid #e2e8f0; font-size: 0.9rem; color: #334155; margin-bottom: 1.5rem; border-radius: 4px; line-height: 1.6;">
                 <p><strong>CONFIDENTIALITY AGREEMENT</strong></p>
-                <p>By clicking "I Agree" below, you acknowledge and agree that any information, documents, business plans, or financial data disclosed by KY Intermediater's or its clients is strictly confidential.</p>
+                <p>By clicking "I Agree & Sign NDA" below, you acknowledge and agree that any information, documents, business plans, or financial data disclosed by KY Intermediater's or its clients is strictly confidential.</p>
                 <p>You agree not to disclose, share, or use this confidential information for any purpose other than evaluating a potential business transaction through our platform.</p>
                 <p>Your digital signature, IP address, and timestamp will be securely recorded.</p>
             </div>
-            <button id="signNdaBtn" class="btn" style="width: 100%; font-size: 1.1rem;">I Agree & Sign NDA</button>
+            <button id="signNdaBtn" class="btn btn-primary" style="width: 100%; font-size: 1rem;">I Agree &amp; Sign Digital NDA</button>
+        </div>
+
+        <!-- NDA Confirmed Badge -->
+        <div id="ndaConfirmedBadge" class="glass-panel" style="display: none; padding: 1rem 1.5rem; margin-bottom: 2rem; background: rgba(15, 77, 63, 0.05) !important; border-color: rgba(15, 77, 63, 0.2) !important;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <span style="display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--emerald); color: white; font-size: 12px; font-weight: bold;">✓</span>
+                    <span style="font-size: 0.9rem; font-weight: 600; color: var(--emerald);">Digital NDA Executed &amp; Verified</span>
+                </div>
+                <span id="ndaTimestampDisplay" style="font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: var(--quiet);"></span>
+            </div>
         </div>
         
         <div id="meetingSection" class="glass-panel" style="display: none; padding: 2rem; margin-bottom: 2rem;">
@@ -80,14 +133,14 @@
                     <option value="16:00">4:00 PM</option>
                 </select>
             </div>
-            <button id="bookMeetBtn" class="btn" style="width: 100%;">Book Meeting</button>
+            <button id="bookMeetBtn" class="btn btn-primary" style="width: 100%;">Book Meeting</button>
         </div>
 
         <div id="trackerData" style="display: none;">
             <div class="glass-panel" style="padding: 2rem; margin-bottom: 2rem;">
-                <h3 style="margin-bottom: 1rem; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 0.5rem;">Assigned Analyst</h3>
-                <p><strong><span id="agentName" style="color: var(--accent);">Unassigned</span></strong></p>
-                <p style="font-size: 0.85rem; color: var(--text-secondary);">Your dedicated analyst will guide you through the next steps.</p>
+                <h3 style="margin-bottom: 0.5rem; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 0.5rem;">Assigned Analyst</h3>
+                <p style="margin-bottom: 0.2rem;"><strong><span id="agentName" style="color: var(--accent); font-size: 1.1rem;">Unassigned</span></strong></p>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">Our matching algorithm is reviewing your venture preferences.</p>
             </div>
 
             <div class="glass-panel" style="padding: 2rem;">
@@ -129,42 +182,118 @@
         };
         const statusSteps = ["Application Received", "Initial Contact / Strategy Call", "Proposal & Due Diligence", "Closed / Venture Activated"];
 
-        document.addEventListener('DOMContentLoaded', async () => {
-            const params = new URLSearchParams(window.location.search);
-            const id = params.get('id');
-            if (!id) {
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('errorBox').style.display = 'block';
-                return;
-            }
+        let currentClientId = null;
+
+        async function handleLookup(e) {
+            if (e) e.preventDefault();
+            const inputVal = document.getElementById('lookupInput').value.trim();
+            if (!inputVal) return;
+
+            const btn = document.getElementById('lookupSubmitBtn');
+            const errBox = document.getElementById('lookupError');
+            btn.disabled = true;
+            btn.textContent = 'Searching...';
+            errBox.style.display = 'none';
 
             try {
-                const data = await KYApi.fetchPortalData(id);
-                document.getElementById('loading').style.display = 'none';
-                
-                if (!data.ndaSigned) {
-                    document.getElementById('ndaWall').style.display = 'block';
-                    document.getElementById('signNdaBtn').addEventListener('click', async () => {
-                        document.getElementById('signNdaBtn').textContent = 'Signing...';
-                        try {
-                            await KYApi.signNDA(id);
-                            window.location.reload();
-                        } catch(e) {
-                            alert(e.message);
-                            document.getElementById('signNdaBtn').textContent = 'I Agree & Sign NDA';
-                        }
-                    });
-                    return;
+                const data = await KYApi.fetchPortalData(inputVal);
+                // Update URL parameter
+                if (data.clientId) {
+                    const newUrl = window.location.pathname + '?id=' + encodeURIComponent(data.clientId);
+                    window.history.replaceState({ path: newUrl }, '', newUrl);
                 }
+                document.getElementById('portalLookupBox').style.display = 'none';
+                document.getElementById('errorBox').style.display = 'none';
+                renderPortal(data, data.clientId || inputVal);
+            } catch (err) {
+                errBox.textContent = err.message || 'No record found. Please verify your email or ID.';
+                errBox.style.display = 'block';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Access Portal';
+            }
+        }
+
+        function renderPortal(data, id) {
+            currentClientId = id;
+            document.getElementById('loading').style.display = 'none';
+
+            // Populate Applicant Header
+            document.getElementById('applicantHeader').style.display = 'block';
+            document.getElementById('clientNameDisplay').textContent = data.name || 'Valued Client';
+            document.getElementById('clientEmailDisplay').textContent = data.email || '';
+            document.getElementById('clientRegNoDisplay').textContent = id;
+            document.getElementById('copyRegHeaderBtn').onclick = () => {
+                navigator.clipboard.writeText(id);
+                document.getElementById('copyRegHeaderBtn').textContent = 'Copied!';
+                setTimeout(() => document.getElementById('copyRegHeaderBtn').textContent = 'Copy', 2000);
+            };
+
+            // Always display tracker
+            document.getElementById('trackerData').style.display = 'block';
+            document.getElementById('agentName').textContent = data.agent || 'Unassigned';
+
+            // Build Tracker Steps
+            let currentStepIndex = statusMap[data.status] || 1;
+            let stepsHTML = '';
+            statusSteps.forEach((stepName, i) => {
+                const stepNum = i + 1;
+                let stateClass = '';
+                if (stepNum < currentStepIndex) stateClass = 'completed';
+                else if (stepNum === currentStepIndex) stateClass = 'active';
+
+                stepsHTML += `
+                    <div class="step ${stateClass}">
+                        <div class="step-circle">${stepNum < currentStepIndex ? '✓' : stepNum}</div>
+                        <div class="step-content">
+                            <h3>${stepName}</h3>
+                            ${stepNum === currentStepIndex ? '<p>Currently in progress.</p>' : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('statusSteps').innerHTML = stepsHTML;
+
+            // Build Activity Log
+            let logsHTML = '';
+            (data.logs || []).slice().reverse().forEach(log => {
+                const date = new Date(log.time).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                logsHTML += `<div class="log-item"><span class="log-date">${date}</span> ${log.action}</div>`;
+            });
+            document.getElementById('activityLogContainer').innerHTML = logsHTML || '<div class="log-item" style="color:var(--quiet);">No activity logged yet.</div>';
+
+            // NDA handling
+            if (!data.ndaSigned) {
+                document.getElementById('ndaWall').style.display = 'block';
+                document.getElementById('ndaConfirmedBadge').style.display = 'none';
                 
-                document.getElementById('trackerData').style.display = 'block';
-                
+                document.getElementById('signNdaBtn').onclick = async () => {
+                    document.getElementById('signNdaBtn').disabled = true;
+                    document.getElementById('signNdaBtn').textContent = 'Signing Digital NDA...';
+                    try {
+                        await KYApi.signNDA(id);
+                        alert("NDA Signed Successfully! Your Data Room and Meeting options are now unlocked.");
+                        window.location.reload();
+                    } catch(e) {
+                        alert(e.message);
+                        document.getElementById('signNdaBtn').disabled = false;
+                        document.getElementById('signNdaBtn').textContent = 'I Agree & Sign Digital NDA';
+                    }
+                };
+            } else {
+                document.getElementById('ndaWall').style.display = 'none';
+                document.getElementById('ndaConfirmedBadge').style.display = 'block';
+                if (data.ndaTimestamp) {
+                    document.getElementById('ndaTimestampDisplay').textContent = 'Signed on ' + new Date(data.ndaTimestamp).toLocaleDateString();
+                }
+
+                // Unlock Meeting Scheduler if Verified or Contacted
                 if (data.status === 'Verified' || data.status === 'Contacted') {
                     document.getElementById('meetingSection').style.display = 'block';
-                    document.getElementById('bookMeetBtn').addEventListener('click', async () => {
+                    document.getElementById('bookMeetBtn').onclick = async () => {
                         const d = document.getElementById('meetDate').value;
                         const t = document.getElementById('meetTime').value;
-                        if(!d || !t) return alert("Select date and time");
+                        if (!d || !t) return alert("Select date and time");
                         
                         document.getElementById('bookMeetBtn').textContent = 'Booking...';
                         try {
@@ -175,43 +304,10 @@
                             alert(e.message);
                             document.getElementById('bookMeetBtn').textContent = 'Book Meeting';
                         }
-                    });
+                    };
                 }
-                
-                document.getElementById('agentName').textContent = data.agent;
-                
-                let currentStepIndex = statusMap[data.status] || 1;
-                
-                // Build Tracker
-                let stepsHTML = '';
-                statusSteps.forEach((stepName, i) => {
-                    const stepNum = i + 1;
-                    let stateClass = '';
-                    if (stepNum < currentStepIndex) stateClass = 'completed';
-                    else if (stepNum === currentStepIndex) stateClass = 'active';
 
-                    stepsHTML += `
-                        <div class="step ${stateClass}">
-                            <div class="step-circle">${stepNum < currentStepIndex ? '✓' : stepNum}</div>
-                            <div class="step-content">
-                                <h3>${stepName}</h3>
-                                ${stepNum === currentStepIndex ? '<p>Currently in progress.</p>' : ''}
-                            </div>
-                        </div>
-                    `;
-                });
-                document.getElementById('statusSteps').innerHTML = stepsHTML;
-
-                // Build Activity Log
-                let logsHTML = '';
-                [...data.logs].reverse().forEach(log => {
-                    const date = new Date(log.time).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-                    logsHTML += `<div class="log-item"><span class="log-date">${date}</span> ${log.action}</div>`;
-                });
-                document.getElementById('activityLogContainer').innerHTML = logsHTML;
-                
                 // Docs
-                
                 if (data.docs && data.docs.length > 0) {
                     document.getElementById('docsSection').style.display = 'block';
                     let docsHTML = '';
@@ -220,54 +316,70 @@
                     });
                     document.getElementById('docsList').innerHTML = docsHTML;
                 }
-                
-                // File Upload Logic
-                document.getElementById('uploadBtn').addEventListener('click', async () => {
-                    const fileInput = document.getElementById('fileUpload');
-                    if (!fileInput.files[0]) return alert("Please select a file.");
-                    
-                    const file = fileInput.files[0];
-                    const btn = document.getElementById('uploadBtn');
-                    btn.textContent = 'Uploading...';
-                    
-                    const reader = new FileReader();
-                    reader.onload = async (e) => {
-                        const base64Data = e.target.result.split(',')[1];
-                        try {
-                            await KYApi.uploadDocument(id, file.name, base64Data);
-                            alert("Document uploaded successfully!");
-                            window.location.reload();
-                        } catch(err) {
-                            alert(err.message);
-                            btn.textContent = 'Upload Securely';
-                        }
-                    };
-                    reader.readAsDataURL(file);
-                });
-                
+
                 // Marketplace Logic
                 if (data.deals && data.deals.length > 0) {
                     document.getElementById('clientMarketplace').style.display = 'block';
                     let mHtml = '';
                     data.deals.forEach(d => {
                         mHtml += `
-                            <div class="glass-panel" style="padding: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+                            <div class="glass-panel" style="padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; border-radius: 6px;">
                                 <div>
-                                    <h4 style="margin: 0 0 0.5rem 0; color: #d4af37;">${d.title}</h4>
+                                    <h4 style="margin: 0 0 0.5rem 0; color: var(--emerald);">${d.title}</h4>
                                     <p style="margin: 0; font-size: 0.9rem; color: #334155;"><strong>${d.industry}</strong> | ${d.capital}</p>
                                     <p style="margin: 0.5rem 0 0 0; font-size: 0.85rem; color: #64748b;">${d.description}</p>
                                 </div>
-                                <button onclick="KYApi.requestIntro('${id}', '${d.title}').then(() => alert('Intro requested!')).catch(e => alert(e.message))" class="btn">Request Intro</button>
+                                <button onclick="KYApi.requestIntro('${id}', '${d.title}').then(() => alert('Intro requested!')).catch(e => alert(e.message))" class="btn btn-outline">Request Intro</button>
                             </div>
                         `;
                     });
                     document.getElementById('clientDealsContainer').innerHTML = mHtml;
                 }
+            }
 
+            // File Upload Logic
+            document.getElementById('uploadBtn').onclick = async () => {
+                const fileInput = document.getElementById('fileUpload');
+                if (!fileInput.files[0]) return alert("Please select a file.");
+                
+                const file = fileInput.files[0];
+                const btn = document.getElementById('uploadBtn');
+                btn.textContent = 'Uploading...';
+                
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    const base64Data = e.target.result.split(',')[1];
+                    try {
+                        await KYApi.uploadDocument(id, file.name, base64Data);
+                        alert("Document uploaded successfully!");
+                        window.location.reload();
+                    } catch(err) {
+                        alert(err.message);
+                        btn.textContent = 'Upload Securely';
+                    }
+                };
+                reader.readAsDataURL(file);
+            };
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id') || params.get('email');
+
+            if (!id) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('portalLookupBox').style.display = 'block';
+                return;
+            }
+
+            try {
+                const data = await KYApi.fetchPortalData(id);
+                renderPortal(data, data.clientId || id);
             } catch (error) {
                 console.error(error);
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('errorBox').style.display = 'block';
+                document.getElementById('portalLookupBox').style.display = 'block';
             }
         });
     </script>

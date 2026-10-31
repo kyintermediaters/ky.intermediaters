@@ -27,10 +27,37 @@
     </header>
 
     <main class="container" style="padding-top: 8rem; min-height: calc(100vh - 150px); display: flex; align-items: center; justify-content: center;">
-        <div class="glass-panel" style="width: 100%; max-width: 500px;">
-            <h2 style="text-align: center; margin-bottom: 2rem;">Register Now</h2>
+        <div class="glass-panel" style="width: 100%; max-width: 540px;">
+            <h2 id="formHeader" style="text-align: center; margin-bottom: 2rem;">Register Now</h2>
             
             <div id="alert-message" style="display: none; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center;"></div>
+
+            <!-- SUCCESS CARD (Shown upon completion) -->
+            <div id="registrationSuccess" style="display: none; text-align: center;">
+                <div style="width: 64px; height: 64px; background: rgba(15, 77, 63, 0.1); border: 2px solid var(--emerald); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 30px; color: var(--emerald);">✓</div>
+                <h2 style="font-size: 2.2rem; color: var(--emerald); margin-bottom: 0.5rem;">Registration Confirmed!</h2>
+                <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 2rem;">Welcome to KY Intermediater's. Your business profile has been recorded in our secure network.</p>
+
+                <div style="background: rgba(15, 77, 63, 0.04); border: 1px solid var(--hairline); border-radius: 6px; padding: 1.5rem; margin-bottom: 1.5rem; text-align: left;">
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; text-transform: uppercase; color: var(--quiet); letter-spacing: 0.1em; margin-bottom: 0.4rem;">Your Registration ID</div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; background: #ffffff; padding: 0.75rem 1rem; border-radius: 4px; border: 1px solid var(--hairline); margin-bottom: 1.25rem;">
+                        <span id="successRegNo" style="font-family: 'IBM Plex Mono', monospace; font-size: 1rem; font-weight: 600; color: var(--emerald); word-break: break-all;"></span>
+                        <button type="button" id="copyRegBtn" class="btn btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.75rem; flex-shrink: 0;">Copy ID</button>
+                    </div>
+
+                    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; text-transform: uppercase; color: var(--quiet); letter-spacing: 0.1em; margin-bottom: 0.4rem;">Your Client Portal Link</div>
+                    <div style="font-size: 0.85rem; color: var(--ink); word-break: break-all; background: #ffffff; padding: 0.75rem 1rem; border-radius: 4px; border: 1px solid var(--hairline); margin-bottom: 1rem;" id="successPortalUrl"></div>
+
+                    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                        <a id="openPortalBtn" href="#" class="btn btn-primary" style="flex: 1; text-align: center; text-decoration: none; padding: 0.85rem 1.2rem; font-size: 0.9rem;">Access Client Portal →</a>
+                        <button type="button" id="copyPortalBtn" class="btn btn-outline" style="flex: 1; padding: 0.85rem 1.2rem; font-size: 0.9rem;">Copy Portal Link</button>
+                    </div>
+                </div>
+
+                <p style="font-size: 0.85rem; color: var(--quiet); line-height: 1.6; margin: 0;">
+                    <strong>Important:</strong> Please bookmark your portal link above. You can use it anytime to track your application status, sign the digital NDA, schedule strategy calls, and access documents.
+                </p>
+            </div>
 
             <form id="register-form">
                 
@@ -290,16 +317,37 @@
             const data = Object.fromEntries(formData.entries());
             
             try {
-                await KYApi.submitRegistration(data);
+                const res = await KYApi.submitRegistration(data);
                 
-                showAlert('Registration successful! We have emailed you a confirmation. We will contact you shortly to schedule your consultation.');
+                const regNo = res.clientId || '';
+                const portalUrl = res.portalUrl || (regNo ? (window.location.origin + '/portal.html?id=' + regNo) : 'portal.html');
                 
-                form.reset();
-                step2.style.display = 'none';
-                // keep the success message visible
+                // Hide form and form header
+                document.getElementById('register-form').style.display = 'none';
+                document.getElementById('alert-message').style.display = 'none';
+                document.getElementById('formHeader').style.display = 'none';
+                
+                // Populate and display success view
+                document.getElementById('successRegNo').textContent = regNo;
+                document.getElementById('successPortalUrl').textContent = portalUrl;
+                document.getElementById('openPortalBtn').href = portalUrl;
+                
+                document.getElementById('copyRegBtn').onclick = () => {
+                    navigator.clipboard.writeText(regNo);
+                    document.getElementById('copyRegBtn').textContent = 'Copied!';
+                    setTimeout(() => document.getElementById('copyRegBtn').textContent = 'Copy ID', 2000);
+                };
+                
+                document.getElementById('copyPortalBtn').onclick = () => {
+                    navigator.clipboard.writeText(portalUrl);
+                    document.getElementById('copyPortalBtn').textContent = 'Copied!';
+                    setTimeout(() => document.getElementById('copyPortalBtn').textContent = 'Copy Portal Link', 2000);
+                };
+
+                document.getElementById('registrationSuccess').style.display = 'block';
+                
             } catch (error) {
                 showAlert(error.message || 'Something went wrong. Please try again.', true);
-            } finally {
                 btn.disabled = false;
                 btn.innerHTML = 'Submit Details & Pay ₹<span class="blurred-price">500</span> Later';
             }

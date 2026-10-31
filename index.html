@@ -811,8 +811,14 @@
                     
                     formStatus.style.display = 'block';
                     if (data.status === 'success') {
-                        formStatus.style.color = '#e4e9e1';
-                        formStatus.innerHTML = '<strong>Registration Received!</strong> Our team has received your details and will contact you for your strategy session.';
+                        const regId = data.clientId || '';
+                        const portalLink = data.portalUrl || (regId ? `portal.html?id=${regId}` : '');
+                        formStatus.style.color = '#FAF7F2';
+                        formStatus.innerHTML = `
+                            <div style="font-weight: 600; font-size: 1.1rem; color: #FAF7F2; margin-bottom: 0.5rem;">Registration Confirmed!</div>
+                            ${regId ? `<div style="font-family: monospace; font-size: 0.85rem; background: rgba(0,0,0,0.3); padding: 0.5rem 0.75rem; border-radius: 4px; margin-bottom: 0.75rem; word-break: break-all;">Reg ID: <strong style="color:#EBC7BE;">${regId}</strong></div>` : ''}
+                            ${portalLink ? `<a href="${portalLink}" style="display: inline-block; background: #EBC7BE; color: #0F4D3F; padding: 0.6rem 1.4rem; border-radius: 99px; font-weight: 700; text-decoration: none; font-size: 0.85rem; text-transform: uppercase;">Access Client Portal →</a>` : 'Our team will contact you shortly.'}
+                        `;
                         contactForm.reset();
                     } else {
                         formStatus.innerHTML = '<strong>Notice:</strong> ' + (data.message || 'Details saved. Our team will contact you shortly.');

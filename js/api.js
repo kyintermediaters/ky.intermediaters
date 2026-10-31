@@ -10,7 +10,7 @@ async function submitRegistration(formData) {
     });
     const result = await response.json();
     if (result.status !== 'success') throw new Error(result.message || 'Failed to register');
-    return true;
+    return result;
 }
 
 async function fetchRegistrations(pass) {
@@ -72,10 +72,16 @@ async function bulkBroadcast(emails, subject, body, pass) {
     return true;
 }
 
-async function fetchPortalData(clientId) {
-    const response = await fetch(`/api/portal?action=getPortalData&id=${encodeURIComponent(clientId)}`);
+async function fetchPortalData(identifier) {
+    let url = `/api/portal?action=getPortalData`;
+    if (identifier.includes('@')) {
+        url += `&email=${encodeURIComponent(identifier.trim().toLowerCase())}`;
+    } else {
+        url += `&id=${encodeURIComponent(identifier.trim())}`;
+    }
+    const response = await fetch(url);
     const result = await response.json();
-    if (result.status !== 'success') throw new Error(result.message);
+    if (result.status !== 'success') throw new Error(result.message || 'No registration record found');
     return result.data;
 }
 

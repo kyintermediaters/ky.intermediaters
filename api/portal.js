@@ -21,11 +21,21 @@ module.exports = async function handler(req, res) {
             body = req.query;
         }
         
-        const id = body.id;
-        if (!id) return res.status(400).json({ status: 'error', message: 'Missing ID' });
+        const lookupKey = body.id || body.clientId;
+        const lookupEmail = body.email ? body.email.trim().toLowerCase() : null;
+
+        if (!lookupKey && !lookupEmail) {
+            return res.status(400).json({ status: 'error', message: 'Missing Registration ID or Email address.' });
+        }
         
-        const lead = await Lead.findOne({ clientId: id });
-        if (!lead) return res.status(404).json({ status: 'error', message: 'Invalid Link' });
+        let lead;
+        if (lookupKey) {
+            lead = await Lead.findOne({ clientId: lookupKey });
+        } else if (lookupEmail) {
+            lead = await Lead.findOne({ email: { $regex: new RegExp(`^${lookupEmail}$`, 'i') } });
+        }
+
+        if (!lead) return res.status(404).json({ status: 'error', message: 'No registration record found for this ID or Email. Please check your spelling or register a new profile.' });
         
         
         if (req.method === 'POST' && body.action === 'uploadDoc') {
@@ -47,8 +57,12 @@ module.exports = async function handler(req, res) {
             return res.status(200).json({ 
                 status: 'success', 
                 data: { 
+                    clientId: lead.clientId,
                     name: lead.name,
                     email: lead.email,
+                    phone: lead.phone,
+                    capital: lead.capital,
+                    interest: lead.interest,
                     status: lead.status, 
                     logs: lead.activityLog, 
                     agent: lead.agent, 
@@ -72,8 +86,12 @@ module.exports = async function handler(req, res) {
             return res.status(200).json({ 
                 status: 'success', 
                 data: { 
+                    clientId: lead.clientId,
                     name: lead.name,
                     email: lead.email,
+                    phone: lead.phone,
+                    capital: lead.capital,
+                    interest: lead.interest,
                     status: lead.status, 
                     logs: lead.activityLog, 
                     agent: lead.agent, 
@@ -100,8 +118,12 @@ module.exports = async function handler(req, res) {
             return res.status(200).json({ 
                 status: 'success', 
                 data: { 
+                    clientId: lead.clientId,
                     name: lead.name,
                     email: lead.email,
+                    phone: lead.phone,
+                    capital: lead.capital,
+                    interest: lead.interest,
                     status: lead.status, 
                     logs: lead.activityLog, 
                     agent: lead.agent, 
@@ -122,8 +144,12 @@ module.exports = async function handler(req, res) {
             return res.status(200).json({ 
                 status: 'success', 
                 data: { 
+                    clientId: lead.clientId,
                     name: lead.name,
                     email: lead.email,
+                    phone: lead.phone,
+                    capital: lead.capital,
+                    interest: lead.interest,
                     status: lead.status, 
                     logs: lead.activityLog, 
                     agent: lead.agent, 
