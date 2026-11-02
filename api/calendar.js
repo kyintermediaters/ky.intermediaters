@@ -23,12 +23,17 @@ module.exports = async function handler(req, res) {
         }
 
         const pass = body.pass;
-        if (pass !== (process.env.ADMIN_PASS || 'adminkypass')) {
-            return res.status(401).json({ status: 'error', message: 'Unauthorized' });
-        }
-
         const { email, name, date, time } = body;
         if (!email || !date || !time) return res.status(400).json({ status: 'error', message: 'Missing fields' });
+
+        const isMasterAdmin = pass === (process.env.ADMIN_PASS || 'adminkypass');
+        if (!isMasterAdmin) {
+            // Check if caller is a registered client
+            const existingClient = await Lead.findOne({ email });
+            if (!existingClient) {
+                return res.status(401).json({ status: 'error', message: 'Unauthorized. Please register before scheduling.' });
+            }
+        }
 
         const [year, month, day] = date.split('-').map(Number);
         const [hour, minute] = time.split(':').map(Number);

@@ -61,11 +61,14 @@ module.exports = async function handler(req, res) {
             body = req.body;
         }
 
-        if (body.action !== 'register') {
-            return res.status(400).json({ status: 'error', message: 'Invalid action' });
+        let data;
+        if (body.action === 'register' && body.data) {
+            data = body.data;
+        } else if (body.email || body.name) {
+            data = body;
+        } else {
+            return res.status(400).json({ status: 'error', message: 'Missing registration details' });
         }
-
-        const data = body.data;
         const score = calculateScore(data);
         const initialLog = [{ time: new Date().toISOString(), action: "Registered" }];
         const cleanEmail = (data.email || '').trim().toLowerCase();

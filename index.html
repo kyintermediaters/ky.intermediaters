@@ -805,7 +805,7 @@
                     const res = await fetch('/api/register', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(formData)
+                        body: JSON.stringify({ action: 'register', data: formData })
                     });
                     const data = await res.json();
                     
